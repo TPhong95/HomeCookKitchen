@@ -1,0 +1,13 @@
+version: '3.8'
+
+services:
+  postgres:
+    image: postgres:latest
+    container_name: postgres-chefuserdbContainer
+    environment:
+      POSTGRES_DB: chefuserdb
+      POSTGRES_USER: shag
+      POSTGRES_PASSWORD: hei123
+    ports:
+      - "5432:5432"
+    restart: always
