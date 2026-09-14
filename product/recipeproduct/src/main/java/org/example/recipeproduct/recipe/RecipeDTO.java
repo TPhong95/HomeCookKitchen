@@ -4,5 +4,4 @@ public record RecipeDTO(
         Long cookId,
         String name,
         boolean active
-) {
-}
+) {}

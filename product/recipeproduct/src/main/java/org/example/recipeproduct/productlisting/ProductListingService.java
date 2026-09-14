@@ -45,4 +45,21 @@ public class ProductListingService {
         ProductListing productListing = new ProductListing(recipe, DTO.quantity(), DTO.unitPrice());
         return productListingRepo.save(productListing);
     }
+
+    public ProductListing updateProductListing(Long id, ProductListingDTO DTO) {
+        ProductListing productListing = productListingRepo.findById(id).orElse(null);
+        if (productListing == null) {
+            throw new ProductListingNotFoundException("No product listing with id " + id + " found");
+        }
+        if (DTO == null){
+            throw new BadRequestException("Cannot update a product listing without receiving information");
+        }
+        if (DTO.quantity() != productListing.getQuantity()) {
+        productListing.setQuantity(DTO.quantity());
+        }
+        if (DTO.unitPrice() != productListing.getUnitPrice()) {
+        productListing.setUnitPrice(DTO.unitPrice());
+        }
+        return productListingRepo.save(productListing);
+    }
 }

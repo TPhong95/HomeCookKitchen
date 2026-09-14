@@ -26,4 +26,10 @@ public class Recipe {
 
     @OneToMany(fetch = FetchType.LAZY)
     private List<ProductListing> productListing;
+
+    public Recipe(Long cookId, String recipeName, boolean active) {
+        this.cookId = cookId;
+        this.recipeName = recipeName;
+        this.active = active;
+    }
 }

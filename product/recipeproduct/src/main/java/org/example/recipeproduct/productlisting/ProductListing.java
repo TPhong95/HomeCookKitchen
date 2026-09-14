@@ -25,7 +25,7 @@ public class ProductListing {
     private Recipe recipeId;
 
     private int quantity;
-    private int unitPrice;
+    private float unitPrice;
 
     public ProductListing(Recipe recipe, int quantity, float unitPrice) {
         this.recipeId = recipe;
