@@ -40,7 +40,7 @@ public class CustomerService {
         return customerRepo.save(newCustomer);
     }
 
-    public Customer updateCustomer(CustomerDTO DTO, int id) {
+    public Customer updateCustomer(int id, CustomerDTO DTO) {
         Customer customerToUpdate = findCustomerById(id);
         if (DTO.name() != null && !DTO.name().isEmpty()) {
             customerToUpdate.setName(DTO.name());
@@ -48,10 +48,7 @@ public class CustomerService {
         if (DTO.email() != null && !DTO.email().isEmpty()) {
             customerToUpdate.setName(DTO.email());
         }
-        if (
-                (DTO.name() == null || DTO.name().isEmpty())
-                || (DTO.email() == null || DTO.email().isEmpty())
-        ) {
+        if ((DTO.name() == null || DTO.name().isEmpty()) || (DTO.email() == null || DTO.email().isEmpty())) {
             throw new BadRequestException("No information to update customer was provided");
         }
         return customerRepo.save(customerToUpdate);
