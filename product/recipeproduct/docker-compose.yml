@@ -1,10 +1,10 @@
 services:
   db:
-    container_name: "postgresql"
-    image: postgres:alpine
+    container_name: "recipeproduct"
+    image: postgres:17-alpine
     ports:
     - '5432:5432'
     environment:
-    - POSTGRES_DB=HomeCookPRODUCT
+    - POSTGRES_DB=home_cook_product
     - POSTGRES_USER=root
     - POSTGRES_PASSWORD=password
