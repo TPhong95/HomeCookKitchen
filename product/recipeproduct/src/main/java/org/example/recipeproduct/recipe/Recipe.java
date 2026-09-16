@@ -20,7 +20,10 @@ public class Recipe {
     @Column(name = "r_id")
     private Long recipeId;
 
+    @Column(name = "co_id")
     private Long cookId;
+
+    @Column(name = "name")
     private String recipeName;
     private boolean active;
 

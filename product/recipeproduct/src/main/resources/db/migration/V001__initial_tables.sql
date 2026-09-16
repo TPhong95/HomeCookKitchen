@@ -1,3 +1,4 @@
+
 CREATE TABLE IF NOT EXISTS recipe(
     r_id INT PRIMARY KEY,
     co_id INT,
