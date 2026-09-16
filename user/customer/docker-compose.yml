@@ -1,0 +1,14 @@
+version: '3.8'
+
+services:
+  postgres:
+    image: postgres:latest
+    container_name: postgres-customerDB
+    environment:
+      POSTGRES_DB: customerDB
+      POSTGRES_USER: username
+      POSTGRES_PASSWORD: password
+      # This will break later
+    ports:
+      - "5432:5432"
+    restart: always
