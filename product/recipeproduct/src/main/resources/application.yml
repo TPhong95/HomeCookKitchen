@@ -5,7 +5,7 @@ spring:
     driver-class-name: org.postgresql.Driver
     username: root
     password: password
-    url: jdbc:postgresql://localhost:5432/home_cook_product
+    url: jdbc:postgresql://localhost:5434/home_cook_product
   jpa:
     generate-ddl: false
     show-sql: false
