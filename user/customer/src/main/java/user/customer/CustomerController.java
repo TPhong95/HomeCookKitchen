@@ -26,7 +26,7 @@ public class CustomerController {
 
     @PostMapping()
     public ResponseEntity<Customer> createCustomer(@RequestBody CustomerDTO customer) {
-        return ResponseEntity.ok(customerService.saveCustomer(customer));
+        return ResponseEntity.ok(customerService.createCustomer(customer));
     }
 
     @PatchMapping("/{id}")

@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import user.customer.exception.BadRequestException;
 import user.customer.exception.CustomerNotFoundException;
+import user.customer.exception.DuplicateEmailException;
 
 import java.util.List;
 
@@ -28,13 +29,14 @@ public class CustomerService {
         return customer;
     }
 
-    public Customer saveCustomer(CustomerDTO DTO) {
+    public Customer createCustomer(CustomerDTO DTO) {
         if (DTO.name() == null || DTO.name().isEmpty()) {
             throw new BadRequestException("Name is needed");
         }
         if (DTO.email() == null || DTO.email().isEmpty()) {
             throw new BadRequestException("Email is needed");
         }
+        validateUniqueEmail(DTO.email());
 
         Customer newCustomer = new Customer(DTO.name(), DTO.email());
         return customerRepo.save(newCustomer);
@@ -48,9 +50,16 @@ public class CustomerService {
         if (DTO.email() != null && !DTO.email().isEmpty()) {
             customerToUpdate.setName(DTO.email());
         }
+        validateUniqueEmail(DTO.email());
         if ((DTO.name() == null || DTO.name().isEmpty()) || (DTO.email() == null || DTO.email().isEmpty())) {
             throw new BadRequestException("No information to update customer was provided");
         }
         return customerRepo.save(customerToUpdate);
+    }
+
+    public void validateUniqueEmail(String email) {
+        if (customerRepo.existsByEmail(email)) {
+            throw new DuplicateEmailException("This email is already in use");
+        }
     }
 }
