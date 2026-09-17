@@ -1,4 +1,4 @@
-package org.example.users.chef.chefaddress;
+package org.example.users.chef.address;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;

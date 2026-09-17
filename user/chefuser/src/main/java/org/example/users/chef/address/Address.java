@@ -1,5 +1,6 @@
-package org.example.users.chef.chefaddress;
+package org.example.users.chef.address;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -19,6 +20,7 @@ public class Address {
     private String street;
     private String city;
     private String country;
+
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "chef_id")
