@@ -4,7 +4,7 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.example.users.chef.chefaddress.Address;
+import org.example.users.chef.address.Address;
 
 import java.util.ArrayList;
 import java.util.List;
