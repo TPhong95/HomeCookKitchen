@@ -8,7 +8,7 @@ import java.util.List;
 @RestController
 @RequestMapping("api/purchase")
 public class PurchaseController {
-    private PurchaseService purchaseService;
+    private final PurchaseService purchaseService;
 
     public PurchaseController(PurchaseService purchaseService) {
         this.purchaseService = purchaseService;

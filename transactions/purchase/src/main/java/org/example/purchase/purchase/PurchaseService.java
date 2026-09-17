@@ -1,6 +1,5 @@
 package org.example.purchase.purchase;
 
-import org.example.purchase.event.PurchaseEvent;
 import org.example.purchase.exception.notfound.PurchaseNotFoundException;
 import org.springframework.stereotype.Service;
 
