@@ -15,7 +15,7 @@ public class PurchaseController {
     }
 
     @GetMapping()
-    public ResponseEntity<Purchase> getPurchaseById(@PathVariable Long id) {
+    public ResponseEntity<Purchase> getPurchaseById(@PathVariable int id) {
         Purchase result = purchaseService.getPurchaseById(id);
         return ResponseEntity.ok(result);
     }
@@ -29,6 +29,10 @@ public class PurchaseController {
         return ResponseEntity.ok(result);
     }
 
-
+    @PostMapping()
+    public ResponseEntity<Purchase> savePurchase(@RequestBody PurchaseDto purchaseDto) {
+        Purchase purchase = purchaseService.create(purchaseDto);
+        return ResponseEntity.ok(purchase);
+    }
 
 }
