@@ -10,4 +10,4 @@ and prices, from any number of locations.
 Direct API REST calls
 ### Asynchronous:
 running a task in the background, 
-so your main program doesn't have to freeze and wait for it to finish.
+so your main program doesn't have to freeze and wait for it to finish. 
