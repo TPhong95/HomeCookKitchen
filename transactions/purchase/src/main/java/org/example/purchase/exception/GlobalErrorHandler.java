@@ -13,7 +13,7 @@ public class GlobalErrorHandler {
 
 
     //========== 400 BAD REQUEST ==========
-
+/*
     @ExceptionHandler({
             }
     )
@@ -22,6 +22,8 @@ public class GlobalErrorHandler {
         return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
     }
 
+
+ */
     //========== 404 NOT FOUND ==========
 
     @ExceptionHandler({
@@ -32,6 +34,7 @@ public class GlobalErrorHandler {
         log.error("404 Not Found error: {}", e.getMessage(), e);
         return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
     }
+/*
 
     //========== 409 CONFLICT ==========
 
@@ -49,4 +52,6 @@ public class GlobalErrorHandler {
         log.error("500 Unexpected error: {}", e.getMessage(), e);
         return new ResponseEntity<>("An unexpected error occurred", HttpStatus.INTERNAL_SERVER_ERROR);
     }
+
+ */
 }
