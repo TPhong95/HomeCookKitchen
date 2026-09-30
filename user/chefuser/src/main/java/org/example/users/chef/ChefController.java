@@ -4,6 +4,7 @@ import org.example.users.chef.address.Address;
 import org.example.users.chef.dtos.AddressResponseDto;
 import org.example.users.chef.dtos.ChefResponseDto;
 import org.example.users.chef.dtos.SaveAddressDto;
+import org.example.users.chef.mappers.DtoMapper;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -14,22 +15,18 @@ import java.util.List;
 @RequestMapping("/api/chef")
 public class ChefController {
     private final ChefService chefService;
+    private final DtoMapper dtoMapper;
 
-    public ChefController(ChefService chefService) {
+    public ChefController(ChefService chefService, DtoMapper dtoMapper) {
         this.chefService = chefService;
+        this.dtoMapper = dtoMapper;
     }
 
     @PostMapping()
     public ResponseEntity<ChefResponseDto> saveChef(@RequestBody Chef chef) {
         Chef savedChef = chefService.save(chef);
 
-        //Dto mapping skal flyttes til en egen klasse senere
-        ChefResponseDto response = new ChefResponseDto(
-                savedChef.getId(),
-                savedChef.getName(),
-                savedChef.getEmail(),
-                savedChef.getPhoneNumber()
-        );
+        ChefResponseDto response = dtoMapper.toChefResponseDto(savedChef);
         return ResponseEntity.ok(response);
     }
 
@@ -38,6 +35,7 @@ public class ChefController {
         Chef result = chefService.getChefById(id);
         return ResponseEntity.ok(result);
     }
+
     @GetMapping()
     public ResponseEntity<List<Chef>> getAllChefs() {
         List<Chef> result = chefService.getAllChefs();
@@ -57,20 +55,15 @@ public class ChefController {
     @PostMapping("/address/{chefId}")
     public ResponseEntity<List<AddressResponseDto>> saveChefAddress(@RequestBody SaveAddressDto dto, @PathVariable Long chefId) {
         List<Address> addresses = chefService.saveAddressToChef(chefId, dto);
-
-        //Skal skille ut denne mappinga i den DTOmapper klasse senere
-        List<AddressResponseDto> response = addresses.stream()
-                .map(address -> new AddressResponseDto(
-                        address.getId(),
-                        address.getStreet(),
-                        address.getCity(),
-                        address.getCountry(),
-                        chefId
-                ))
-                .toList();
+        List<AddressResponseDto> response = dtoMapper.toAddressResponseDtoList(addresses, chefId);
 
         return ResponseEntity.ok(response);
+    }
 
+    @DeleteMapping("/address/{chefId}/{addressId}")
+    public ResponseEntity<String> deleteChefAddress(@PathVariable Long chefId, @PathVariable Long addressId) {
+        chefService.deleteAddressFromChef(chefId, addressId);
+        return ResponseEntity.ok("Address with id: " + addressId + " deleted");
     }
 }
 

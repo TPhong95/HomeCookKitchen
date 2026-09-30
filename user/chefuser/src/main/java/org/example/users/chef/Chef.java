@@ -27,4 +27,14 @@ public class Chef {
     @OneToMany(mappedBy = "chef", cascade = CascadeType.ALL, orphanRemoval = true)
     List<Address> addresses = new ArrayList<>();
 
+    public void addAddress(Address address){
+        addresses.add(address);
+        address.setChef(this);
+    }
+
+    public void removeAddress(Address address){
+        addresses.remove(address);
+        address.setChef(null);
+    }
+
 }
