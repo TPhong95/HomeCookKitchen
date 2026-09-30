@@ -1,0 +1,21 @@
+spring:
+  application:
+    name: custUser
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    username: username
+    password: password
+    url: jdbc:postgresql://localhost:5432/customerDB
+  jpa:
+    generate-ddl: false
+    show-sql: false
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+  flyway:
+    locations: classpath:db/migration/customer
+    enabled: true
+server:
+  port: 8003
+
+# Potential problem with port number conflict on DB
