@@ -1,9 +1,25 @@
+version: '3.8'
+
 services:
-  db:
+  postgres:
     image: postgres:17-alpine
+    container_name: purchase-db-container
     environment:
       POSTGRES_DB: purchase_db
       POSTGRES_USER: user
       POSTGRES_PASSWORD: password
     ports:
       - "5435:5432"
+    restart: always
+
+  purchase-service:
+    build: .
+    container_name: purchase_service
+    ports:
+      - "8011:8011"
+    environment:
+      PRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/purchase_db
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: password
+    depends_on:
+      - postgres
