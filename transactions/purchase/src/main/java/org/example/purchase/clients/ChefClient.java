@@ -1,7 +1,6 @@
 package org.example.purchase.clients;
 
 import org.example.purchase.dtos.ChefDto;
-import org.example.purchase.dtos.ProductListingDto;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestClient;
 

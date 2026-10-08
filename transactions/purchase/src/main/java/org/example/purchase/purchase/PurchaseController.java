@@ -16,7 +16,7 @@ public class PurchaseController {
         this.purchaseOrchestrationService = purchaseOrchestrationService;
     }
 
-    @GetMapping()
+    @GetMapping("/{id}")
     public ResponseEntity<Purchase> getPurchaseById(@PathVariable int id) {
         Purchase result = purchaseService.getPurchaseById(id);
         return ResponseEntity.ok(result);
