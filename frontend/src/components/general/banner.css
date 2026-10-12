@@ -1,0 +1,47 @@
+.banner-sidebar {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+  font-family: "Segoe UI", serif;
+  font-size: 2rem;
+  background-color: #1d3b58;
+  padding-right: 1rem;
+  /* Possibly remove this border to the right of the sidebar */
+  border-right-color: #f8ffe3;
+  border-right-width: 2px;
+  border-right-style: solid;
+}
+
+.banner-sidebar a {
+  color: #ffffff;
+  text-decoration: none;
+}
+
+.banner-sidebar a:hover {
+  text-decoration: underline;
+}
+
+.banner-sidebar ul {
+  list-style-type: none;
+  padding-left: 0;
+  margin: 10px;
+}
+
+.profile-picture-container {
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 1.5rem;
+}
+
+.profile-picture-container img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+

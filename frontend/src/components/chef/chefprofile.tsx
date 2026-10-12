@@ -1,5 +1,6 @@
-import { useRef, useState} from "react";
+import {useRef, useState} from "react";
 import './chefprofile.css'
+import {Banner} from "../general/banner.tsx";
 
 /*
 interface Chef {
@@ -45,27 +46,35 @@ export function ChefProfile() {
   }
 
   return (
-    <>
+    <div className={"profile-layout"}>
+      <Banner />
       <div className={"wrapper"}>
         <div className={"top-banner"}>
-          <h1>Welcome {name}</h1>
-          <button onClick={handleEditProfileModal}>Edit profile</button>
+          {name ? (<h1>Welcome, {name}</h1>
+          ) : (
+            <h1>Welcome!</h1>
+            )}
+          <button
+            className={"edit-profile-btn"}
+            onClick={handleEditProfileModal}
+          >
+            Edit profile
+          </button>
         </div>
         <div className={"contact-info"}>
-          <p>Name: {name}</p>
-          <ul>
-            <li>Street: {street}</li>
-            <li>Postcode: {postalCode}</li>
+          <p><strong>Name: </strong>{name}</p>
+          <p><strong>Address:</strong></p>
+          <ul className={"address-list"}>
+            <li><strong>Street: </strong>{street}</li>
+            <li><strong>Postcode: </strong>{postalCode}</li>
           </ul>
-          <p>Email: {email}</p>
-        </div>
-        <div className={"useful-links"}>
-          <div className={"link-box"}>Listings</div>
-          <div className={"link-box"}>Recipes</div>
-          <div className={"link-box"}>History</div>
+          <p><strong>Email: </strong>{email}</p>
         </div>
 
-        <dialog ref={editProfileDialogRef}>
+        <dialog
+          className={"edit-profile-dialog"}
+          ref={editProfileDialogRef}
+        >
           <div className={"modal-contact-details"}>
             <div>Name:</div>
             <input
@@ -92,13 +101,24 @@ export function ChefProfile() {
               onChange={(e) => setTempEmail(e.target.value)}
             />
           </div>
+          <p className={""}>Save changes?</p>
           <div className={"save-changes-box"}>
-            <p>Save changes?</p>
-            <button onClick={() => handleSaveChanges()}>Yes</button>
-            <button onClick={() => editProfileDialogRef.current?.close()}>No</button>
+
+            <button
+              className={"yes-btn"}
+              onClick={() => handleSaveChanges()}
+            >
+              Yes
+            </button>
+            <button
+              className={"no-btn"}
+              onClick={() => editProfileDialogRef.current?.close()}
+            >
+              No
+            </button>
           </div>
         </dialog>
       </div>
-    </>
+    </div>
   )
 }
