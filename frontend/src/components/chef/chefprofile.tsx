@@ -50,7 +50,7 @@ export function ChefProfile() {
       <Banner />
       <div className={"chef-wrapper"}>
         <div className={"chef-top-banner"}>
-          {name ? (<h1>Welcome, {name}</h1>
+          {name ? (<h1>Welcome, {name}!</h1>
           ) : (
             <h1>Welcome!</h1>
             )}

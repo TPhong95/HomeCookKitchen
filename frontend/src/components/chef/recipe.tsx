@@ -1,5 +1,6 @@
 import {useRef, useState} from "react";
 import {Banner} from "../general/banner.tsx";
+import "./recipe.css";
 
 const DishCategory = {
   BURGERS: "Burgers",
@@ -20,19 +21,42 @@ type DishPreference = typeof DishPreference [keyof typeof DishPreference];
 
 interface Recipe {
   id?: number;
-  name: string;
+  recipeName: string;
   description: string;
   active: boolean;
   category: DishCategory;
   preference: DishPreference;
+  image?: string;
 }
 
+const testRecipes: Recipe[] = [
+  {
+    id: 1,
+    recipeName: "Falafel Baguette",
+    description: "I put falafel in a baguette, it tastes alright",
+    active: true,
+    category: DishCategory.PASTA,
+    preference: DishPreference.VEGAN,
+    image: "../../../testdata/falafelbaguette.jpg"
+  },
+  {
+    id: 2,
+    recipeName: "Lasagne",
+    description: "My grandpa's shoe tastes better",
+    active: false,
+    category: DishCategory.PASTA,
+    preference: DishPreference.NONE,
+    image: "../../../testdata/lasagne.jpg"
+  }
+]
 
 export function Recipe() {
   // const [name, setName] = useState<string>("");
   const name = "Kieran";
 
-  const [recipes, setRecipes] = useState<Recipe[]>([]);
+  const [activeFilter, setActiveFilter] = useState<"ALL" | "ACTIVE" | "INACTIVE">("ACTIVE");
+
+  const [recipes, setRecipes] = useState<Recipe[]>(testRecipes);
   const [tempRecipeName, setTempRecipeName] = useState("");
   const [tempDescription, setTempDescription] = useState("");
   const [tempCategory, setTempCategory] = useState<DishCategory>(DishCategory.BURGERS);
@@ -54,7 +78,7 @@ export function Recipe() {
     setRecipes(
       [...recipes,
         {
-          name: tempRecipeName,
+          recipeName: tempRecipeName,
           description: tempDescription,
           active: true,
           category: tempCategory,
@@ -63,6 +87,35 @@ export function Recipe() {
       ]);
 
     addRecipeDialogRef.current?.close();
+  }
+
+  const allergensList = [
+    {id: "gluten", label: "Gluten"},
+    {id: "crustaceans", label: "Crustaceans"},
+    {id: "eggs", label: "Eggs"},
+    {id: "fish", label: "Fish"},
+    {id: "peanuts", label: "Peanuts"},
+    {id: "soybeans", label: "Soybeans"},
+    {id: "milk", label: "Milk"},
+    {id: "nuts", label: "Nuts"},
+    {id: "celery", label: "Celery"},
+    {id: "mustard", label: "Mustard"},
+    {id: "sesame", label: "Sesame seeds"},
+    {id: "sulfites", label: "Sulfites"},
+    {id: "lupin", label: "Lupin"},
+    {id: "molluscs", label: "Molluscs"},
+  ];
+
+  function handleShowAllRecipes() {
+    setActiveFilter("ALL");
+  }
+
+  function handleShowActiveRecipes() {
+    setActiveFilter("ACTIVE");
+  }
+
+  function handleShowInactiveRecipes() {
+    setActiveFilter("INACTIVE");
   }
 
   return (
@@ -79,7 +132,58 @@ export function Recipe() {
           </button>
         </div>
 
-        <dialog ref={addRecipeDialogRef}>
+        <div>
+
+        </div>
+
+        <div className={"recipe-filter-container"}>
+          <button
+            className={`filter-recipe-btn ${activeFilter === "ALL" ? "active-filter" : ""}`}
+            onClick={handleShowAllRecipes}
+          >
+            All
+          </button>
+          <button
+            className={`filter-recipe-btn ${activeFilter === "ACTIVE" ? "active-filter" : ""}`}
+            onClick={handleShowActiveRecipes}
+          >
+            Active
+          </button>
+          <button
+            className={`filter-recipe-btn ${activeFilter === "INACTIVE" ? "active-filter" : ""}`}
+            onClick={handleShowInactiveRecipes}
+          >
+            Inactive
+          </button>
+        </div>
+
+        <div className={"all-recipes-container"}>
+          {recipes.map((recipe) => (
+            <div className={"recipe-item-container"} key={recipe.id }>
+              <div className={"recipe-picture-container"}>
+                <img src={recipe.image} alt={recipe.recipeName} />
+              </div>
+              <div className={"recipe-info-container"}>
+                <div className={"name-and-edit-container"}>
+                  <div className={"recipe-title"}>{recipe.recipeName}</div>
+                  <button className={"edit-recipe-btn"}>Edit recipe</button>
+                </div>
+
+                <div className={"listing-and-active-container"}>
+                  <button className={"create-listing-btn"}>+ Create listing</button>
+                  <div className={"active-inactive-btn"}>
+                    {recipe.active ? "Active" : "Inactive"}
+                  </div>
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+
+        <dialog
+          className={"add-recipe-dialog"}
+          ref={addRecipeDialogRef}
+        >
           <div>
             <label htmlFor={"recipe-name-input"}>Recipe Name:</label>
             <input
@@ -122,132 +226,37 @@ export function Recipe() {
             </select>
           </div>
 
+          <div className={"allergens-title"}>Allergens:</div>
           <div className={"allergens-checkboxes"}>
-            <input
-              id={"gluten-checkbox"}
-              type={"checkbox"}
-              name={"gluten-checkbox"}
-              value={"gluten"}
-            />
-            <label htmlFor={"gluten-checkbox"}>Gluten</label>
-
-            <input
-              id={"crustaceans-checkbox"}
-              type={"checkbox"}
-              name={"crusteceans-checkbox"}
-              value={"crusteceans"}
-            />
-            <label htmlFor={"crusteceans-checkbox"}>Crusteceans</label>
-
-            <input
-              id={"eggs-checkbox"}
-              type={"checkbox"}
-              name={"eggs-checkbox"}
-              value={"eggs"}
-            />
-            <label htmlFor={"eggs-checkbox"}>Eggs</label>
-
-            <input
-              id={"fish-checkbox"}
-              type={"checkbox"}
-              name={"fish-checkbox"}
-              value={"fish"}
-            />
-            <label htmlFor={"fish-checkbox"}>Fish</label>
-
-            <input
-              id={"peanuts-checkbox"}
-              type={"checkbox"}
-              name={"peanuts-checkbox"}
-              value={"peanuts"}
-            />
-            <label htmlFor={"peanuts-checkbox"}>Peanuts</label>
-
-            <input
-              id={"soybeans-checkbox"}
-              type={"checkbox"}
-              name={"soybeans-checkbox"}
-              value={"soybeans"}
-            />
-            <label htmlFor={"soybeans-checkbox"}>Soybeans</label>
-
-            <input
-              id={"milk-checkbox"}
-              type={"checkbox"}
-              name={"milk-checkbox"}
-              value={"milk"}
-            />
-            <label htmlFor={"milk-checkbox"}>Milk</label>
-
-            <input
-              id={"nuts-checkbox"}
-              type={"checkbox"}
-              name={"nuts-checkbox"}
-              value={"nuts"}
-            />
-            <label htmlFor={"nuts-checkbox"}>Nuts</label>
-
-            <input
-              id={"celery-checkbox"}
-              type={"checkbox"}
-              name={"celery-checkbox"}
-              value={"celery"}
-            />
-            <label htmlFor={"celery-checkbox"}>Celery</label>
-
-            <input
-              id={"mustard-checkbox"}
-              type={"checkbox"}
-              name={"mustard-checkbox"}
-              value={"mustard"}
-            />
-            <label htmlFor={"mustard-checkbox"}>Mustard</label>
-
-            <input
-              id={"sesame-checkbox"}
-              type={"checkbox"}
-              name={"sesame-checkbox"}
-              value={"sesame"}
-            />
-            <label htmlFor={"sesame-checkbox"}>Sesame seeds</label>
-
-            <input
-              id={"sulfites-checkbox"}
-              type={"checkbox"}
-              name={"sulfites-checkbox"}
-              value={"sulfites"}
-            />
-            <label htmlFor={"sulfites-checkbox"}>Sulfites</label>
-
-            <input
-              id={"lupin-checkbox"}
-              type={"checkbox"}
-              name={"lupin-checkbox"}
-              value={"lupin"}
-            />
-            <label htmlFor={"lupin-checkbox"}>Lupin</label>
-
-            <input
-              id={"molluscs-checkbox"}
-              type={"checkbox"}
-              name={"molluscs-checkbox"}
-              value={"molluscs"}
-            />
-            <label htmlFor={"molluscs-checkbox"}>Molluscs</label>
+            {allergensList.map((allergen) => (
+              <div className={"allergen-item"} key={allergen.id}>
+                <input
+                  id={`${allergen.id}-checkbox`}
+                  type={"checkbox"}
+                  name={`${allergen.id}-checkbox`}
+                  value={allergen.id}
+                />
+                <label htmlFor={`${allergen.id}-checkbox`}>{allergen.label}</label>
+              </div>
+            ))}
           </div>
-          <p>Add recipe?</p>
-          <button
-            className={"yes-btn"}
-            onClick={handleSaveRecipe}
-          >
-            Yes
-          </button>
-          <button
-            className={"no-btn"}
-            onClick={() => addRecipeDialogRef.current?.close()}
-          >
-            No
-          </button>
+
+
+          <p className={"add-recipe-question"}>Add recipe?</p>
+          <div className={"save-recipe-box"}>
+            <button
+              className={"yes-btn"}
+              onClick={handleSaveRecipe}
+            >
+              Yes
+            </button>
+            <button
+              className={"no-btn"}
+              onClick={() => addRecipeDialogRef.current?.close()}
+            >
+              No
+            </button>
+          </div>
         </dialog>
       </div>
     </div>

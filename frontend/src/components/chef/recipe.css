@@ -1,0 +1,236 @@
+.recipe-layout {
+  display: flex;
+  min-height: 100vh;
+}
+
+.recipe-wrapper {
+  font-family: "Segoe UI", serif;
+  background-color: #eeffff;
+  flex: 1;
+  border-left-style: solid;
+  border-left-width: 2px;
+  border-left-color: #000000;
+}
+
+.recipe-top-banner {
+  display: flex;
+  justify-content: space-between;
+  color: #ffffff;
+  background-color: #0a4c86;
+  padding-left: 1%;
+}
+
+.add-recipe-btn {
+  background-color: #99eeff;
+  color: #1d3b58;
+  border: none;
+  padding: 0.6rem 1.2rem;
+  font-weight: bold;
+  font-size: 1rem;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.add-recipe-btn:hover {
+  background-color: #45e0ff;
+}
+
+.recipe-filter-container {
+  display: flex;
+  justify-content: space-evenly;
+  margin-top: 0.8vh;
+}
+
+.filter-recipe-btn {
+  background-color: #cbfdfd;
+  width: 10rem;
+  height: 3rem;
+  border-radius: 5px;
+}
+
+.active-filter {
+  background-color: #0a4c86;
+  color: #ffffff;
+  font-weight: bold;
+}
+
+.all-recipes-container {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  padding: 2rem;
+}
+
+.recipe-item-container {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 1.5rem;
+  background-color: #ffffff;
+  border: 2px solid #0a4c86;
+  border-radius: 8px;
+  padding: 1.2rem;
+}
+
+.recipe-picture-container {
+  grid-row: span 2;
+}
+
+.recipe-picture-container img {
+  width: 120px;
+  height: 120px;
+  border-radius: 5px;
+  object-fit: cover;
+  border: 1px solid #1d3b58;
+  display: block;
+}
+
+.recipe-info-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  flex: 1;
+  height: 120px; /* Matches picture height so top/bottom rows align to extremities */
+}
+
+.name-and-edit-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+}
+
+.listing-and-active-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+}
+
+.recipe-title {
+  font-size: 1.3rem;
+  font-weight: bold;
+  color: #1d3b58;
+  margin: 0;
+}
+
+.edit-recipe-btn {
+  background-color: #ffffff;
+  border: 1px solid #0a4c86;
+  color: #1d3b58;
+  padding: 0.4rem 0.8rem;
+  border-radius: 4px;
+  cursor: pointer;
+  font-weight: 500;
+}
+
+.create-listing-btn {
+  background-color: #cbfdfd;
+  border: 1px solid #0a4c86;
+  color: #1d3b58;
+  padding: 0.4rem 0.8rem;
+  border-radius: 4px;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.active-inactive-btn {
+  font-weight: 600;
+  color: #1d3b58;
+}
+
+.add-recipe-dialog {
+  background-color: #eeffff;
+  border-radius: 5px;
+}
+
+.save-recipe-box {
+  display: flex;
+  justify-content: space-evenly;
+}
+
+.save-recipe-box .yes-btn {
+  background-color: #c0ff63;
+  transition-duration: 0.2s;
+  width: 10rem;
+  height: 3rem;
+  border-radius: 5px;
+}
+
+.save-recipe-box .yes-btn:hover {
+  background-color: #a0da4e;
+}
+
+.save-recipe-box .no-btn {
+  background-color: #ffb9b9;
+  transition-duration: 0.2s;
+  width: 10rem;
+  height: 3rem;
+  border-radius: 5px;
+}
+
+.save-recipe-box .no-btn:hover {
+  background-color: #ff7c7c;
+}
+
+.add-recipe-question {
+  text-align: center;
+  font-size: 1.5rem;
+}
+
+/* --- New Additions for Form Styling & Grid --- */
+
+.add-recipe-dialog {
+  padding: 2rem;
+  width: 550px;
+  max-width: 90vw;
+  border: 2px solid #0a4c86;
+}
+
+/* Form field containers */
+.form-field {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 1rem;
+}
+
+.form-field label {
+  font-weight: bold;
+  margin-bottom: 0.3rem;
+  color: #1d3b58;
+}
+
+.category-dropdowns {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.category-dropdowns .form-field {
+  flex: 1;
+  margin-bottom: 0;
+}
+
+.allergens-checkboxes {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0.5rem 1rem;
+  background-color: #ffffff;
+  padding: 1rem;
+  border: 1px solid #0a4c86;
+  border-radius: 4px;
+  margin-bottom: 1.5rem;
+}
+
+.allergen-item {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.allergens-title {
+  font-weight: bold;
+  color: #1d3b58;
+  margin-bottom: 0.3rem;
+}

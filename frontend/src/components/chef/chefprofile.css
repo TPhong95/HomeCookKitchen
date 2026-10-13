@@ -73,20 +73,20 @@ Mid-blue: #99eeff
   background-color: #45e0ff;
 }
 
-.yes-btn {
+.save-changes-box .yes-btn {
   background-color: #c0ff63;
   transition-duration: 0.2s;
 }
 
-.yes-btn:hover {
+.save-changes-box .yes-btn:hover {
   background-color: #a0da4e;
 }
 
-.no-btn {
+.save-changes-box .no-btn {
   background-color: #ffb9b9;
   transition-duration: 0.2s;
 }
 
-.no-btn:hover {
+.save-changes-box .no-btn:hover {
   background-color: #ff7c7c;
 }
