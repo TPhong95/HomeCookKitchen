@@ -12,13 +12,16 @@ Mid-blue: #99eeff
   min-height: 100vh;
 }
 
-.wrapper {
+.chef-wrapper {
   font-family: "Segoe UI", serif; /* Fight me */
   background-color: #eeffff;
   flex: 1;
+  border-left-style: solid;
+  border-left-width: 2px;
+  border-left-color: #000000;
 }
 
-.top-banner {
+.chef-top-banner {
   display: flex;
   justify-content: space-between;
   color: #ffffff;

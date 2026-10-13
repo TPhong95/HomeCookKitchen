@@ -48,8 +48,8 @@ export function ChefProfile() {
   return (
     <div className={"profile-layout"}>
       <Banner />
-      <div className={"wrapper"}>
-        <div className={"top-banner"}>
+      <div className={"chef-wrapper"}>
+        <div className={"chef-top-banner"}>
           {name ? (<h1>Welcome, {name}</h1>
           ) : (
             <h1>Welcome!</h1>
