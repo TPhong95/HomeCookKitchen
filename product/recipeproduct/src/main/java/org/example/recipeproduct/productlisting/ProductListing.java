@@ -1,6 +1,7 @@
 package org.example.recipeproduct.productlisting;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -20,7 +21,7 @@ public class ProductListing {
     private Long productListingId;
 
     @ManyToOne
-    @JsonIgnore
+    @JsonIgnoreProperties("productListing")
     @JoinColumn(name = "r_id")
     private Recipe recipeId;
 

@@ -28,6 +28,7 @@ public class Recipe {
     private boolean active;
 
     @OneToMany(fetch = FetchType.LAZY)
+    @JoinColumn(name = "r_id")//Maybe replace with Json Ignore
     private List<ProductListing> productListing;
 
     public Recipe(Long cookId, String recipeName, boolean active) {

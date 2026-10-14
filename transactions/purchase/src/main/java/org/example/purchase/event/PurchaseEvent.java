@@ -5,7 +5,7 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.example.purchase.productlisting.ProductListingDto;
+import org.example.purchase.dtos.ListingInfoDto;
 import org.example.purchase.purchase.Purchase;
 
 @Getter
@@ -18,7 +18,8 @@ public class PurchaseEvent {
     @SequenceGenerator(name = "purchase_event_seq", sequenceName = "purchase_event_seq", allocationSize = 1)
     private int id;
 
-    private ProductListingDto productListing;
+    @Embedded
+    private ListingInfoDto listingInfoDto;
 
     @ManyToOne()
     @JoinColumn(name = "purchase_id")
