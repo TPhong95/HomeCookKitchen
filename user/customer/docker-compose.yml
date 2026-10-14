@@ -19,6 +19,6 @@ services:
     ports:
       - "8003"
     environment:
-      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5433/customerDB
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/customerDB
       SPRING_DATASOURCE_USERNAME: username
       SPRING_DATASOURCE_PASSWORD: password

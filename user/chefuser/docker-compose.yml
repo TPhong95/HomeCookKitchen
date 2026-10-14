@@ -16,7 +16,7 @@ services:
     build: .
     container_name: chef_service
     ports:
-      - "8002:8002"
+      - "8002"
     environment:
       SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/chefDB
       SPRING_DATASOURCE_USERNAME: username
