@@ -5,7 +5,7 @@ spring:
     driver-class-name: org.postgresql.Driver
     username: username
     password: password
-    url: jdbc:postgresql://localhost:5432/customerDB
+    url: jdbc:postgresql://localhost:5433/customerDB
   jpa:
     generate-ddl: false
     show-sql: false
