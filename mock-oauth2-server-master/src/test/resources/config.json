@@ -1,0 +1,39 @@
+{
+  "interactiveLogin": true,
+  "httpServer": "NettyWrapper",
+  "loginPagePath": "/app/login/login.example.html",
+  "staticAssetsPath": "/app/static",
+  "tokenCallbacks": [
+    {
+      "issuerId": "issuer1",
+      "tokenExpiry": 120,
+      "requestMappings": [
+        {
+          "requestParam": "code",
+          "match": "*",
+          "claims": {
+            "sub": "subByCode",
+            "aud": [
+              "audByCode"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "issuerId": "issuer2",
+      "requestMappings": [
+        {
+          "requestParam": "someparam",
+          "match": "somevalue",
+          "claims": {
+            "sub": "subBySomeParam",
+            "aud": [
+              "audBySomeParam"
+            ]
+          }
+        }
+      ]
+    }
+  ]
+}
