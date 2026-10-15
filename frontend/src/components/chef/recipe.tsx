@@ -52,7 +52,6 @@ const testRecipes: RecipeStruct[] = [
 ]
 
 export function Recipe() {
-  // const [name, setName] = useState<string>("");
   const name = "Kieran";
 
   const [activeFilter, setActiveFilter] = useState<"ALL" | "ACTIVE" | "INACTIVE">("ACTIVE");
@@ -63,10 +62,10 @@ export function Recipe() {
   const [tempCategory, setTempCategory] = useState<DishCategory>(DishCategory.BURGERS);
   const [tempPreference, setTempPreference] = useState<DishPreference>(DishPreference.NONE);
   const [tempAllergens, setTempAllergens] = useState<Record<Allergen, boolean>>(initialAllergens);
+  const [tempImage, setTempImage] = useState("");
 
-  const [tempPortions, setTempPortions] = useState("0"); // FIX: string to int conversion
-  const [tempPricePerPortion, setTempPricePerPortion] = useState("0"); // FIX: string to int conversion
-  const [tempBuyFrom, setTempBuyFrom] = useState("");
+  const [tempPortions, setTempPortions] = useState("0");
+  const [tempPricePerPortion, setTempPricePerPortion] = useState("0");
   const [tempBuyTo, setTempBuyTo] = useState("");
   const [tempReadyTime, setTempReadyTime] = useState("");
   const [tempRecipePicture, setTempRecipePicture] = useState("");
@@ -83,6 +82,7 @@ export function Recipe() {
     setTempCategory(DishCategory.BURGERS);
     setTempPreference(DishPreference.NONE);
     setTempAllergens(initialAllergens);
+    setTempImage("");
     showRecipeDialogRef.current?.showModal();
   }
 
@@ -92,6 +92,7 @@ export function Recipe() {
     setTempCategory(recipe.category);
     setTempPreference(recipe.preference);
     setTempAllergens(recipe.allergens || initialAllergens);
+    setTempImage(recipe.image || "");
     showRecipeDialogRef.current?.showModal();
   }
 
@@ -101,13 +102,14 @@ export function Recipe() {
     setRecipes(
       [...recipes,
         {
-          id: Date.now(), // FIX!! Technical debt to check editing
+          id: Date.now(),
           recipeName: tempRecipeName,
           description: tempDescription,
           active: true,
           category: tempCategory,
           preference: tempPreference,
           allergens: tempAllergens,
+          image: tempImage,
         }
       ]);
 
@@ -117,7 +119,6 @@ export function Recipe() {
   const handleCreateListingModal = (recipe: RecipeStruct) => {
     setTempRecipeName(recipe.recipeName);
     if (recipe.image) setTempRecipePicture(recipe.image);
-    setTempBuyFrom("");
     setTempBuyTo("");
     setTempReadyTime("");
     createListingDialogRef.current?.showModal();
@@ -192,10 +193,6 @@ export function Recipe() {
           </button>
         </div>
 
-        <div>
-
-        </div>
-
         <div className={"recipe-filter-container"}>
           <button
             className={`filter-recipe-btn ${activeFilter === "ALL" ? "active-filter" : ""}`}
@@ -262,65 +259,88 @@ export function Recipe() {
           className={"add-recipe-dialog"}
           ref={showRecipeDialogRef}
         >
-          <div>
-            <label htmlFor={"recipe-name-input"}>Recipe Name:</label>
-            <input
-              id={"recipe-name-input"}
-              type={"text"}
-              value={tempRecipeName}
-              onChange={(e) => setTempRecipeName(e.target.value)}
-            />
-          </div>
-          <div>
-            <label htmlFor={"description-input"}>Description:</label>
-            <textarea
-              id={"description-input"}
-              value={tempDescription}
-              onChange={(e) => setTempDescription(e.target.value)}
-            />
+          <div className={"header-picture-name-description"}>
+            <div className={"recipe-image-upload-section"}>
+              {tempImage ? (
+                <div className={"image-preview-container"}>
+                  <img src={tempImage} alt="Recipe Preview" />
+                </div>
+              ) : (
+                <div className={"image-placeholder-box"} title="Click to add image">
+                  <span className={"plus-icon"}>+</span>
+                  <span className={"placeholder-text"}>Add photo</span>
+                </div>
+              )}
+            </div>
+            <div className={"recipe-text-fields-section"}>
+              <div className={"form-field"}>
+                <label htmlFor={"recipe-name-input"}>Recipe Name:</label>
+                <input
+                  id={"recipe-name-input"}
+                  type={"text"}
+                  value={tempRecipeName}
+                  onChange={(e) => setTempRecipeName(e.target.value)}
+                  placeholder={"e.g. Reindeer Kebab Pizza"}
+                />
+              </div>
+              <div className={"form-field"}>
+                <label htmlFor={"description-input"}>Description:</label>
+                <textarea
+                  id={"description-input"}
+                  value={tempDescription}
+                  onChange={(e) => setTempDescription(e.target.value)}
+                  placeholder={"Briefly describe the dish..."}
+                />
+              </div>
+            </div>
           </div>
 
           <div className={"category-dropdowns"}>
-            <label htmlFor={"category-input"}>Category:</label>
-            <select
-              id={"category-input"}
-              value={tempCategory}
-              onChange={(e) => setTempCategory(e.target.value as DishCategory)}
-            >
-              {Object.values(DishCategory).map((value) => (
-                <option key={value} value={value}>{value}</option>
-              ))}
-            </select>
+            <div className={"form-field"}>
+              <label htmlFor={"category-input"}>Category:</label>
+              <select
+                id={"category-input"}
+                value={tempCategory}
+                onChange={(e) => setTempCategory(e.target.value as DishCategory)}
+              >
+                {Object.values(DishCategory).map((value) => (
+                  <option key={value} value={value}>{value}</option>
+                ))}
+              </select>
+            </div>
 
-            <label htmlFor={"preference-input"}>Diet preference:</label>
-            <select
-              id={"preference-input"}
-              value={tempPreference}
-              onChange={(e) => setTempPreference(e.target.value as DishPreference)}
-            >
-              {Object.values(DishPreference).map((value) => (
-                <option key={value} value={value}>{value}</option>
-              ))}
-            </select>
+            <div className={"form-field"}>
+              <label htmlFor={"preference-input"}>Diet preference:</label>
+              <select
+                id={"preference-input"}
+                value={tempPreference}
+                onChange={(e) => setTempPreference(e.target.value as DishPreference)}
+              >
+                {Object.values(DishPreference).map((value) => (
+                  <option key={value} value={value}>{value}</option>
+                ))}
+              </select>
+            </div>
           </div>
 
-          <div className={"allergens-title"}>Allergens:</div>
-          <div className={"allergens-checkboxes"}>
-            {allergensList.map((allergen) => (
-              <div className={"allergen-item"} key={allergen.id}>
-                <input
-                  id={`${allergen.id}-checkbox`}
-                  type={"checkbox"}
-                  name={`${allergen.id}-checkbox`}
-                  value={allergen.id}
-                  checked={tempAllergens[allergen.id] || false}
-                  onChange={(e) => handleAllergenChange(allergen.id, e.target.checked)}
-                />
-                <label htmlFor={`${allergen.id}-checkbox`}>{allergen.label}</label>
-              </div>
-            ))}
+          <div className={"form-field"}>
+            <div className={"allergens-title"}>Allergens:</div>
+            <div className={"allergens-checkboxes"}>
+              {allergensList.map((allergen) => (
+                <div className={"allergen-item"} key={allergen.id}>
+                  <input
+                    id={`${allergen.id}-checkbox`}
+                    type={"checkbox"}
+                    name={`${allergen.id}-checkbox`}
+                    value={allergen.id}
+                    checked={tempAllergens[allergen.id] || false}
+                    onChange={(e) => handleAllergenChange(allergen.id, e.target.checked)}
+                  />
+                  <label htmlFor={`${allergen.id}-checkbox`}>{allergen.label}</label>
+                </div>
+              ))}
+            </div>
           </div>
-
 
           <p className={"add-recipe-question"}>Add recipe?</p>
           <div className={"save-recipe-box"}>
@@ -345,7 +365,7 @@ export function Recipe() {
         >
           <div className={"create-listing-header-container"}>
             <div className={"listing-recipe-image-container"}>
-              <img src={tempRecipePicture}/>
+              <img src={tempRecipePicture} alt={tempRecipeName}/>
             </div>
             <h1>{tempRecipeName}</h1>
           </div>
@@ -370,16 +390,7 @@ export function Recipe() {
           </div>
           <div className={"buy-window-container"}>
             <div>
-              <label htmlFor={"buy-from-window"}>From</label>
-              <input
-                id={"buy-from-window"}
-                type={"datetime-local"}
-                value={tempBuyFrom}
-                onChange={(e) => setTempBuyFrom(e.target.value)}
-              />
-            </div>
-            <div>
-              <label htmlFor={"buy-to-window"}>To</label>
+              <label htmlFor={"buy-to-window"}>Customer Order Deadline</label>
               <input
                 id={"buy-to-window"}
                 type={"datetime-local"}
@@ -391,7 +402,7 @@ export function Recipe() {
           <div className={"ready-by-container"}>
             <label htmlFor={"ready-by"}>Expected time of completion:</label>
             <input
-              id={"buy-to-window"}
+              id={"ready-by"}
               type={"datetime-local"}
               value={tempReadyTime}
               onChange={(e) => setTempReadyTime(e.target.value)}
@@ -412,7 +423,6 @@ export function Recipe() {
               No
             </button>
           </div>
-
         </dialog>
       </div>
     </div>
