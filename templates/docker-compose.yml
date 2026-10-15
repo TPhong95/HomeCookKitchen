@@ -1,0 +1,22 @@
+version: '3.8'
+
+services:
+  Example_name_DB: #Change Example_name_DB, this name is used to specify service in compose
+    image: postgres:17-alpine
+    container_name: #Insert container name here
+    environment:
+      POSTGRES_DB: #Insert DB name here
+      POSTGRES_USER: username
+      POSTGRES_PASSWORD: password
+    ports:
+    - '0000:5432' #On left is hardcoded port to local computer right is always 5432 for docker
+
+  Example_name_service:
+    build: .
+    container_name: #Insert container name here
+    ports:
+      - "8006" #Same port as the Dockerfile
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/ExampleDB #change ExampleDB to the postgresDB over
+      SPRING_DATASOURCE_USERNAME: username
+      SPRING_DATASOURCE_PASSWORD: password
