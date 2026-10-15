@@ -15,7 +15,9 @@ spring:
   flyway:
     locations: classpath:db/migration/customer
     enabled: true
+  cloud:
+    consul:
+      host: consul
+      port: 8500
 server:
   port: 8003
-
-# Potential problem with port number conflict on DB
