@@ -1,0 +1,144 @@
+version: '3.8'
+
+services:
+  #CHEF SERVICE & DB
+  postgres:
+    image: postgres:17-alpine
+    container_name: postgres-chef
+    environment:
+      POSTGRES_DB: chefDB
+      POSTGRES_USER: username
+      POSTGRES_PASSWORD: password
+    ports:
+      - "5432:5432"
+    restart: always
+    volumes:
+      - chef_db_data:/var/lib/postgresql/data
+    networks:
+      - m2026
+
+  chef-service:
+    image: chef-service:0.0.1-SNAPSHOT
+    container_name: chef-service
+    build:
+      context: ./user/chefuser
+    ports:
+      - "8002"
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/chefDB
+      SPRING_DATASOURCE_USERNAME: username
+      SPRING_DATASOURCE_PASSWORD: password
+    depends_on:
+      - postgres
+    networks:
+      - m2026
+
+
+  #CUSTOMER SERVICE & DB
+  postgres_customer:
+    image: postgres:17-alpine
+    container_name: postgres-customer
+    environment:
+      POSTGRES_DB: customerDB
+      POSTGRES_USER: username
+      POSTGRES_PASSWORD: password
+    ports:
+      - "5433:5432"
+    restart: always
+    volumes:
+      - customer_db_data:/var/lib/postgresql/data
+    networks:
+      - m2026
+
+  customer-service:
+    image: customer-service:0.0.1-SNAPSHOT
+    container_name: customer-service
+    build:
+      context: ./user/customer
+    ports:
+      - "8003"
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres_customer:5432/customerDB
+      SPRING_DATASOURCE_USERNAME: username
+      SPRING_DATASOURCE_PASSWORD: password
+    depends_on:
+      - postgres_customer
+    networks:
+      - m2026
+
+
+  # PURCHASE SERVICE & DB
+  postgres_purchase:
+    image: postgres:17-alpine
+    container_name: postgres-purchase
+    environment:
+      POSTGRES_DB: purchase_db
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: password
+    ports:
+      - "5435:5432"
+    restart: always
+    volumes:
+      - purchase_db_data:/var/lib/postgresql/data
+    networks:
+      - m2026
+
+  purchase-service:
+    image: purchase-service:0.0.1-SNAPSHOT
+    container_name: purchase-service
+    build:
+      context: ./transaction/purchase
+    ports:
+      - "8011"
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres_purchase:5432/purchase_db
+      SPRING_DATASOURCE_USERNAME: user
+      SPRING_DATASOURCE_PASSWORD: password
+    depends_on:
+      - postgres_purchase
+    networks:
+      - m2026
+
+
+  #PRODUCT SERVICE & DB
+  postgres_product:
+    image: postgres:17-alpine
+    container_name: postgres-product
+    environment:
+      POSTGRES_DB: productDB
+      POSTGRES_USER: username
+      POSTGRES_PASSWORD: password
+    ports:
+      - "5434:5432"
+    restart: always
+    volumes:
+      - product_db_data:/var/lib/postgresql/data
+    networks:
+      - m2026
+
+  product-service:
+    image: product-service:0.0.1-SNAPSHOT
+    container_name: product-service
+    build:
+      context: ./product/recipeproduct
+    ports:
+      - "8006"
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres_product:5432/productDB
+      SPRING_DATASOURCE_USERNAME: username
+      SPRING_DATASOURCE_PASSWORD: password
+    depends_on:
+      - postgres_product
+    networks:
+      - m2026
+
+
+volumes:
+  chef_db_data:
+  customer_db_data:
+  purchase_db_data:
+  product_db_data:
+
+networks:
+  m2026:
+    driver: bridge
