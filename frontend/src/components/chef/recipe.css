@@ -140,6 +140,51 @@
   color: #1d3b58;
 }
 
+.active-inactive-container {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  cursor: pointer;
+}
+
+.toggle-switch {
+  width: 46px;
+  height: 24px;
+  background-color: #cbd5e1;
+  border-radius: 12px;
+  position: relative;
+  transition: background-color 0.2s ease;
+  border: 1px solid #94a3b8;
+}
+
+.toggle-switch.active {
+  background-color: #0a4c86;
+  border-color: #0a4c86;
+}
+
+.toggle-knob {
+  width: 18px;
+  height: 18px;
+  background-color: #ffffff;
+  border-radius: 50%;
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  transition: transform 0.2s ease;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.toggle-switch.active .toggle-knob {
+  transform: translateX(22px);
+}
+
+.status-label {
+  font-weight: 600;
+  color: #1d3b58;
+  user-select: none;
+  font-size: 0.95rem;
+}
+
 .add-recipe-dialog {
   background-color: #eeffff;
   border-radius: 5px;
@@ -233,4 +278,91 @@
   font-weight: bold;
   color: #1d3b58;
   margin-bottom: 0.3rem;
+}
+
+.create-listing-dialog {
+  background-color: #eeffff;
+  border-radius: 8px;
+  padding: 2rem;
+  width: 500px;
+  max-width: 90vw;
+  border: 2px solid #0a4c86;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
+}
+
+.create-listing-header-container {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+  border-bottom: 2px solid #0a4c86;
+  padding-bottom: 1rem;
+}
+
+.listing-recipe-image-container img {
+  width: 60px;
+  height: 60px;
+  border-radius: 6px;
+  object-fit: cover;
+  border: 1px solid #1d3b58;
+}
+
+.create-listing-header-container h1 {
+  font-size: 1.4rem;
+  color: #1d3b58;
+  margin: 0;
+}
+
+.create-listing-dialog label {
+  font-weight: bold;
+  color: #1d3b58;
+  font-size: 0.95rem;
+  display: block;
+  margin-bottom: 0.3rem;
+  margin-top: 1rem;
+}
+
+.create-listing-dialog input[type="text"],
+.create-listing-dialog input[type="datetime-local"] {
+  width: 100%;
+  padding: 0.6rem;
+  border: 1px solid #0a4c86;
+  border-radius: 4px;
+  background-color: #ffffff;
+  color: #1d3b58;
+  font-size: 1rem;
+  box-sizing: border-box;
+}
+
+.buy-window-container {
+  display: flex;
+  gap: 1rem;
+}
+
+.buy-window-container > div {
+  flex: 1;
+}
+
+.create-listing-question {
+  text-align: center;
+  font-size: 1.3rem;
+  font-weight: bold;
+  color: #1d3b58;
+  margin: 1.5rem 0 1rem 0;
+}
+
+.listing-total-preview {
+  margin-top: 1rem;
+  padding: 0.8rem;
+  background-color: #ffffff;
+  border: 1px dashed #0a4c86;
+  border-radius: 4px;
+  color: #1d3b58;
+  font-size: 1rem;
+  text-align: right;
+}
+
+.listing-total-preview strong {
+  color: #0a4c86;
+  font-size: 1.1rem;
 }
