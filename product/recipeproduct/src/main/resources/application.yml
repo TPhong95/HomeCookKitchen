@@ -21,3 +21,8 @@ spring:
       port: 8500
 server:
   port: 8006
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health, info
