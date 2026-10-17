@@ -13,12 +13,26 @@
   border-right-style: solid;
 }
 
+.banner-sidebar.customer {
+  background-color: #346739;
+  border-right-color: #F2EDC2;
+}
+
 .banner-sidebar a {
   color: #ffffff;
   text-decoration: none;
 }
 
 .banner-sidebar a:hover {
+  text-decoration: underline;
+}
+
+.banner-sidebar.customer a {
+  color: #F2EDC2;
+}
+
+.banner-sidebar.customer a:hover {
+  color: #9FCB98;
   text-decoration: underline;
 }
 
