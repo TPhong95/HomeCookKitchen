@@ -1,0 +1,86 @@
+.listings-layout {
+  display: flex;
+  min-height: 100vh;
+}
+
+.listings-wrapper {
+  font-family: "Segoe UI", serif;
+  background-color: #eeffff;
+  flex: 1;
+  border-left-style: solid;
+  border-left-width: 2px;
+  border-left-color: #000000;
+}
+
+.listings-top-banner {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  color: #ffffff;
+  background-color: #0a4c86;
+  padding: 0.5rem 2rem;
+}
+
+.all-active-listings-container {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  padding: 2rem;
+}
+
+.active-listing-item-container {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 1.5rem;
+  background-color: #ffffff;
+  border: 2px solid #0a4c86;
+  border-radius: 8px;
+  padding: 1.2rem;
+}
+
+.listing-picture-container img {
+  width: 120px;
+  height: 120px;
+  border-radius: 5px;
+  object-fit: cover;
+  border: 1px solid #1d3b58;
+  display: block;
+}
+
+.listing-info-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  flex: 1;
+  height: 120px;
+}
+
+.name-and-edit-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+}
+
+.listing-title {
+  font-size: 1.3rem;
+  font-weight: bold;
+  color: #1d3b58;
+  margin: 0;
+}
+
+.listing-quantity-text {
+  font-weight: 600;
+  color: #1d3b58;
+}
+
+.listing-quantity-numbers {
+  color: #0a4c86;
+  font-weight: bold;
+}
+
+.listing-price-container {
+  font-size: 0.95rem;
+  color: #1d3b58;
+}
