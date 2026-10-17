@@ -21,6 +21,10 @@ Mid-blue: #99eeff
   border-left-color: #000000;
 }
 
+.chef-wrapper h1 {
+  margin-left: 2rem;
+}
+
 .chef-top-banner {
   display: flex;
   justify-content: space-between;
@@ -89,4 +93,27 @@ Mid-blue: #99eeff
 
 .save-changes-box .no-btn:hover {
   background-color: #ff7c7c;
+}
+
+.vibe-section-header-banner {
+  display: flex;
+  justifyContent: space-between;
+  alignItems: center;
+}
+
+.edit-description-btn {
+  background-color: #99eeff;
+  color: #1d3b58;
+  border-color: #eeffff;
+  margin-left: 1rem;
+  padding: 0.2rem 0.6rem;
+  font-weight: bold;
+  font-size: 1rem;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.edit-description-btn:hover {
+  background-color: #45e0ff;
 }
