@@ -1,6 +1,6 @@
 import {useRef, useState} from "react";
 import {Banner} from "../general/banner.tsx";
-import "./recipe.css";
+import styles from "./recipe.module.css";
 import {type RecipeStruct, DishCategory, DishPreference, Allergen} from "../shared/recipeinterface.ts";
 
 const initialAllergens: Record<Allergen, boolean> = {
@@ -180,60 +180,60 @@ export function Recipe() {
   })
 
   return (
-    <div className={"recipe-layout"}>
+    <div className={styles["recipe-layout"]}>
       <Banner/>
-      <div className={"recipe-wrapper"}>
-        <div className={"recipe-top-banner"}>
+      <div className={styles["recipe-wrapper"]}>
+        <div className={styles["recipe-top-banner"]}>
           <h1>{name}'s Recipes</h1>
           <button
-            className={"add-recipe-btn"}
+            className={styles["add-recipe-btn"]}
             onClick={handleAddRecipeModal}
           >
             + Add Recipe
           </button>
         </div>
 
-        <div className={"recipe-filter-container"}>
+        <div className={styles["recipe-filter-container"]}>
           <button
-            className={`filter-recipe-btn ${activeFilter === "ALL" ? "active-filter" : ""}`}
+            className={`${styles["filter-recipe-btn"]} ${activeFilter === "ALL" ? styles["active-filter"] : ""}`}
             onClick={handleShowAllRecipes}
           >
             All
           </button>
           <button
-            className={`filter-recipe-btn ${activeFilter === "ACTIVE" ? "active-filter" : ""}`}
+            className={`${styles["filter-recipe-btn"]} ${activeFilter === "ACTIVE" ? "active-filter" : ""}`}
             onClick={handleShowActiveRecipes}
           >
             Active
           </button>
           <button
-            className={`filter-recipe-btn ${activeFilter === "INACTIVE" ? "active-filter" : ""}`}
+            className={`${styles["filter-recipe-btn"]} ${activeFilter === "INACTIVE" ? "active-filter" : ""}`}
             onClick={handleShowInactiveRecipes}
           >
             Inactive
           </button>
         </div>
 
-        <div className={"all-recipes-container"}>
+        <div className={styles["all-recipes-container"]}>
           {filteredRecipes.map((recipe) => (
-            <div className={"recipe-item-container"} key={recipe.id}>
-              <div className={"recipe-picture-container"}>
+            <div className={styles["recipe-item-container"]} key={recipe.id}>
+              <div className={styles["recipe-picture-container"]}>
                 <img src={recipe.image} alt={recipe.recipeName}/>
               </div>
-              <div className={"recipe-info-container"}>
-                <div className={"name-and-edit-container"}>
-                  <div className={"recipe-title"}>{recipe.recipeName}</div>
+              <div className={styles["recipe-info-container"]}>
+                <div className={styles["name-and-edit-container"]}>
+                  <div className={styles["recipe-title"]}>{recipe.recipeName}</div>
                   <button
-                    className={"edit-recipe-btn"}
+                    className={styles["edit-recipe-btn"]}
                     onClick={() => handleEditRecipeModal(recipe)}
                   >
                     Edit recipe
                   </button>
                 </div>
 
-                <div className={"listing-and-active-container"}>
+                <div className={styles["listing-and-active-container"]}>
                   {recipe.active ? (<button
-                    className={"create-listing-btn"}
+                    className={styles["create-listing-btn"]}
                     onClick={() => handleCreateListingModal(recipe)}
                   >
                     + Create listing
@@ -241,13 +241,13 @@ export function Recipe() {
                     <div></div> /* DO NOT REMOVE, OTHERWISE INACTIVE BUTTON APPEARS ON WRONG SIDE */
                   )}
                   <div
-                    className={"active-inactive-btn"}
+                    className={styles["active-inactive-btn"]}
                     onClick={() => recipe.id !== undefined && handleToggleActive(recipe.id)}
                   >
-                    <div className={`toggle-switch ${recipe.active ? "active" : ""}`}>
-                      <div className={"toggle-knob"}></div>
+                    <div className={`${styles["toggle-switch"]} ${recipe.active ? styles["active"] : ""}`}>
+                      <div className={styles["toggle-knob"]}></div>
                     </div>
-                    <span className={"status-label"}>{recipe.active ? "Active" : "Inactive"}</span>
+                    <span className={styles["status-label"]}>{recipe.active ? "Active" : "Inactive"}</span>
                   </div>
                 </div>
               </div>
@@ -256,24 +256,24 @@ export function Recipe() {
         </div>
 
         <dialog
-          className={"add-recipe-dialog"}
+          className={styles["add-recipe-dialog"]}
           ref={showRecipeDialogRef}
         >
-          <div className={"header-picture-name-description"}>
-            <div className={"recipe-image-upload-section"}>
+          <div className={styles["header-picture-name-description"]}>
+            <div className={styles["recipe-image-upload-section"]}>
               {tempImage ? (
-                <div className={"image-preview-container"}>
+                <div className={styles["image-preview-container"]}>
                   <img src={tempImage} alt="Recipe Preview" />
                 </div>
               ) : (
-                <div className={"image-placeholder-box"} title="Click to add image">
-                  <span className={"plus-icon"}>+</span>
-                  <span className={"placeholder-text"}>Add photo</span>
+                <div className={styles["image-placeholder-box"]} title="Click to add image">
+                  <span className={styles["plus-icon"]}>+</span>
+                  <span className={styles["placeholder-text"]}>Add photo</span>
                 </div>
               )}
             </div>
-            <div className={"recipe-text-fields-section"}>
-              <div className={"form-field"}>
+            <div className={styles["recipe-text-fields-section"]}>
+              <div className={styles["form-field"]}>
                 <label htmlFor={"recipe-name-input"}>Recipe Name:</label>
                 <input
                   id={"recipe-name-input"}
@@ -283,7 +283,7 @@ export function Recipe() {
                   placeholder={"e.g. Reindeer Kebab Pizza"}
                 />
               </div>
-              <div className={"form-field"}>
+              <div className={styles["form-field"]}>
                 <label htmlFor={"description-input"}>Description:</label>
                 <textarea
                   id={"description-input"}
@@ -295,8 +295,8 @@ export function Recipe() {
             </div>
           </div>
 
-          <div className={"category-dropdowns"}>
-            <div className={"form-field"}>
+          <div className={styles["category-dropdowns"]}>
+            <div className={styles["form-field"]}>
               <label htmlFor={"category-input"}>Category:</label>
               <select
                 id={"category-input"}
@@ -309,7 +309,7 @@ export function Recipe() {
               </select>
             </div>
 
-            <div className={"form-field"}>
+            <div className={styles["form-field"]}>
               <label htmlFor={"preference-input"}>Diet preference:</label>
               <select
                 id={"preference-input"}
@@ -323,11 +323,11 @@ export function Recipe() {
             </div>
           </div>
 
-          <div className={"form-field"}>
-            <div className={"allergens-title"}>Allergens:</div>
-            <div className={"allergens-checkboxes"}>
+          <div className={styles["form-field"]}>
+            <div className={styles["allergens-title"]}>Allergens:</div>
+            <div className={styles["allergens-checkboxes"]}>
               {allergensList.map((allergen) => (
-                <div className={"allergen-item"} key={allergen.id}>
+                <div className={styles["allergen-item"]} key={allergen.id}>
                   <input
                     id={`${allergen.id}-checkbox`}
                     type={"checkbox"}
@@ -342,16 +342,16 @@ export function Recipe() {
             </div>
           </div>
 
-          <p className={"add-recipe-question"}>Add recipe?</p>
-          <div className={"save-recipe-box"}>
+          <p className={styles["add-recipe-question"]}>Add recipe?</p>
+          <div className={styles["save-recipe-box"]}>
             <button
-              className={"yes-btn"}
+              className={styles["yes-btn"]}
               onClick={handleSaveRecipe}
             >
               Yes
             </button>
             <button
-              className={"no-btn"}
+              className={styles["no-btn"]}
               onClick={() => showRecipeDialogRef.current?.close()}
             >
               No
@@ -360,16 +360,16 @@ export function Recipe() {
         </dialog>
 
         <dialog
-          className={"create-listing-dialog"}
+          className={styles["create-listing-dialog"]}
           ref={createListingDialogRef}
         >
-          <div className={"create-listing-header-container"}>
-            <div className={"listing-recipe-image-container"}>
+          <div className={styles["create-listing-header-container"]}>
+            <div className={styles["listing-recipe-image-container"]}>
               <img src={tempRecipePicture} alt={tempRecipeName}/>
             </div>
             <h1>{tempRecipeName}</h1>
           </div>
-          <div className={"portion-control-container"}>
+          <div className={styles["portion-control-container"]}>
             <label htmlFor={"number-of-portions"}>Number of portions:</label>
             <input
               id={"number-of-portions"}
@@ -384,11 +384,11 @@ export function Recipe() {
               value={tempPricePerPortion}
               onChange={(e) => setTempPricePerPortion(e.target.value)}
             />
-            <div className={"listing-total-preview"}>
+            <div className={styles["listing-total-preview"]}>
               Total potential revenue: <strong>{calculatedTotal.toFixed(2)}NOK</strong>
             </div>
           </div>
-          <div className={"buy-window-container"}>
+          <div className={styles["buy-window-container"]}>
             <div>
               <label htmlFor={"buy-to-window"}>Customer Order Deadline</label>
               <input
@@ -399,7 +399,7 @@ export function Recipe() {
               />
             </div>
           </div>
-          <div className={"ready-by-container"}>
+          <div className={styles["ready-by-container"]}>
             <label htmlFor={"ready-by"}>Expected time of completion:</label>
             <input
               id={"ready-by"}
@@ -408,16 +408,16 @@ export function Recipe() {
               onChange={(e) => setTempReadyTime(e.target.value)}
             />
           </div>
-          <p className={"create-listing-question"}>Create listing?</p>
-          <div className={"save-recipe-box"}>
+          <p className={styles["create-listing-question"]}>Create listing?</p>
+          <div className={styles["save-recipe-box"]}>
             <button
-              className={"yes-btn"}
+              className={styles["yes-btn"]}
               onClick={handleCreateListing}
             >
               Yes
             </button>
             <button
-              className={"no-btn"}
+              className={styles["no-btn"]}
               onClick={() => createListingDialogRef.current?.close()}
             >
               No

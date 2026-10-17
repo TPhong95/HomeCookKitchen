@@ -1,5 +1,5 @@
 import {Banner} from "../general/banner.tsx";
-import "./history.css";
+import styles from "./history.module.css";
 import {type ListingStruct} from "../shared/listinginterface.ts";
 import {useState} from "react";
 
@@ -48,36 +48,36 @@ export function History() {
   );
 
   return (
-    <div className={"listings-layout"}>
+    <div className={styles["listings-layout"]}>
       <Banner/>
-      <div className={"listings-wrapper"}>
-        <div className={"listings-top-banner"}>
+      <div className={styles["listings-wrapper"]}>
+        <div className={styles["listings-top-banner"]}>
           <h1>{name}'s Listing History</h1>
         </div>
 
-        <div className={"all-active-listings-container"}>
+        <div className={styles["all-active-listings-container"]}>
           {sortedHistory.map((listing) => {
             const revenue = (listing.quantityPurchased ?? 0) * (listing.unitPrice ?? 0);
             return (
               <div
-                className={"active-listing-item-container"}
+                className={styles["active-listing-item-container"]}
                 key={listing.id}
               >
-                <div className={"listing-picture-container"}>
+                <div className={styles["listing-picture-container"]}>
                   <img src={listing.image} alt={listing.recipeName} />
                 </div>
-                <div className={"listing-info-container"}>
-                  <div className={"name-and-edit-container"}>
-                    <div className={"listing-title"}>{listing.recipeName}</div>
+                <div className={styles["listing-info-container"]}>
+                  <div className={styles["name-and-edit-container"]}>
+                    <div className={styles["listing-title"]}>{listing.recipeName}</div>
                   </div>
 
-                  <div className={"listing-quantity-text"}>
-                    Total Revenue: <span className={"listing-quantity-numbers"}>{revenue.toFixed(2)} NOK</span>
+                  <div className={styles["listing-quantity-text"]}>
+                    Total Revenue: <span className={styles["listing-quantity-numbers"]}>{revenue.toFixed(2)} NOK</span>
                   </div>
-                  <div className={"listing-quantity-text"}>
-                    Sold: <span className={"listing-quantity-numbers"}>{listing.quantityPurchased} / {listing.quantity} portions</span>
+                  <div className={styles["listing-quantity-text"]}>
+                    Sold: <span className={styles["listing-quantity-numbers"]}>{listing.quantityPurchased} / {listing.quantity} portions</span>
                   </div>
-                  <div className={"listing-price-container"}>Hosted at: {listing.readyBy}</div>
+                  <div className={styles["listing-price-container"]}>Hosted at: {listing.readyBy}</div>
                 </div>
               </div>
             );

@@ -101,3 +101,18 @@ Mid-blue: #99eeff
 .edit-profile-description-btn:hover {
   background-color: #45e0ff;
 }
+
+.home-description-container {
+  margin-top: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.label-container {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-weight: bold;
+  color: #1d3b58;
+}

@@ -1,5 +1,5 @@
 import {useRef, useState} from "react";
-import './chefprofile.css'
+import styles from './chefprofile.module.css'
 import {Banner} from "../general/banner.tsx";
 
 /*
@@ -77,48 +77,48 @@ export function ChefProfile() {
   };
 
   return (
-    <div className={"profile-layout"}>
+    <div className={styles["profile-layout"]}>
       <Banner/>
-      <div className={"chef-wrapper"}>
-        <div className={"chef-top-banner"}>
+      <div className={styles["chef-wrapper"]}>
+        <div className={styles["chef-top-banner"]}>
           {name ? (<h1>Welcome, {name}!</h1>
           ) : (
             <h1>Welcome!</h1>
           )}
 
         </div>
-        <div className={"vibe-section-header-banner"}>
+        <div className={styles["vibe-section-header-banner"]}>
           <h1>Contact Info</h1>
           <button
-            className={"edit-profile-description-btn"}
+            className={styles["edit-profile-description-btn"]}
             onClick={handleEditProfileModal}
           >
             Edit contact info
           </button>
         </div>
-        <div className={"contact-info"}>
+        <div className={styles["contact-info"]}>
           <p><strong>Name: </strong>{name}</p>
           <p><strong>Address:</strong></p>
-          <ul className={"address-list"}>
+          <ul className={styles["address-list"]}>
             <li><strong>Street: </strong>{street}</li>
             <li><strong>Postcode: </strong>{postalCode}</li>
           </ul>
           <p><strong>Email: </strong>{email}</p>
         </div>
 
-        <div className={"vibe-section-header-banner"}>
+        <div className={styles["vibe-section-header-banner"]}>
           <h1>Home Description</h1>
           <button
-            className={"edit-profile-description-btn"}
+            className={styles["edit-profile-description-btn"]}
             onClick={handleEditHomeDescriptionModal}
           >
             Edit description
           </button>
         </div>
-        <div className={"contact-info"}>
+        <div className={styles["contact-info"]}>
           <p><strong>Description: </strong>{description}</p>
           <p><strong>Vibes:</strong></p>
-          <ul className={"address-list"}>
+          <ul className={styles["address-list"]}>
             <li><strong>Music: </strong>{music}</li>
             <li><strong>Pets: </strong> {pets ? ("Yes") : ("No")}</li>
             <li><strong>Outdoor: </strong>{outdoor ? ("Yes") : ("No")}</li>
@@ -127,10 +127,10 @@ export function ChefProfile() {
         </div>
 
         <dialog
-          className={"edit-profile-dialog"}
+          className={styles["edit-profile-dialog"]}
           ref={editProfileDialogRef}
         >
-          <div className={"modal-contact-details"}>
+          <div className={styles["modal-contact-details"]}>
             <div>Name:</div>
             <input
               type="text"
@@ -157,16 +157,16 @@ export function ChefProfile() {
             />
           </div>
           <p className={""}>Save changes?</p>
-          <div className={"save-changes-box"}>
+          <div className={styles["save-changes-box"]}>
 
             <button
-              className={"yes-btn"}
+              className={styles["yes-btn"]}
               onClick={() => handleSaveChanges()}
             >
               Yes
             </button>
             <button
-              className={"no-btn"}
+              className={styles["no-btn"]}
               onClick={() => editProfileDialogRef.current?.close()}
             >
               No
@@ -175,20 +175,18 @@ export function ChefProfile() {
         </dialog>
 
         <dialog
-          className={"edit-profile-dialog"}
+          className={styles["edit-profile-dialog"]}
           ref={editHomeDescriptionDialogRef}
         >
-          <div className={"modal-contact-details"}>
+          <div className={styles["modal-contact-details"]}>
             <div>Description:</div>
             <textarea
               value={tempDescription}
               onChange={(e) => setTempDescription(e.target.value)}
               rows={3}
-              style={{width: "100%", padding: "0.5rem", borderRadius: "4px", border: "1px solid #0a4c86"}}
             />
-            <div style={{marginTop: "1rem", display: "flex", flexDirection: "column", gap: "0.5rem"}}>
-              <label
-                style={{display: "flex", alignItems: "center", gap: "0.5rem", fontWeight: "bold", color: "#1d3b58"}}>
+            <div className={styles["home-description-container"]}>
+              <label className={styles["label-container"]}>
                 <input
                   type="checkbox"
                   checked={tempMusic}
@@ -196,8 +194,7 @@ export function ChefProfile() {
                 />
                 Music
               </label>
-              <label
-                style={{display: "flex", alignItems: "center", gap: "0.5rem", fontWeight: "bold", color: "#1d3b58"}}>
+              <label className={styles["label-container"]}>
                 <input
                   type="checkbox"
                   checked={tempPets}
@@ -205,8 +202,7 @@ export function ChefProfile() {
                 />
                 Pets
               </label>
-              <label
-                style={{display: "flex", alignItems: "center", gap: "0.5rem", fontWeight: "bold", color: "#1d3b58"}}>
+              <label className={styles["label-container"]}>
                 <input
                   type="checkbox"
                   checked={tempOutdoor}
@@ -214,8 +210,7 @@ export function ChefProfile() {
                 />
                 Outdoor
               </label>
-              <label
-                style={{display: "flex", alignItems: "center", gap: "0.5rem", fontWeight: "bold", color: "#1d3b58"}}>
+              <label className={styles["label-container"]}>
                 <input
                   type="checkbox"
                   checked={tempFamilyFriendly}
@@ -226,15 +221,15 @@ export function ChefProfile() {
             </div>
           </div>
           <p>Save changes?</p>
-          <div className={"save-changes-box"}>
+          <div className={styles["save-changes-box"]}>
             <button
-              className={"yes-btn"}
+              className={styles["yes-btn"]}
               onClick={handleSaveHomeDescription}
             >
               Yes
             </button>
             <button
-              className={"no-btn"}
+              className={styles["no-btn"]}
               onClick={() => editHomeDescriptionDialogRef.current?.close()}
             >
               No

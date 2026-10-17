@@ -1,5 +1,5 @@
 import {Banner} from "../general/banner.tsx";
-import "./listings.css";
+import styles from "./listings.module.css";
 import {type ListingStruct} from "../shared/listinginterface.ts";
 import {useRef, useState} from "react";
 import {Allergen, DishCategory, DishPreference, type RecipeStruct} from "../shared/recipeinterface.ts";
@@ -151,54 +151,54 @@ export function Listings() {
     createListingDialogRef.current?.close();
   };
   return (
-    <div className={"listings-layout"}>
+    <div className={styles["listings-layout"]}>
       <Banner/>
-      <div className={"listings-wrapper"}>
-        <div className={"listings-top-banner"}>
+      <div className={styles["listings-wrapper"]}>
+        <div className={styles["listings-top-banner"]}>
           <h1>{name}'s Listings</h1>
           <button
-            className={"new-listing-btn"}
+            className={styles["new-listing-btn"]}
             onClick={handleOpenCreateListingModal}
           >
             + Create Listing
           </button>
         </div>
 
-        <div className={"all-active-listings-container"}>
+        <div className={styles["all-active-listings-container"]}>
           {listings.map((listing) => (
             <div
-              className={"active-listing-item-container"}
+              className={styles["active-listing-item-container"]}
               key={listing.id}
             >
-              <div className={"listing-picture-container"}>
+              <div className={styles["listing-picture-container"]}>
                 <img src={listing.image} alt={listing.recipeName} />
               </div>
-              <div className={"listing-info-container"}>
-                <div className={"name-and-edit-container"}>
-                  <div className={"listing-title"}>{listing.recipeName}</div>
+              <div className={styles["listing-info-container"]}>
+                <div className={styles["name-and-edit-container"]}>
+                  <div className={styles["listing-title"]}>{listing.recipeName}</div>
                   <button
-                    className={"edit-recipe-btn"}
+                    className={styles["edit-recipe-btn"]}
                     onClick={() => handleEditListingModal(listing)}
                   >
                     Edit listing
                   </button>
                 </div>
 
-                <div className={"listing-quantity-text"}>
-                  Price per portion: <span className={"listing-quantity-numbers"}>{listing.unitPrice} NOK</span>
+                <div className={styles["listing-quantity-text"]}>
+                  Price per portion: <span className={styles["listing-quantity-numbers"]}>{listing.unitPrice} NOK</span>
                 </div>
-                <div className={"listing-quantity-text"}>
-                  Seats left: <span className={"listing-quantity-numbers"}>{listing.quantityPurchased} / {listing.quantity}</span>
+                <div className={styles["listing-quantity-text"]}>
+                  Seats left: <span className={styles["listing-quantity-numbers"]}>{listing.quantityPurchased} / {listing.quantity}</span>
                 </div>
-                <div className={"listing-price-container"}>Ready by: {listing.readyBy}</div>
-                <div className={"listing-purchase-deadline"}>Purchase deadline: {listing.purchaseDeadline}</div>
+                <div className={styles["listing-price-container"]}>Ready by: {listing.readyBy}</div>
+                <div className={styles["listing-purchase-deadline"]}>Purchase deadline: {listing.purchaseDeadline}</div>
               </div>
             </div>
           ))}
         </div>
 
         <dialog
-          className={"create-listing-dialog"}
+          className={styles["create-listing-dialog"]}
           ref={createListingDialogRef}
         >
           {modalStep === 1 ? (
@@ -219,16 +219,16 @@ export function Listings() {
                   ))}
                 </select>
               </div>
-              <div className={"save-recipe-box"}>
+              <div className={styles["save-recipe-box"]}>
                 <button
-                  className={"yes-btn"}
+                  className={styles["yes-btn"]}
                   onClick={handleNextStep}
                   disabled={selectedRecipeId === ""}
                 >
                   Next
                 </button>
                 <button
-                  className={"no-btn"}
+                  className={styles["no-btn"]}
                   onClick={() => createListingDialogRef.current?.close()}
                 >
                   Cancel
@@ -237,13 +237,13 @@ export function Listings() {
             </div>
           ) : (
             <div>
-              <div className={"create-listing-header-container"}>
-                <div className={"listing-recipe-image-container"}>
+              <div className={styles["create-listing-header-container"]}>
+                <div className={styles["listing-recipe-image-container"]}>
                   <img src={tempRecipePicture} alt={tempRecipeName}/>
                 </div>
                 <h1>{tempRecipeName}</h1>
               </div>
-              <div className={"portion-control-container"}>
+              <div className={styles["portion-control-container"]}>
                 <label htmlFor={"number-of-portions"}>Number of portions:</label>
                 <input
                   id={"number-of-portions"}
@@ -258,11 +258,11 @@ export function Listings() {
                   value={tempPricePerPortion}
                   onChange={(e) => setTempPricePerPortion(e.target.value)}
                 />
-                <div className={"listing-total-preview"}>
+                <div className={styles["listing-total-preview"]}>
                   Total potential revenue: <strong>{calculatedTotal.toFixed(2)}NOK</strong>
                 </div>
               </div>
-              <div className={"buy-window-container"}>
+              <div className={styles["buy-window-container"]}>
                 <div>
                   <label htmlFor={"buy-to-window"}>Purchase Deadline</label>
                   <input
@@ -273,7 +273,7 @@ export function Listings() {
                   />
                 </div>
               </div>
-              <div className={"ready-by-container"}>
+              <div className={styles["ready-by-container"]}>
                 <label htmlFor={"ready-by"}>Expected time of completion:</label>
                 <input
                   id={"ready-by"}
@@ -282,16 +282,16 @@ export function Listings() {
                   onChange={(e) => setTempReadyTime(e.target.value)}
                 />
               </div>
-              <p className={"create-listing-question"}>Create listing?</p>
-              <div className={"save-recipe-box"}>
+              <p className={styles["create-listing-question"]}>Create listing?</p>
+              <div className={styles["save-recipe-box"]}>
                 <button
-                  className={"yes-btn"}
+                  className={styles["yes-btn"]}
                   onClick={handleCreateListing}
                 >
                   Yes
                 </button>
                 <button
-                  className={"no-btn"}
+                  className={styles["no-btn"]}
                   onClick={() => setModalStep(1)}
                 >
                   Back

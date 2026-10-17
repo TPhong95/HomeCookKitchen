@@ -1,6 +1,6 @@
 import {NavLink} from "react-router-dom";
 import {useState} from "react";
-import "./banner.css";
+import styles from "./banner.module.css";
 
 export function Banner() {
   /* When we hook this up to UserContext, we can replace the code below with this
@@ -33,15 +33,15 @@ export function Banner() {
   // Note that NavLink is used if we want to highlight which page we are on (for future styling)
 
   return (
-    <div className={`banner-sidebar ${role}`}>
-      <div className={"profile-picture-container"}>
+    <div className={`${styles["banner-sidebar"]} ${role === "customer" ? styles.customer : ""}`}>
+      <div className={styles["profile-picture-container"]}>
         <img src="../../../testdata/profilepic.jpg" alt={"profile picture goes here"}/>
       </div>
-      <div className={"nav-container"}>
+      <div className={styles["nav-container"]}>
       <ul>
         {navigation.map((nav) => (
           <li
-            className={"list-item"}
+            className={styles["list-item"]}
             key={nav.text}
           >
             <NavLink to={nav.link}>
