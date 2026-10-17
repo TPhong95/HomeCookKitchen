@@ -61,22 +61,6 @@ Mid-blue: #99eeff
   justify-content: space-evenly;
 }
 
-.edit-profile-btn {
-  background-color: #99eeff;
-  color: #1d3b58;
-  border: none;
-  padding: 0.6rem 1.2rem;
-  font-weight: bold;
-  font-size: 1rem;
-  border-radius: 4px;
-  cursor: pointer;
-  transition: background-color 0.2s;
-}
-
-.edit-profile-btn:hover {
-  background-color: #45e0ff;
-}
-
 .save-changes-box .yes-btn {
   background-color: #c0ff63;
   transition-duration: 0.2s;
@@ -97,16 +81,16 @@ Mid-blue: #99eeff
 
 .vibe-section-header-banner {
   display: flex;
-  justifyContent: space-between;
-  alignItems: center;
+  justify-content: space-between;
+  align-items: center;
 }
 
-.edit-description-btn {
+.edit-profile-description-btn {
   background-color: #99eeff;
   color: #1d3b58;
   border-color: #eeffff;
-  margin-left: 1rem;
-  padding: 0.2rem 0.6rem;
+  margin-right: 1rem;
+  padding: 0.6rem 1.2rem;
   font-weight: bold;
   font-size: 1rem;
   border-radius: 4px;
@@ -114,6 +98,6 @@ Mid-blue: #99eeff
   transition: background-color 0.2s;
 }
 
-.edit-description-btn:hover {
+.edit-profile-description-btn:hover {
   background-color: #45e0ff;
 }

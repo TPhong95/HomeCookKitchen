@@ -85,14 +85,17 @@ export function ChefProfile() {
           ) : (
             <h1>Welcome!</h1>
           )}
+
+        </div>
+        <div className={"vibe-section-header-banner"}>
+          <h1>Contact Info</h1>
           <button
-            className={"edit-profile-btn"}
+            className={"edit-profile-description-btn"}
             onClick={handleEditProfileModal}
           >
-            Edit profile
+            Edit contact info
           </button>
         </div>
-        <h1>Contact Info</h1>
         <div className={"contact-info"}>
           <p><strong>Name: </strong>{name}</p>
           <p><strong>Address:</strong></p>
@@ -106,7 +109,7 @@ export function ChefProfile() {
         <div className={"vibe-section-header-banner"}>
           <h1>Home Description</h1>
           <button
-            className={"edit-description-btn"}
+            className={"edit-profile-description-btn"}
             onClick={handleEditHomeDescriptionModal}
           >
             Edit description
@@ -181,10 +184,11 @@ export function ChefProfile() {
               value={tempDescription}
               onChange={(e) => setTempDescription(e.target.value)}
               rows={3}
-              style={{ width: "100%", padding: "0.5rem", borderRadius: "4px", border: "1px solid #0a4c86" }}
+              style={{width: "100%", padding: "0.5rem", borderRadius: "4px", border: "1px solid #0a4c86"}}
             />
-            <div style={{ marginTop: "1rem", display: "flex", flexDirection: "column", gap: "0.5rem" }}>
-              <label style={{ display: "flex", alignItems: "center", gap: "0.5rem", fontWeight: "bold", color: "#1d3b58" }}>
+            <div style={{marginTop: "1rem", display: "flex", flexDirection: "column", gap: "0.5rem"}}>
+              <label
+                style={{display: "flex", alignItems: "center", gap: "0.5rem", fontWeight: "bold", color: "#1d3b58"}}>
                 <input
                   type="checkbox"
                   checked={tempMusic}
@@ -192,7 +196,8 @@ export function ChefProfile() {
                 />
                 Music
               </label>
-              <label style={{ display: "flex", alignItems: "center", gap: "0.5rem", fontWeight: "bold", color: "#1d3b58" }}>
+              <label
+                style={{display: "flex", alignItems: "center", gap: "0.5rem", fontWeight: "bold", color: "#1d3b58"}}>
                 <input
                   type="checkbox"
                   checked={tempPets}
@@ -200,7 +205,8 @@ export function ChefProfile() {
                 />
                 Pets
               </label>
-              <label style={{ display: "flex", alignItems: "center", gap: "0.5rem", fontWeight: "bold", color: "#1d3b58" }}>
+              <label
+                style={{display: "flex", alignItems: "center", gap: "0.5rem", fontWeight: "bold", color: "#1d3b58"}}>
                 <input
                   type="checkbox"
                   checked={tempOutdoor}
@@ -208,7 +214,8 @@ export function ChefProfile() {
                 />
                 Outdoor
               </label>
-              <label style={{ display: "flex", alignItems: "center", gap: "0.5rem", fontWeight: "bold", color: "#1d3b58" }}>
+              <label
+                style={{display: "flex", alignItems: "center", gap: "0.5rem", fontWeight: "bold", color: "#1d3b58"}}>
                 <input
                   type="checkbox"
                   checked={tempFamilyFriendly}
