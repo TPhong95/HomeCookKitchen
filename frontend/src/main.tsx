@@ -3,6 +3,7 @@ import { createRoot } from 'react-dom/client'
 import {FrontPage} from "./components/general/frontpage.tsx";
 import {ChefProfile} from "./components/chef/chefprofile.tsx";
 import {Recipe} from "./components/chef/recipe.tsx";
+import {Listings} from "./components/chef/listings.tsx";
 
 createRoot(document.getElementById('root')!).render(
   <BrowserRouter>
@@ -10,6 +11,7 @@ createRoot(document.getElementById('root')!).render(
       <Route path={"/"} element={<FrontPage />} />
       <Route path={"/user/chef/profile"} element={<ChefProfile />} />
       <Route path={"/user/chef/recipe"} element={<Recipe />} />
+      <Route path={"/user/chef/listings"} element={<Listings />} />
     </Routes>
   </BrowserRouter>,
 )

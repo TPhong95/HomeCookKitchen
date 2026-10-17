@@ -6,7 +6,7 @@ export function Banner() {
   const navigation = [
     { link: "/", text: "Home" },
     { link: "/user/chef/profile", text: "Profile" },
-    { link: "/user/chef/listing", text: "Listings" },
+    { link: "/user/chef/listings", text: "Listings" },
     { link: "/user/chef/recipe", text: "Recipes" },
     { link: "/user/chef/history", text: "History" },
   ]

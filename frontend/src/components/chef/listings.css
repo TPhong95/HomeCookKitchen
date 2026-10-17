@@ -1,0 +1,247 @@
+.listings-layout {
+  display: flex;
+  min-height: 100vh;
+}
+
+.listings-wrapper {
+  font-family: "Segoe UI", serif;
+  background-color: #eeffff;
+  flex: 1;
+  border-left-style: solid;
+  border-left-width: 2px;
+  border-left-color: #000000;
+}
+
+.listings-top-banner {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  color: #ffffff;
+  background-color: #0a4c86;
+  padding: 0.5rem 2rem;
+}
+
+.new-listing-btn {
+  background-color: #99eeff;
+  color: #1d3b58;
+  border: none;
+  padding: 0.6rem 1.2rem;
+  font-weight: bold;
+  font-size: 1rem;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.new-listing-btn:hover {
+  background-color: #45e0ff;
+}
+
+.all-active-listings-container {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  padding: 2rem;
+}
+
+.active-listing-item-container {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 1.5rem;
+  background-color: #ffffff;
+  border: 2px solid #0a4c86;
+  border-radius: 8px;
+  padding: 1.2rem;
+}
+
+.listing-picture-container img {
+  width: 120px;
+  height: 120px;
+  border-radius: 5px;
+  object-fit: cover;
+  border: 1px solid #1d3b58;
+  display: block;
+}
+
+.listing-info-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  flex: 1;
+  height: 120px;
+}
+
+.name-and-edit-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+}
+
+.listing-title {
+  font-size: 1.3rem;
+  font-weight: bold;
+  color: #1d3b58;
+  margin: 0;
+}
+
+.edit-recipe-btn {
+  background-color: #ffffff;
+  border: 1px solid #0a4c86;
+  color: #1d3b58;
+  padding: 0.4rem 0.8rem;
+  border-radius: 4px;
+  cursor: pointer;
+  font-weight: 500;
+  transition: background-color 0.2s;
+}
+
+.edit-recipe-btn:hover {
+  background-color: #f0fdff;
+}
+
+.listing-quantity-text {
+  font-weight: bold;
+
+}
+
+.listing-quantity-numbers{
+  color: #0a4c86;
+  font-size: 1.1rem;
+}
+
+
+.listing-price-container,
+.listing-purchase-deadline {
+  font-size: 0.95rem;
+  color: #1d3b58;
+}
+
+.create-listing-dialog {
+  background-color: #eeffff;
+  border-radius: 8px;
+  padding: 2rem;
+  width: 500px;
+  max-width: 90vw;
+  border: 2px solid #0a4c86;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
+}
+
+.create-listing-dialog h2 {
+  color: #1d3b58;
+  margin-top: 0;
+  margin-bottom: 1rem;
+}
+
+.create-listing-dialog label {
+  font-weight: bold;
+  color: #1d3b58;
+  font-size: 0.95rem;
+  display: block;
+  margin-bottom: 0.3rem;
+  margin-top: 1rem;
+}
+
+.create-listing-dialog input[type="text"],
+.create-listing-dialog input[type="datetime-local"],
+.create-listing-dialog select {
+  width: 100%;
+  padding: 0.6rem;
+  border: 1px solid #0a4c86;
+  border-radius: 4px;
+  background-color: #ffffff;
+  color: #1d3b58;
+  font-size: 1rem;
+  box-sizing: border-box;
+}
+
+.create-listing-header-container {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+  border-bottom: 2px solid #0a4c86;
+  padding-bottom: 1rem;
+}
+
+.listing-recipe-image-container img {
+  width: 60px;
+  height: 60px;
+  border-radius: 6px;
+  object-fit: cover;
+  border: 1px solid #1d3b58;
+}
+
+.create-listing-header-container h1 {
+  font-size: 1.4rem;
+  color: #1d3b58;
+  margin: 0;
+}
+
+.listing-total-preview {
+  margin-top: 1rem;
+  padding: 0.8rem;
+  background-color: #ffffff;
+  border: 1px dashed #0a4c86;
+  border-radius: 4px;
+  color: #1d3b58;
+  font-size: 1rem;
+  text-align: right;
+}
+
+.listing-total-preview strong {
+  color: #0a4c86;
+  font-size: 1.1rem;
+}
+
+.create-listing-question {
+  text-align: center;
+  font-size: 1.3rem;
+  font-weight: bold;
+  color: #1d3b58;
+  margin: 1.5rem 0 1rem 0;
+}
+
+.save-recipe-box {
+  display: flex;
+  justify-content: space-evenly;
+  margin-top: 1.5rem;
+}
+
+.save-recipe-box .yes-btn {
+  background-color: #c0ff63;
+  transition-duration: 0.2s;
+  width: 10rem;
+  height: 3rem;
+  border-radius: 5px;
+  border: 1px solid #8cc53e;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.save-recipe-box .yes-btn:hover {
+  background-color: #a0da4e;
+}
+
+.save-recipe-box .yes-btn:disabled {
+  background-color: #e2e8f0;
+  border-color: #cbd5e1;
+  color: #94a3b8;
+  cursor: not-allowed;
+}
+
+.save-recipe-box .no-btn {
+  background-color: #ffb9b9;
+  transition-duration: 0.2s;
+  width: 10rem;
+  height: 3rem;
+  border-radius: 5px;
+  border: 1px solid #e58e8e;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.save-recipe-box .no-btn:hover {
+  background-color: #ff7c7c;
+}
