@@ -81,7 +81,7 @@ export function Listings() {
   const name = "Geoffrey";
 
   const [listings, setListings] = useState<ListingStruct[]>(testListings);
-  const [recipes, setRecipes] = useState<RecipeStruct[]>(testRecipes); // FIX: Backend call actually sets recipes
+  const [recipes /*, setRecipes */] = useState<RecipeStruct[]>(testRecipes); // FIX: Backend call actually sets recipes
 
   const [modalStep, setModalStep] = useState<1 | 2>(1);
   const [selectedRecipeId, setSelectedRecipeId] = useState<number | "">("");
