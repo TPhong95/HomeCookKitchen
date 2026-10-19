@@ -1,0 +1,359 @@
+.cart-layout {
+  display: flex;
+  min-height: 100vh;
+}
+
+.cart-wrapper {
+  font-family: "Segoe UI", serif;
+  background-color: #F2EDC2;
+  flex: 1;
+  border-left-style: solid;
+  border-left-width: 2px;
+  border-left-color: #346739;
+  /* Removed padding from wrapper so top-banner stretches edge-to-edge */
+}
+
+.cart-top-banner {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  color: #ffffff;
+  background-color: #498350;
+  padding: 1rem 2rem; /* Stretches edge-to-edge inside wrapper */
+  box-shadow: 0 4px 6px rgba(52, 103, 57, 0.15);
+}
+
+.cart-top-banner h1 {
+  margin: 0;
+  font-size: 2rem;
+}
+
+.all-cart-items-container {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  padding: 2rem; /* Provides the spacing around the items */
+  margin-bottom: 0;
+}
+
+.cart-footer {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 1rem;
+  background-color: #ffffff;
+  border: 2px solid #346739;
+  border-radius: 8px;
+  padding: 1.5rem;
+  margin: 0 2rem 2rem 2rem; /* Aligns footer nicely with the items padding */
+  box-shadow: 0 4px 8px rgba(52, 103, 57, 0.1);
+}
+
+/* --- Rest of your existing CSS remains unchanged --- */
+.cart-item-container {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 1.5rem;
+  background-color: #ffffff;
+  border: 2px solid #346739;
+  border-radius: 8px;
+  padding: 1.2rem;
+  cursor: pointer;
+  box-shadow: 0 4px 8px rgba(52, 103, 57, 0.1);
+  transition: transform 0.1s ease, box-shadow 0.1s ease;
+}
+
+.cart-item-container:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 12px rgba(52, 103, 57, 0.15);
+}
+
+.cart-picture-container img {
+  width: 120px;
+  height: 120px;
+  border-radius: 5px;
+  object-fit: cover;
+  border: 1px solid #346739;
+  display: block;
+}
+
+.cart-info-main {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  flex: 1;
+  gap: 0.4rem;
+}
+
+.cart-item-title {
+  font-size: 1.3rem;
+  font-weight: bold;
+  color: #346739;
+  margin: 0;
+}
+
+.cart-item-chef {
+  font-size: 1rem;
+  color: #498350;
+}
+
+.chef-name {
+  font-size: 1.1rem;
+  font-weight: bold;
+  color: #346739;
+}
+
+.order-detail-text {
+  font-size: 0.95rem;
+  color: #498350;
+  font-weight: 600;
+}
+
+.order-highlight {
+  color: #346739;
+  font-weight: bold;
+}
+
+.cart-ready-by {
+  font-size: 0.9rem;
+  color: #498350;
+}
+
+.cart-info-side {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  justify-content: center;
+  gap: 0.4rem;
+  min-width: 120px;
+}
+
+.cart-qty-text {
+  font-weight: 600;
+  color: #498350;
+  font-size: 0.95rem;
+}
+
+.cart-price-text {
+  font-size: 1.2rem;
+  font-weight: bold;
+  color: #346739;
+}
+
+.cart-total-display {
+  font-size: 1.3rem;
+  font-weight: bold;
+  color: #346739;
+}
+
+.cart-total-display span {
+  color: #498350;
+  font-size: 1.4rem;
+}
+
+.checkout-btn {
+  background-color: #79AE6F;
+  color: #ffffff;
+  border: none;
+  padding: 0.8rem 2rem;
+  font-weight: bold;
+  font-size: 1.1rem;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.checkout-btn:hover {
+  background-color: #346739;
+}
+
+.see-item-dialog,
+.checkout-dialog {
+  background-color: #F2EDC2;
+  border-radius: 8px;
+  padding: 2rem;
+  width: 550px;
+  max-width: 90vw;
+  border: 2px solid #346739;
+  box-shadow: 0 8px 16px rgba(52, 103, 57, 0.2);
+}
+
+.modal-pic-name-close-container {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+  border-bottom: 2px solid #346739;
+  padding-bottom: 1rem;
+}
+
+.modal-pic-name-close-container > div:nth-child(2) {
+  flex: 1;
+}
+
+.modal-pic-name-close-container h1 {
+  font-size: 1.4rem;
+  color: #346739;
+  margin: 0 0 0.3rem 0;
+}
+
+.food-category-container {
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: #498350;
+  background-color: #9FCB98;
+  padding: 0.2rem 0.6rem;
+  border-radius: 4px;
+  display: inline-block;
+}
+
+.close-btn {
+  font-size: 1.2rem;
+  cursor: pointer;
+  padding: 0.4rem;
+  border-radius: 4px;
+  transition: background-color 0.2s;
+}
+
+.close-btn:hover {
+  background-color: #9FCB98;
+}
+
+.allergens-modal-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+}
+
+.allergens-modal-list > div {
+  background-color: #ffffff;
+  border: 1px solid #346739;
+  color: #346739;
+  padding: 0.3rem 0.6rem;
+  border-radius: 4px;
+  font-size: 0.85rem;
+  font-weight: 500;
+}
+
+.modal-description {
+  background-color: #ffffff;
+  border: 1px solid #346739;
+  padding: 0.8rem;
+  border-radius: 4px;
+  color: #346739;
+  margin-bottom: 1rem;
+  font-size: 0.95rem;
+}
+
+.both-dates-container {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.date-container {
+  flex: 1;
+}
+
+.modal-date-descriptions {
+  font-weight: bold;
+  color: #346739;
+  font-size: 0.9rem;
+}
+
+.modal-date-text {
+  color: #498350;
+  font-size: 0.95rem;
+}
+
+.order-quantity-box {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+  background-color: #ffffff;
+  padding: 0.5rem 1rem;
+  border: 1px solid #346739;
+  border-radius: 4px;
+  width: fit-content;
+}
+
+.order-quantity-btn {
+  background-color: #79AE6F;
+  color: #ffffff;
+  border: none;
+  width: 30px;
+  height: 30px;
+  font-weight: bold;
+  font-size: 1.1rem;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.order-quantity-btn:hover {
+  background-color: #498350;
+}
+
+.add-to-order-btn {
+  width: 100%;
+  background-color: #79AE6F;
+  color: #ffffff;
+  border: none;
+  padding: 0.8rem;
+  font-weight: bold;
+  font-size: 1.1rem;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.add-to-order-btn:hover {
+  background-color: #346739;
+}
+
+.checkout-question {
+  text-align: center;
+  font-size: 1.2rem;
+  font-weight: bold;
+  color: #346739;
+  margin-bottom: 1.5rem;
+}
+
+.checkout-btn-box {
+  display: flex;
+  justify-content: space-evenly;
+}
+
+.yes-btn {
+  background-color: #79AE6F;
+  color: #ffffff;
+  width: 10rem;
+  height: 3rem;
+  border-radius: 5px;
+  border: 1px solid #346739;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.yes-btn:hover {
+  background-color: #346739;
+}
+
+.no-btn {
+  background-color: #ffffff;
+  color: #346739;
+  width: 10rem;
+  height: 3rem;
+  border-radius: 5px;
+  border: 1px solid #346739;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.no-btn:hover {
+  background-color: #9FCB98;
+}

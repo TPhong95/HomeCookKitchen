@@ -1,0 +1,129 @@
+/* https://www.color-hex.com/color-palette/1082766 */
+/*
+Green: #8fce00
+Darker blue: #0a4c86
+Lightest blue: #eeffff
+Darkest blue: #1d3b58
+Mid-blue: #99eeff
+ */
+
+.profile-layout {
+  display: flex;
+  min-height: 100vh;
+}
+
+.chef-wrapper {
+  font-family: "Segoe UI", serif; /* Fight me */
+  background-color: #eeffff;
+  flex: 1;
+  border-left-style: solid;
+  border-left-width: 2px;
+  border-left-color: #000000;
+}
+
+.chef-wrapper h1 {
+  margin-left: 2rem;
+}
+
+.chef-top-banner {
+  display: flex;
+  justify-content: space-between;
+  color: #ffffff;
+  background-color: #0a4c86;
+  padding-left: 1%;
+}
+
+.contact-info {
+  background-color: #ffffff;
+  border-width: 2px;
+  border-style: solid;
+  padding-left: 1rem;
+  padding-top: 0.2rem;
+  padding-bottom: 0.2rem;
+  margin-left: 1rem;
+  margin-right: 1rem;
+  margin-top: 0.5rem;
+  border-radius: 5px;
+}
+
+.address-list {
+  list-style: none;
+  padding-left: 1rem;
+}
+
+.edit-profile-dialog {
+  background-color: #eeffff;
+  border-radius: 5px;
+}
+
+.save-changes-box {
+  display: flex;
+  justify-content: space-evenly;
+}
+
+.save-changes-box .yes-btn {
+  background-color: #c0ff63;
+  border: 1px solid #346739;
+  padding: 0.5rem 1.5rem;
+  border-radius: 4px;
+  font-weight: bold;
+  cursor: pointer;
+  transition-duration: 0.2s;
+}
+
+.save-changes-box .yes-btn:hover {
+  background-color: #a0da4e;
+}
+
+.save-changes-box .no-btn {
+  background-color: #ffb9b9;
+  color: #000000;
+  border: 1px solid #346739;
+  padding: 0.5rem 1.5rem;
+  border-radius: 4px;
+  font-weight: bold;
+  cursor: pointer;
+  transition-duration: 0.2s;
+}
+
+.save-changes-box .no-btn:hover {
+  background-color: #ff7c7c;
+}
+
+.vibe-section-header-banner {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.edit-profile-description-btn {
+  background-color: #99eeff;
+  color: #1d3b58;
+  border-color: #eeffff;
+  margin-right: 1rem;
+  padding: 0.6rem 1.2rem;
+  font-weight: bold;
+  font-size: 1rem;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.edit-profile-description-btn:hover {
+  background-color: #45e0ff;
+}
+
+.home-description-container {
+  margin-top: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.label-container {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-weight: bold;
+  color: #1d3b58;
+}

@@ -1,0 +1,242 @@
+import {useRef, useState} from "react";
+import styles from './chefprofile.module.css'
+import {Banner} from "../general/banner.tsx";
+
+/*
+interface Chef {
+  id: number;
+  name: string;
+  street: string;
+  postalCode: string; // Due to postal codes starting with null. Convert in backend if needed
+  email: string;
+}
+ */
+
+export function ChefProfile() {
+  // Main values
+  const [name, setName] = useState("");
+  const [street, setStreet] = useState("");
+  const [postalCode, setPostalCode] = useState("");
+  const [email, setEmail] = useState("");
+
+  const [description, setDescription] = useState("");
+  const [music, setMusic] = useState(false);
+  const [pets, setPets] = useState(false);
+  const [outdoor, setOutdoor] = useState(false);
+  const [familyFriendly, setFamilyFriendly] = useState(false);
+
+  // Temporary values for editing
+  const [tempName, setTempName] = useState("");
+  const [tempStreet, setTempStreet] = useState("");
+  const [tempPostalCode, setTempPostalCode] = useState("");
+  const [tempEmail, setTempEmail] = useState("");
+
+  const [tempDescription, setTempDescription] = useState("");
+  const [tempMusic, setTempMusic] = useState(false);
+  const [tempPets, setTempPets] = useState(false);
+  const [tempOutdoor, setTempOutdoor] = useState(false);
+  const [tempFamilyFriendly, setTempFamilyFriendly] = useState(false);
+
+  // Modals
+  const editProfileDialogRef = useRef<HTMLDialogElement>(null);
+  const editHomeDescriptionDialogRef = useRef<HTMLDialogElement>(null);
+
+  const handleEditProfileModal = () => {
+    setTempName(name);
+    setTempStreet(street);
+    setTempPostalCode(postalCode);
+    setTempEmail(email);
+
+    editProfileDialogRef.current?.showModal();
+  };
+
+  function handleSaveChanges() {
+    setName(tempName);
+    setStreet(tempStreet);
+    setPostalCode(tempPostalCode);
+    setEmail(tempEmail);
+    editProfileDialogRef.current?.close();
+  }
+
+  const handleEditHomeDescriptionModal = () => {
+    setTempDescription(description);
+    setTempMusic(music);
+    setTempPets(pets);
+    setTempOutdoor(outdoor);
+    setTempFamilyFriendly(familyFriendly);
+    editHomeDescriptionDialogRef.current?.showModal();
+  };
+
+  const handleSaveHomeDescription = () => {
+    setDescription(tempDescription);
+    setMusic(tempMusic);
+    setPets(tempPets);
+    setOutdoor(tempOutdoor);
+    setFamilyFriendly(tempFamilyFriendly);
+    editHomeDescriptionDialogRef.current?.close();
+  };
+
+  return (
+    <div className={styles["profile-layout"]}>
+      <Banner/>
+      <div className={styles["chef-wrapper"]}>
+        <div className={styles["chef-top-banner"]}>
+          {name ? (<h1>Welcome, {name}!</h1>
+          ) : (
+            <h1>Welcome!</h1>
+          )}
+
+        </div>
+        <div className={styles["vibe-section-header-banner"]}>
+          <h1>Contact Info</h1>
+          <button
+            className={styles["edit-profile-description-btn"]}
+            onClick={handleEditProfileModal}
+          >
+            Edit contact info
+          </button>
+        </div>
+        <div className={styles["contact-info"]}>
+          <p><strong>Name: </strong>{name}</p>
+          <p><strong>Address:</strong></p>
+          <ul className={styles["address-list"]}>
+            <li><strong>Street: </strong>{street}</li>
+            <li><strong>Postcode: </strong>{postalCode}</li>
+          </ul>
+          <p><strong>Email: </strong>{email}</p>
+        </div>
+
+        <div className={styles["vibe-section-header-banner"]}>
+          <h1>Home Description</h1>
+          <button
+            className={styles["edit-profile-description-btn"]}
+            onClick={handleEditHomeDescriptionModal}
+          >
+            Edit description
+          </button>
+        </div>
+        <div className={styles["contact-info"]}>
+          <p><strong>Description: </strong>{description}</p>
+          <p><strong>Vibes:</strong></p>
+          <ul className={styles["address-list"]}>
+            <li><strong>Music: </strong>{music}</li>
+            <li><strong>Pets: </strong> {pets ? ("Yes") : ("No")}</li>
+            <li><strong>Outdoor: </strong>{outdoor ? ("Yes") : ("No")}</li>
+            <li><strong>Family Friendly: </strong>{familyFriendly ? ("Yes") : ("No")}</li>
+          </ul>
+        </div>
+
+        <dialog
+          className={styles["edit-profile-dialog"]}
+          ref={editProfileDialogRef}
+        >
+          <div className={styles["modal-contact-details"]}>
+            <div>Name:</div>
+            <input
+              type="text"
+              value={tempName}
+              onChange={(e) => setTempName(e.target.value)}
+            />
+            <div>Street:</div>
+            <input
+              type="text"
+              value={tempStreet}
+              onChange={(e) => setTempStreet(e.target.value)}
+            />
+            <div>Postal Code:</div>
+            <input
+              type="text"
+              value={tempPostalCode}
+              onChange={(e) => setTempPostalCode(e.target.value)}
+            />
+            <div>Email:</div>
+            <input
+              type="text"
+              value={tempEmail}
+              onChange={(e) => setTempEmail(e.target.value)}
+            />
+          </div>
+          <p className={""}>Save changes?</p>
+          <div className={styles["save-changes-box"]}>
+
+            <button
+              className={styles["yes-btn"]}
+              onClick={() => handleSaveChanges()}
+            >
+              Yes
+            </button>
+            <button
+              className={styles["no-btn"]}
+              onClick={() => editProfileDialogRef.current?.close()}
+            >
+              No
+            </button>
+          </div>
+        </dialog>
+
+        <dialog
+          className={styles["edit-profile-dialog"]}
+          ref={editHomeDescriptionDialogRef}
+        >
+          <div className={styles["modal-contact-details"]}>
+            <div>Description:</div>
+            <textarea
+              value={tempDescription}
+              onChange={(e) => setTempDescription(e.target.value)}
+              rows={3}
+            />
+            <div className={styles["home-description-container"]}>
+              <label className={styles["label-container"]}>
+                <input
+                  type="checkbox"
+                  checked={tempMusic}
+                  onChange={(e) => setTempMusic(e.target.checked)}
+                />
+                Music
+              </label>
+              <label className={styles["label-container"]}>
+                <input
+                  type="checkbox"
+                  checked={tempPets}
+                  onChange={(e) => setTempPets(e.target.checked)}
+                />
+                Pets
+              </label>
+              <label className={styles["label-container"]}>
+                <input
+                  type="checkbox"
+                  checked={tempOutdoor}
+                  onChange={(e) => setTempOutdoor(e.target.checked)}
+                />
+                Outdoor
+              </label>
+              <label className={styles["label-container"]}>
+                <input
+                  type="checkbox"
+                  checked={tempFamilyFriendly}
+                  onChange={(e) => setTempFamilyFriendly(e.target.checked)}
+                />
+                Family Friendly
+              </label>
+            </div>
+          </div>
+          <p>Save changes?</p>
+          <div className={styles["save-changes-box"]}>
+            <button
+              className={styles["yes-btn"]}
+              onClick={handleSaveHomeDescription}
+            >
+              Yes
+            </button>
+            <button
+              className={styles["no-btn"]}
+              onClick={() => editHomeDescriptionDialogRef.current?.close()}
+            >
+              No
+            </button>
+          </div>
+        </dialog>
+      </div>
+    </div>
+  )
+}

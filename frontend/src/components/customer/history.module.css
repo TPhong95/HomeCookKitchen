@@ -1,0 +1,206 @@
+.history-layout {
+  display: flex;
+  min-height: 100vh;
+}
+
+.history-wrapper {
+  font-family: "Segoe UI", serif;
+  background-color: #F2EDC2;
+  flex: 1;
+  border-left-style: solid;
+  border-left-width: 2px;
+  border-left-color: #346739;
+}
+
+.history-top-banner {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  color: #ffffff;
+  background-color: #498350;
+  padding: 1rem 2rem;
+  box-shadow: 0 4px 6px rgba(52, 103, 57, 0.15);
+}
+
+.history-top-banner h1 {
+  margin: 0;
+  font-size: 2rem;
+}
+
+.all-history-items-container {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  padding: 2rem;
+}
+
+.history-item-container {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 1.5rem;
+  background-color: #ffffff;
+  border: 2px solid #346739;
+  border-radius: 8px;
+  padding: 1.2rem;
+  cursor: pointer;
+  box-shadow: 0 4px 8px rgba(52, 103, 57, 0.1);
+  transition: transform 0.1s ease, box-shadow 0.1s ease;
+}
+
+.history-item-container:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 12px rgba(52, 103, 57, 0.15);
+}
+
+.history-picture-container img {
+  width: 120px;
+  height: 120px;
+  border-radius: 5px;
+  object-fit: cover;
+  border: 1px solid #346739;
+  display: block;
+}
+
+.history-info-main {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  flex: 1;
+  gap: 0.4rem;
+}
+
+.history-item-title {
+  font-size: 1.3rem;
+  font-weight: bold;
+  color: #346739;
+  margin: 0;
+}
+
+.history-item-chef {
+  font-size: 1rem;
+  color: #498350;
+}
+
+.chef-name {
+  font-size: 1.1rem;
+  font-weight: bold;
+  color: #346739;
+}
+
+.order-detail-text {
+  font-size: 0.95rem;
+  color: #498350;
+  font-weight: 600;
+}
+
+.order-highlight {
+  color: #346739;
+  font-weight: bold;
+}
+
+.history-ready-by {
+  font-size: 0.9rem;
+  color: #498350;
+}
+
+.history-info-side {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  justify-content: center;
+  gap: 0.4rem;
+  min-width: 120px;
+}
+
+.history-qty-text {
+  font-weight: 600;
+  color: #498350;
+  font-size: 0.95rem;
+}
+
+.history-price-text {
+  font-size: 1.2rem;
+  font-weight: bold;
+  color: #346739;
+}
+
+/* --- Dialog / Modal Styles --- */
+
+.see-item-dialog {
+  background-color: #F2EDC2;
+  border-radius: 8px;
+  padding: 2rem;
+  width: 550px;
+  max-width: 90vw;
+  border: 2px solid #346739;
+  box-shadow: 0 8px 16px rgba(52, 103, 57, 0.2);
+}
+
+.modal-pic-name-close-container {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+  border-bottom: 2px solid #346739;
+  padding-bottom: 1rem;
+}
+
+.modal-pic-name-close-container > div:nth-child(2) {
+  flex: 1;
+}
+
+.modal-pic-name-close-container h1 {
+  font-size: 1.4rem;
+  color: #346739;
+  margin: 0 0 0.3rem 0;
+}
+
+.food-category-container {
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: #498350;
+  background-color: #9FCB98;
+  padding: 0.2rem 0.6rem;
+  border-radius: 4px;
+  display: inline-block;
+}
+
+.close-btn {
+  font-size: 1.2rem;
+  cursor: pointer;
+  padding: 0.4rem;
+  border-radius: 4px;
+  transition: background-color 0.2s;
+}
+
+.close-btn:hover {
+  background-color: #9FCB98;
+}
+
+.allergens-modal-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+}
+
+.allergens-modal-list > div {
+  background-color: #ffffff;
+  border: 1px solid #346739;
+  color: #346739;
+  padding: 0.3rem 0.6rem;
+  border-radius: 4px;
+  font-size: 0.85rem;
+  font-weight: 500;
+}
+
+.modal-description {
+  background-color: #ffffff;
+  border: 1px solid #346739;
+  padding: 0.8rem;
+  border-radius: 4px;
+  color: #346739;
+  margin-bottom: 1rem;
+  font-size: 0.95rem;
+}

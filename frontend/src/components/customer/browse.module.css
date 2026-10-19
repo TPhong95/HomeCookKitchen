@@ -1,0 +1,424 @@
+.browse-layout {
+  display: flex;
+  min-height: 100vh;
+}
+
+.browse-wrapper {
+  font-family: "Segoe UI", serif;
+  background-color: #F2EDC2;
+  flex: 1;
+  border-left-style: solid;
+  border-left-width: 2px;
+  border-left-color: #346739;
+  padding: 2rem;
+}
+
+.search-bar {
+  display: flex;
+  background-color: #ffffff;
+  border: 2px solid #346739;
+  border-radius: 8px;
+  padding: 0.6rem 1rem;
+  align-items: center;
+  margin-bottom: 2rem;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+}
+
+.search-bar form {
+  display: flex;
+  width: 100%;
+  align-items: center;
+  gap: 1rem;
+}
+
+.search-icon {
+  background: none;
+  border: none;
+  font-size: 1.2rem;
+  cursor: pointer;
+}
+
+.search-bar input {
+  flex: 1;
+  border: none;
+  font-size: 1rem;
+  outline: none;
+  color: #346739;
+  background-color: transparent;
+}
+
+.filter-btn {
+  background-color: #79AE6F;
+  color: #ffffff;
+  border: none;
+  padding: 0.5rem 1.2rem;
+  font-weight: bold;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.filter-btn:hover {
+  background-color: #498350;
+}
+
+.all-browse-items-container {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.browse-item-container {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 1.5rem;
+  background-color: #ffffff;
+  border: 2px solid #346739;
+  border-radius: 8px;
+  padding: 1.2rem;
+  box-shadow: 0 4px 8px rgba(52, 103, 57, 0.1);
+}
+
+.browse-item-picture-container img {
+  width: 120px;
+  height: 120px;
+  border-radius: 5px;
+  object-fit: cover;
+  border: 1px solid #346739;
+  display: block;
+}
+
+.browse-item-info-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  flex: 1;
+  height: auto;
+  gap: 0.4rem;
+}
+
+.name-and-edit-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+}
+
+.browse-item-title {
+  font-size: 1.3rem;
+  font-weight: bold;
+  color: #346739;
+  margin: 0;
+}
+
+.more-info-btn {
+  background-color: #9FCB98;
+  border: 1px solid #346739;
+  color: #346739;
+  padding: 0.4rem 0.8rem;
+  border-radius: 4px;
+  cursor: pointer;
+  font-weight: bold;
+  transition: background-color 0.2s;
+}
+
+.more-info-btn:hover {
+  background-color: #79AE6F;
+  color: #ffffff;
+}
+
+.browse-item-quantity-text {
+  font-weight: 600;
+  color: #346739;
+  font-size: 0.95rem;
+}
+
+.browse-item-quantity-numbers {
+  color: #498350;
+  font-weight: bold;
+  font-size: 1.05rem;
+}
+
+.order-detail-text {
+  font-size: 0.95rem;
+  color: #498350;
+  font-weight: 600;
+}
+
+.order-highlight {
+  color: #346739;
+  font-weight: bold;
+}
+
+.browse-item-ready-by,
+.browse-item-description {
+  font-size: 0.9rem;
+  color: #498350;
+  overflow: hidden;
+}
+
+.add-to-cart-txt {
+  font-size: 1.2rem;
+  margin-bottom: 0.5rem;
+}
+
+/* --- Dialogs (Modal Styling matching recipe & listing dialogs) --- */
+
+.see-item-dialog,
+.filter-dialog,
+.cart-or-browse-dialog {
+  background-color: #F2EDC2;
+  border-radius: 8px;
+  padding: 2rem;
+  width: 550px;
+  max-width: 90vw;
+  border: 2px solid #346739;
+  box-shadow: 0 8px 16px rgba(52, 103, 57, 0.2);
+}
+
+.modal-pic-name-close-container {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+  border-bottom: 2px solid #346739;
+  padding-bottom: 1rem;
+}
+
+.modal-pic-name-close-container > div:nth-child(2) {
+  flex: 1;
+}
+
+.modal-pic-name-close-container h1 {
+  font-size: 1.4rem;
+  color: #346739;
+  margin: 0 0 0.3rem 0;
+}
+
+.food-category-container {
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: #498350;
+  background-color: #9FCB98;
+  padding: 0.2rem 0.6rem;
+  border-radius: 4px;
+  display: inline-block;
+}
+
+.close-btn {
+  font-size: 1.2rem;
+  cursor: pointer;
+  padding: 0.4rem;
+  border-radius: 4px;
+  transition: background-color 0.2s;
+}
+
+.close-btn:hover {
+  background-color: #9FCB98;
+}
+
+.allergens-modal-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+}
+
+.allergens-modal-list > div {
+  background-color: #ffffff;
+  border: 1px solid #346739;
+  color: #346739;
+  padding: 0.3rem 0.6rem;
+  border-radius: 4px;
+  font-size: 0.85rem;
+  font-weight: 500;
+}
+
+.modal-description {
+  background-color: #ffffff;
+  border: 1px solid #346739;
+  padding: 0.8rem;
+  border-radius: 4px;
+  color: #346739;
+  margin-bottom: 1rem;
+  font-size: 0.95rem;
+}
+
+.both-dates-container {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.date-container {
+  flex: 1;
+}
+
+.modal-date-descriptions {
+  font-weight: bold;
+  color: #346739;
+  font-size: 0.9rem;
+}
+
+.modal-date-text {
+  color: #498350;
+  font-size: 0.95rem;
+}
+
+.order-quantity-box {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+  background-color: #ffffff;
+  padding: 0.5rem 1rem;
+  border: 1px solid #346739;
+  border-radius: 4px;
+  width: fit-content;
+}
+
+.order-quantity-btn {
+  background-color: #79AE6F;
+  color: #ffffff;
+  border: none;
+  width: 30px;
+  height: 30px;
+  font-weight: bold;
+  font-size: 1.1rem;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.order-quantity-btn:hover {
+  background-color: #498350;
+}
+
+.add-to-order-btn,
+.go-to-cart-btn {
+  width: 100%;
+  background-color: #79AE6F;
+  color: #ffffff;
+  border: none;
+  padding: 0.8rem;
+  font-weight: bold;
+  font-size: 1.1rem;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.add-to-order-btn:hover,
+.go-to-cart-btn:hover {
+  background-color: #346739;
+}
+
+.keep-browsing-btn {
+  width: 100%;
+  background-color: #ffffff;
+  color: #346739;
+  border: 1px solid #346739;
+  padding: 0.8rem;
+  font-weight: bold;
+  font-size: 1rem;
+  border-radius: 6px;
+  cursor: pointer;
+  margin-top: 0.8rem;
+}
+
+.keep-browsing-btn:hover {
+  background-color: #9FCB98;
+}
+
+/* Filter Dialog Specific Styles */
+
+.form-field {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 1rem;
+}
+
+.form-field label,
+.allergens-title {
+  font-weight: bold;
+  margin-bottom: 0.3rem;
+  color: #346739;
+}
+
+.category-dropdowns {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.category-dropdowns .form-field {
+  flex: 1;
+  margin-bottom: 0;
+}
+
+.filter-dialog select {
+  width: 100%;
+  padding: 0.6rem;
+  border: 1px solid #346739;
+  border-radius: 4px;
+  background-color: #ffffff;
+  color: #346739;
+  font-size: 1rem;
+}
+
+.allergens-checkboxes {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0.5rem 1rem;
+  background-color: #ffffff;
+  padding: 1rem;
+  border: 1px solid #346739;
+  border-radius: 4px;
+  margin-bottom: 1.5rem;
+}
+
+.allergen-item {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: #346739;
+  font-size: 0.9rem;
+}
+
+.save-preferences-box {
+  display: flex;
+  justify-content: space-evenly;
+  margin-top: 1.5rem;
+}
+
+.yes-btn {
+  background-color: #79AE6F;
+  color: #ffffff;
+  transition-duration: 0.2s;
+  width: 10rem;
+  height: 3rem;
+  border-radius: 5px;
+  border: 1px solid #346739;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.yes-btn:hover {
+  background-color: #346739;
+}
+
+.reset-btn {
+  width: 100%;
+  margin-top: 1rem;
+  background-color: #ffffff;
+  color: #346739;
+  border: 1px solid #346739;
+  padding: 0.6rem;
+  border-radius: 5px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.reset-btn:hover {
+  background-color: #9FCB98;
+}
