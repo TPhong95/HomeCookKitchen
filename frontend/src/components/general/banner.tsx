@@ -19,7 +19,7 @@ export function Banner() {
     { link: "/", text: "Home" },
     { link: "/user/customer/profile", text: "Profile" },
     { link: "/user/customer/browse", text: "Browse" },
-    { link: "/user/customer/active", text: "Orders" },
+    { link: "/user/customer/orders", text: "Orders" },
     { link: "/user/customer/history", text: "History" },
     { link: "/user/customer/cart", text: "Cart" },
   ]
