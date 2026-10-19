@@ -8,6 +8,9 @@ export interface BrowseItem {
   listingId: number;
   chefId: number;
   chefName: string;
+  chefStreet: string;
+  chefPostalCode: string;
+  chefCity: string;
   recipeName: string;
   description: string;
   image: string;

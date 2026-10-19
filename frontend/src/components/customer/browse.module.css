@@ -140,6 +140,17 @@
   font-size: 1.05rem;
 }
 
+.order-detail-text {
+  font-size: 0.95rem;
+  color: #498350;
+  font-weight: 600;
+}
+
+.order-highlight {
+  color: #346739;
+  font-weight: bold;
+}
+
 .browse-item-ready-by,
 .browse-item-description {
   font-size: 0.9rem;

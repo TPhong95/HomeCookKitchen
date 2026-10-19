@@ -18,6 +18,9 @@ const testBrowseItems: BrowseItem[] = [
     listingId: 1,
     chefId: 1,
     chefName: "George",
+    chefStreet: "Ingenmannsland 3",
+    chefPostalCode: "0123",
+    chefCity: "Oslo",
     recipeName: "Falafel Baguette",
     description: "It tastes like falafel and baguette at the same time",
     image: "../../../testdata/falafelbaguette.jpg",
@@ -36,6 +39,9 @@ const testBrowseItems: BrowseItem[] = [
     listingId: 2,
     chefId: 2,
     chefName: "Joanne",
+    chefStreet: "Hvavar Gata 7",
+    chefPostalCode: "0549",
+    chefCity: "Oslo",
     recipeName: "Lasagne",
     description: "It tastes like a cross between gravel and dead leaves.",
     image: "../../../testdata/lasagne.jpg",
@@ -56,6 +62,9 @@ const testBrowseItems: BrowseItem[] = [
     listingId: 3,
     chefId: 1,
     chefName: "George",
+    chefStreet: "Ingenmannsland 3",
+    chefPostalCode: "0123",
+    chefCity: "Oslo",
     recipeName: "Chicken Salad",
     description: "It's chicken... IN A SALAD WOW!! Never been done before",
     image: "../../../testdata/chickensalad.jpg",
@@ -194,6 +203,10 @@ export function BrowseListing() {
                 </div>
                 <div className={styles["browse-item-quantity-text"]}>
                   Seats left: <span className={styles["browse-item-quantity-numbers"]}>{browseItem.quantity - browseItem.quantityPurchased} / {browseItem.quantity}</span>
+                </div>
+                <div className={styles["order-detail-text"]}>
+                  Chef's address: <span
+                  className={styles["order-highlight"]}>{browseItem.chefStreet}, {browseItem.chefPostalCode} {browseItem.chefCity}</span>
                 </div>
                 <div className={styles["browse-item-ready-by"]}>Ready by: {browseItem.readyBy}</div>
                 <div className={styles["browse-item-description"]}>{browseItem.description}</div>
