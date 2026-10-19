@@ -3,6 +3,7 @@ import styles from './history.module.css';
 import { Banner } from "../general/banner.tsx";
 import { type BrowseItem } from "../shared/browseinterface.ts";
 import { DishCategory, DishPreference, Allergen } from "../shared/recipeinterface.ts";
+import * as React from "react";
 
 export interface HistoryItem extends BrowseItem {
   orderQuantity: number;
@@ -13,6 +14,9 @@ const testHistoryItems: HistoryItem[] = [
     listingId: 101,
     chefId: 1,
     chefName: "George",
+    chefStreet: "Ingenmannsland 3",
+    chefPostalCode: "0123",
+    chefCity: "Oslo",
     recipeName: "Falafel Baguette",
     description: "It tastes like falafel and baguette at the same time",
     image: "../../../testdata/falafelbaguette.jpg",
@@ -32,6 +36,9 @@ const testHistoryItems: HistoryItem[] = [
     listingId: 102,
     chefId: 2,
     chefName: "Joanne",
+    chefStreet: "Hvavar Gata 7",
+    chefPostalCode: "0549",
+    chefCity: "Oslo",
     recipeName: "Lasagne",
     description: "It tastes like a cross between gravel and dead leaves.",
     image: "../../../testdata/lasagne.jpg",
@@ -84,6 +91,10 @@ export function CustomerHistory() {
                 <div className={styles["history-item-title"]}>{item.recipeName}</div>
                 <div className={styles["history-item-chef"]}>
                   Chef: <span className={styles["chef-name"]}>{item.chefName}</span>
+                </div>
+                <div className={styles["order-detail-text"]}>
+                  Chef's address: <span
+                  className={styles["order-highlight"]}>{item.chefStreet}, {item.chefPostalCode} {item.chefCity}</span>
                 </div>
                 <div className={styles["history-ready-by"]}>Eaten at: {item.readyBy}</div>
               </div>
