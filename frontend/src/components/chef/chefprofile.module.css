@@ -63,6 +63,11 @@ Mid-blue: #99eeff
 
 .save-changes-box .yes-btn {
   background-color: #c0ff63;
+  border: 1px solid #346739;
+  padding: 0.5rem 1.5rem;
+  border-radius: 4px;
+  font-weight: bold;
+  cursor: pointer;
   transition-duration: 0.2s;
 }
 
@@ -72,6 +77,12 @@ Mid-blue: #99eeff
 
 .save-changes-box .no-btn {
   background-color: #ffb9b9;
+  color: #000000;
+  border: 1px solid #346739;
+  padding: 0.5rem 1.5rem;
+  border-radius: 4px;
+  font-weight: bold;
+  cursor: pointer;
   transition-duration: 0.2s;
 }
 
