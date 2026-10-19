@@ -15,24 +15,40 @@ export const DishPreference = {
 
 export type DishPreference = typeof DishPreference [keyof typeof DishPreference];
 
-export const Allergen = {
-  GLUTEN: "gluten",
-  CRUSTACEANS: "crustaceans",
-  EGGS: "eggs",
-  FISH: "fish",
-  PEANUTS: "peanuts",
-  SOYBEANS: "soybeans",
-  MILK: "milk",
-  NUTS: "nuts",
-  CELERY: "celery",
-  MUSTARD: "mustard",
-  SESAME: "sesame",
-  SULFITES: "sulfites",
-  LUPIN: "lupin",
-  MOLLUSCS: "molluscs",
-} as const;
+export enum Allergen {
+  GLUTEN = "gluten",
+  CRUSTACEANS = "crustaceans",
+  EGGS = "eggs",
+  FISH = "fish",
+  PEANUTS = "peanuts",
+  SOYBEANS = "soybeans",
+  MILK = "milk",
+  NUTS = "nuts",
+  CELERY = "celery",
+  MUSTARD = "mustard",
+  SESAME = "sesame",
+  SULFITES = "sulfites",
+  LUPIN = "lupin",
+  MOLLUSCS = "molluscs",
+}
 
-export type Allergen = typeof Allergen[keyof typeof Allergen];
+// This is in use, TypeScript is lying to you. DO NOT REMOVE
+const initialAllergens: Record<Allergen, boolean> = {
+  [Allergen.GLUTEN]: false,
+  [Allergen.CRUSTACEANS]: false,
+  [Allergen.EGGS]: false,
+  [Allergen.FISH]: false,
+  [Allergen.PEANUTS]: false,
+  [Allergen.SOYBEANS]: false,
+  [Allergen.MILK]: false,
+  [Allergen.NUTS]: false,
+  [Allergen.CELERY]: false,
+  [Allergen.MUSTARD]: false,
+  [Allergen.SESAME]: false,
+  [Allergen.SULFITES]: false,
+  [Allergen.LUPIN]: false,
+  [Allergen.MOLLUSCS]: false,
+};
 
 export interface RecipeStruct {
   id?: number;

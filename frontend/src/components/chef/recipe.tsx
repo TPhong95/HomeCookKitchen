@@ -1,24 +1,9 @@
 import {useRef, useState} from "react";
 import {Banner} from "../general/banner.tsx";
 import styles from "./recipe.module.css";
-import {type RecipeStruct, DishCategory, DishPreference, Allergen} from "../shared/recipeinterface.ts";
+import {type RecipeStruct, DishCategory, DishPreference, Allergen, initialAllergens} from "../shared/recipeinterface.ts";
 
-const initialAllergens: Record<Allergen, boolean> = {
-  [Allergen.GLUTEN]: false,
-  [Allergen.CRUSTACEANS]: false,
-  [Allergen.EGGS]: false,
-  [Allergen.FISH]: false,
-  [Allergen.PEANUTS]: false,
-  [Allergen.SOYBEANS]: false,
-  [Allergen.MILK]: false,
-  [Allergen.NUTS]: false,
-  [Allergen.CELERY]: false,
-  [Allergen.MUSTARD]: false,
-  [Allergen.SESAME]: false,
-  [Allergen.SULFITES]: false,
-  [Allergen.LUPIN]: false,
-  [Allergen.MOLLUSCS]: false,
-};
+
 
 const testRecipes: RecipeStruct[] = [
   {
