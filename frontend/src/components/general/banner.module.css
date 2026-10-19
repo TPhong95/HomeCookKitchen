@@ -28,11 +28,10 @@
 }
 
 .banner-sidebar.customer a {
-  color: #F2EDC2;
+  color: #ffffff;
 }
 
 .banner-sidebar.customer a:hover {
-  color: #9FCB98;
   text-decoration: underline;
 }
 
