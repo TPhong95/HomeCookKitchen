@@ -8,8 +8,8 @@ Chef_DB:    5432:5432
 Cust_DB:    5433:5433
 product:    8006 - 8010
 product_DB: 5434:5434
-Transaction:8011 - 8015
-Tranac_DB:  5435:5435
+purcahse:8011 - 8015
+purchase_DB:  5435:5435
 ```
 
 # Startup sequence

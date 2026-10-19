@@ -2,7 +2,6 @@ package org.example.purchase.purchase;
 
 import jakarta.persistence.*;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.example.purchase.event.PurchaseEvent;
 
@@ -12,7 +11,6 @@ import java.util.List;
 
 @Getter
 @Setter
-@NoArgsConstructor
 @Entity
 public class Purchase {
     @Id
@@ -20,16 +18,14 @@ public class Purchase {
     @SequenceGenerator(name = "purchase_seq", sequenceName = "purchase_seq", allocationSize = 1)
     private int id;
     private int customerId;
-    private int totalPrice;
+    private float totalPrice;
 
     @OneToMany(mappedBy = "purchase", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<PurchaseEvent> purchaseEvent = new ArrayList<>();
 
     private LocalDateTime timestamp;
 
-    public Purchase(int customerId, List<PurchaseEvent> purchaseEvent) {
-        this.customerId = customerId;
-        this.purchaseEvent = purchaseEvent;
+    public Purchase() {
         this.timestamp = LocalDateTime.now();
     }
 
