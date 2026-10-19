@@ -41,7 +41,7 @@ const testListings: ListingStruct[] = [
     image: "../../../testdata/falafelbaguette.jpg",
     recipeName: "Falafel Baguette",
     quantity: 4,
-    quantityPurchased: 2,
+    quantityPurchased: 3,
     unitPrice: 100,
     readyBy: "2026-06-06T14:30",
     createdAt: "2026-06-06T11:00",
@@ -171,7 +171,7 @@ export function Listings() {
                   Price per portion: <span className={styles["listing-quantity-numbers"]}>{listing.unitPrice} NOK</span>
                 </div>
                 <div className={styles["listing-quantity-text"]}>
-                  Seats left: <span className={styles["listing-quantity-numbers"]}>{listing.quantityPurchased} / {listing.quantity}</span>
+                  Seats left: <span className={styles["listing-quantity-numbers"]}>{listing.quantity - listing.quantityPurchased} / {listing.quantity}</span>
                 </div>
                 <div className={styles["listing-price-container"]}>Ready by: {listing.readyBy}</div>
                 <div className={styles["listing-purchase-deadline"]}>Purchase deadline: {listing.purchaseDeadline}</div>
