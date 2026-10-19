@@ -10,7 +10,7 @@
   border-left-style: solid;
   border-left-width: 2px;
   border-left-color: #346739;
-  padding: 2rem;
+  /* Removed padding from wrapper so top-banner stretches edge-to-edge */
 }
 
 .cart-top-banner {
@@ -18,25 +18,38 @@
   justify-content: space-between;
   align-items: center;
   color: #ffffff;
-  background-color: #346739;
-  padding: 0.5rem 2rem;
-  border-radius: 8px;
-  margin-bottom: 2rem;
+  background-color: #498350;
+  padding: 1rem 2rem; /* Stretches edge-to-edge inside wrapper */
   box-shadow: 0 4px 6px rgba(52, 103, 57, 0.15);
 }
 
 .cart-top-banner h1 {
   margin: 0;
-  font-size: 1.5rem;
+  font-size: 2rem;
 }
 
 .all-cart-items-container {
   display: flex;
   flex-direction: column;
   gap: 1.5rem;
-  margin-bottom: 2rem;
+  padding: 2rem; /* Provides the spacing around the items */
+  margin-bottom: 0;
 }
 
+.cart-footer {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 1rem;
+  background-color: #ffffff;
+  border: 2px solid #346739;
+  border-radius: 8px;
+  padding: 1.5rem;
+  margin: 0 2rem 2rem 2rem; /* Aligns footer nicely with the items padding */
+  box-shadow: 0 4px 8px rgba(52, 103, 57, 0.1);
+}
+
+/* --- Rest of your existing CSS remains unchanged --- */
 .cart-item-container {
   display: flex;
   flex-direction: row;
@@ -82,15 +95,14 @@
 
 .cart-item-chef {
   font-size: 1rem;
+  color: #498350;
 }
 
 .chef-name {
-  font-size: 1.2rem;
+  font-size: 1.1rem;
   font-weight: bold;
-  color: #3a732f;
+  color: #346739;
 }
-
-/* <div className={styles["cart-item-chef"]}>Chef: <span className={"chef-name"}>{item.chefName}</span></div> */
 
 .cart-ready-by {
   font-size: 0.9rem;
@@ -116,18 +128,6 @@
   font-size: 1.2rem;
   font-weight: bold;
   color: #346739;
-}
-
-.cart-footer {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-end;
-  gap: 1rem;
-  background-color: #ffffff;
-  border: 2px solid #346739;
-  border-radius: 8px;
-  padding: 1.5rem;
-  box-shadow: 0 4px 8px rgba(52, 103, 57, 0.1);
 }
 
 .cart-total-display {
@@ -156,8 +156,6 @@
 .checkout-btn:hover {
   background-color: #346739;
 }
-
-/* --- Dialogs / Modals --- */
 
 .see-item-dialog,
 .checkout-dialog {

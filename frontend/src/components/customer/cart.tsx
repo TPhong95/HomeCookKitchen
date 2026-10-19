@@ -3,6 +3,7 @@ import styles from './cart.module.css';
 import { Banner } from "../general/banner.tsx";
 import { type BrowseItem } from "../shared/browseinterface.ts";
 import { useNavigate } from "react-router-dom";
+import {DishCategory, DishPreference, Allergen} from "../shared/recipeinterface.ts";
 
 export interface CartItem extends BrowseItem {
   orderQuantity: number;
@@ -16,9 +17,11 @@ const testCartItems: CartItem[] = [
     recipeName: "Falafel Baguette",
     description: "It tastes like falafel and baguette at the same time",
     image: "../../../testdata/falafelbaguette.jpg",
-    category: "Pasta" as any,
-    preference: "Vegan" as any,
-    allergens: {},
+    category: DishCategory.CURRIES_AND_STEWS,
+    preference: DishPreference.VEGAN,
+    allergens: {
+      [Allergen.GLUTEN]: true,
+    },
     unitPrice: 50,
     quantity: 4,
     quantityPurchased: 3,
@@ -33,9 +36,13 @@ const testCartItems: CartItem[] = [
     recipeName: "Lasagne",
     description: "It tastes like a cross between gravel and dead leaves.",
     image: "../../../testdata/lasagne.jpg",
-    category: "Pasta" as any,
-    preference: "None" as any,
-    allergens: {},
+    category: DishCategory.PASTA,
+    preference: DishPreference.NONE,
+    allergens: {
+      [Allergen.MILK]: true,
+      [Allergen.CELERY]: true,
+      [Allergen.GLUTEN]: true,
+    },
     unitPrice: 180,
     quantity: 6,
     quantityPurchased: 4,
