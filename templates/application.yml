@@ -1,0 +1,28 @@
+spring:
+  application:
+    name: #Name of application
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    username: username
+    password: password
+    url: jdbc:postgresql://localhost:5434/example_name #Replace example_name with name of application
+  jpa:
+    generate-ddl: false
+    show-sql: false
+    properties:
+     hibernate:
+       dialect: org.hibernate.dialect.PostgreSQLDialect
+  flyway:
+    locations: classpath:db/migration/example_folder #Replace example_folder with file path for flyaway migration folder the folder
+    enabled: true
+  cloud:
+    consul:
+      host: consul
+      port: 8500
+server:
+  port: 8006 #Port number for where the application runs
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health, info
