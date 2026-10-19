@@ -6,6 +6,7 @@ import {Recipe} from "./components/chef/recipe.tsx";
 import {Listings} from "./components/chef/listings.tsx";
 import {History} from "./components/chef/history.tsx";
 import {CustomerProfile} from "./components/customer/customerprofile.tsx";
+import {BrowseListing} from "./components/customer/browse.tsx";
 
 createRoot(document.getElementById('root')!).render(
   <BrowserRouter>
@@ -16,6 +17,7 @@ createRoot(document.getElementById('root')!).render(
       <Route path={"/user/chef/listings"} element={<Listings />} />
       <Route path={"/user/chef/history"} element={<History />} />
       <Route path={"/user/customer/profile"} element={<CustomerProfile />} />
+      <Route path={"/user/customer/browse"} element={<BrowseListing />} />
     </Routes>
   </BrowserRouter>,
 )
