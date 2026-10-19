@@ -1,7 +1,14 @@
 import {useRef, useState} from "react";
 import {Banner} from "../general/banner.tsx";
 import styles from "./recipe.module.css";
-import {type RecipeStruct, DishCategory, DishPreference, Allergen, initialAllergens} from "../shared/recipeinterface.ts";
+import {
+  type RecipeStruct,
+  DishCategory,
+  DishPreference,
+  Allergen,
+  initialAllergens,
+  allergensList
+} from "../shared/recipeinterface.ts";
 
 
 
@@ -122,22 +129,7 @@ export function Recipe() {
     );
   };
 
-  const allergensList: { id: Allergen; label: string }[] = [
-    {id: "gluten" as Allergen, label: "Gluten"},
-    {id: "crustaceans" as Allergen, label: "Crustaceans"},
-    {id: "eggs" as Allergen, label: "Eggs"},
-    {id: "fish" as Allergen, label: "Fish"},
-    {id: "peanuts" as Allergen, label: "Peanuts"},
-    {id: "soybeans" as Allergen, label: "Soybeans"},
-    {id: "milk" as Allergen, label: "Milk"},
-    {id: "nuts" as Allergen, label: "Nuts"},
-    {id: "celery" as Allergen, label: "Celery"},
-    {id: "mustard" as Allergen, label: "Mustard"},
-    {id: "sesame" as Allergen, label: "Sesame seeds"},
-    {id: "sulfites" as Allergen, label: "Sulfites"},
-    {id: "lupin" as Allergen, label: "Lupin"},
-    {id: "molluscs" as Allergen, label: "Molluscs"},
-  ];
+
 
   const handleAllergenChange = (allergenKey: Allergen, checked: boolean) => {
     setTempAllergens(prev => ({

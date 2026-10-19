@@ -15,6 +15,7 @@ export const DishPreference = {
 
 export type DishPreference = typeof DishPreference [keyof typeof DishPreference];
 
+/* Enum type system, used to define exact keys allowed for allergens */
 export enum Allergen {
   GLUTEN = "gluten",
   CRUSTACEANS = "crustaceans",
@@ -32,8 +33,8 @@ export enum Allergen {
   MOLLUSCS = "molluscs",
 }
 
-// This is in use, TypeScript is lying to you. DO NOT REMOVE
-const initialAllergens: Record<Allergen, boolean> = {
+/* Key-value lookup map, helps instantiate checkboxes to false in components */
+export const initialAllergens: Record<Allergen, boolean> = {
   [Allergen.GLUTEN]: false,
   [Allergen.CRUSTACEANS]: false,
   [Allergen.EGGS]: false,
@@ -49,6 +50,24 @@ const initialAllergens: Record<Allergen, boolean> = {
   [Allergen.LUPIN]: false,
   [Allergen.MOLLUSCS]: false,
 };
+
+/* Provides an ordered list with display labels for UI */
+export const allergensList: { id: Allergen; label: string }[] = [
+  {id: Allergen.GLUTEN, label: "Gluten"},
+  {id: Allergen.CRUSTACEANS, label: "Crustaceans"},
+  {id: Allergen.EGGS, label: "Eggs"},
+  {id: Allergen.FISH, label: "Fish"},
+  {id: Allergen.PEANUTS, label: "Peanuts"},
+  {id: Allergen.SOYBEANS, label: "Soybeans"},
+  {id: Allergen.MILK, label: "Milk"},
+  {id: Allergen.NUTS, label: "Nuts"},
+  {id: Allergen.CELERY, label: "Celery"},
+  {id: Allergen.MUSTARD, label: "Mustard"},
+  {id: Allergen.SESAME, label: "Sesame seeds"},
+  {id: Allergen.SULFITES, label: "Sulfites"},
+  {id: Allergen.LUPIN, label: "Lupin"},
+  {id: Allergen.MOLLUSCS, label: "Molluscs"},
+];
 
 export interface RecipeStruct {
   id?: number;
