@@ -4,6 +4,7 @@ import { Banner } from "../general/banner.tsx";
 import { type BrowseItem } from "../shared/browseinterface.ts";
 import { useNavigate } from "react-router-dom";
 import {DishCategory, DishPreference, Allergen} from "../shared/recipeinterface.ts";
+import * as React from "react";
 
 export interface CartItem extends BrowseItem {
   orderQuantity: number;
@@ -14,6 +15,9 @@ const testCartItems: CartItem[] = [
     listingId: 1,
     chefId: 1,
     chefName: "George",
+    chefStreet: "Igokk Etsted 560123",
+    chefPostalCode: "0999",
+    chefCity: "Oslo",
     recipeName: "Falafel Baguette",
     description: "It tastes like falafel and baguette at the same time",
     image: "../../../testdata/falafelbaguette.jpg",
@@ -33,6 +37,9 @@ const testCartItems: CartItem[] = [
     listingId: 2,
     chefId: 2,
     chefName: "Joanne",
+    chefStreet: "Jada gata 55",
+    chefPostalCode: "0865",
+    chefCity: "Oslo",
     recipeName: "Lasagne",
     description: "It tastes like a cross between gravel and dead leaves.",
     image: "../../../testdata/lasagne.jpg",
@@ -115,6 +122,10 @@ export function Cart() {
               <div className={styles["cart-info-main"]}>
                 <div className={styles["cart-item-title"]}>{item.recipeName}</div>
                 <div className={styles["cart-item-chef"]}>Chef: <span className={styles["chef-name"]}>{item.chefName}</span></div>
+                <div className={styles["order-detail-text"]}>
+                  Chef's address: <span
+                  className={styles["order-highlight"]}>{item.chefStreet}, {item.chefPostalCode} {item.chefCity}</span>
+                </div>
                 <div className={styles["cart-ready-by"]}>Ready by: {item.readyBy}</div>
               </div>
               <div className={styles["cart-info-side"]}>
