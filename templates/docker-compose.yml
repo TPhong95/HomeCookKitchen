@@ -1,22 +1,41 @@
 version: '3.8'
 
 services:
-  Example_name_DB: #Change Example_name_DB, this name is used to specify service in compose
+  postgres_example: #Change example, this name is used to specify service in compose. Eks: postgres_chef. This one needs to match in the URL
     image: postgres:17-alpine
-    container_name: #Insert container name here
+    container_name: #Insert container name here eks: postgres-chef
     environment:
-      POSTGRES_DB: #Insert DB name here
+      POSTGRES_DB: #Insert DB name here. eks: chefDB
       POSTGRES_USER: username
       POSTGRES_PASSWORD: password
     ports:
     - '0000:5432' #On left is hardcoded port to local computer right is always 5432 for docker
+    restart: always
+    volumes:
+      - example_data:/var/lib/postgresql/data  # change example. Eks: chef_db_data:/var/lib/postgresql/data
+    networks:
+      - m2026 # Can call this network whatever. just make sure all of the services are in the same network.
 
-  Example_name_service:
-    build: .
-    container_name: #Insert container name here
+  example-service: # eks chef-service
+    image: example-service:0.0.1-SNAPSHOT # eks: chef-service:0.0.1-SNAPSHOT
+    container_name: example-service
+    build:
+      context: ./example/example # Filstien. Eks:   ./user/chefuser
     ports:
-      - "8006" #Same port as the Dockerfile
+      - "8002" # Choose port for service-container to listen on.
     environment:
-      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/ExampleDB #change ExampleDB to the postgresDB over
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres_example:5432/example  #eks: jdbc:postgresql://postgres_chef:5432/chefDB. postgres_chef in the url needs to match with database name defined right under services:
       SPRING_DATASOURCE_USERNAME: username
       SPRING_DATASOURCE_PASSWORD: password
+      SPRING_CONFIG_IMPORT: "optional:consul:"
+      SPRING_CLOUD_CONSUL_HOST: "consul"
+    depends_on:
+      - postgres_example
+      - consul
+    networks:
+      - m2026
+
+networks:
+  m2026:
+    driver: bridge
+

@@ -1,11 +1,11 @@
 spring:
   application:
-    name: custUser
+    name: custuser
   datasource:
     driver-class-name: org.postgresql.Driver
     username: username
     password: password
-    url: jdbc:postgresql://localhost:5433/customerDB
+    url: jdbc:postgresql://postgres_customer:5432/customerDB
   jpa:
     generate-ddl: false
     show-sql: false

@@ -1,8 +1,22 @@
 version: '3.8'
 
+
+
 services:
+
+  #CONSUL
+  consul:
+    image: hashicorp/consul:2.0.0
+    container_name: consul
+    ports:
+      - "8500:8500"
+      - "8600:8600/udp"
+    command: agent -dev -node=m26 -client=0.0.0.0
+    networks:
+      - m2026
+
   #CHEF SERVICE & DB
-  postgres:
+  postgres_chef:
     image: postgres:17-alpine
     container_name: postgres-chef
     environment:
@@ -12,8 +26,6 @@ services:
     ports:
       - "5432:5432"
     restart: always
-    volumes:
-      - chef_db_data:/var/lib/postgresql/data
     networks:
       - m2026
 
@@ -25,11 +37,14 @@ services:
     ports:
       - "8002"
     environment:
-      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/chefDB
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres_chef:5432/chefDB
       SPRING_DATASOURCE_USERNAME: username
       SPRING_DATASOURCE_PASSWORD: password
+      SPRING_CONFIG_IMPORT: "optional:consul:"
+      SPRING_CLOUD_CONSUL_HOST: "consul"
     depends_on:
-      - postgres
+      - postgres_chef
+      - consul
     networks:
       - m2026
 
@@ -45,8 +60,6 @@ services:
     ports:
       - "5433:5432"
     restart: always
-    volumes:
-      - customer_db_data:/var/lib/postgresql/data
     networks:
       - m2026
 
@@ -61,8 +74,11 @@ services:
       SPRING_DATASOURCE_URL: jdbc:postgresql://postgres_customer:5432/customerDB
       SPRING_DATASOURCE_USERNAME: username
       SPRING_DATASOURCE_PASSWORD: password
+      SPRING_CONFIG_IMPORT: "optional:consul:"
+      SPRING_CLOUD_CONSUL_HOST: "consul"
     depends_on:
       - postgres_customer
+      - consul
     networks:
       - m2026
 
@@ -72,14 +88,12 @@ services:
     image: postgres:17-alpine
     container_name: postgres-purchase
     environment:
-      POSTGRES_DB: purchase_db
-      POSTGRES_USER: user
+      POSTGRES_DB: purchaseDB
+      POSTGRES_USER: username
       POSTGRES_PASSWORD: password
     ports:
       - "5435:5432"
     restart: always
-    volumes:
-      - purchase_db_data:/var/lib/postgresql/data
     networks:
       - m2026
 
@@ -87,15 +101,18 @@ services:
     image: purchase-service:0.0.1-SNAPSHOT
     container_name: purchase-service
     build:
-      context: ./transaction/purchase
+      context: ./transactions/purchase
     ports:
       - "8011"
     environment:
-      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres_purchase:5432/purchase_db
-      SPRING_DATASOURCE_USERNAME: user
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres_purchase:5432/purchaseDB
+      SPRING_DATASOURCE_USERNAME: username
       SPRING_DATASOURCE_PASSWORD: password
+      SPRING_CONFIG_IMPORT: "optional:consul:"
+      SPRING_CLOUD_CONSUL_HOST: "consul"
     depends_on:
       - postgres_purchase
+      - consul
     networks:
       - m2026
 
@@ -111,14 +128,12 @@ services:
     ports:
       - "5434:5432"
     restart: always
-    volumes:
-      - product_db_data:/var/lib/postgresql/data
     networks:
       - m2026
 
   product-service:
     image: product-service:0.0.1-SNAPSHOT
-    container_name: product-service
+    container_name: recipeproduct-service
     build:
       context: ./product/recipeproduct
     ports:
@@ -127,17 +142,14 @@ services:
       SPRING_DATASOURCE_URL: jdbc:postgresql://postgres_product:5432/productDB
       SPRING_DATASOURCE_USERNAME: username
       SPRING_DATASOURCE_PASSWORD: password
+      SPRING_CONFIG_IMPORT: "optional:consul:"
+      SPRING_CLOUD_CONSUL_HOST: "consul"
     depends_on:
       - postgres_product
+      - consul
     networks:
       - m2026
 
-
-volumes:
-  chef_db_data:
-  customer_db_data:
-  purchase_db_data:
-  product_db_data:
 
 networks:
   m2026:

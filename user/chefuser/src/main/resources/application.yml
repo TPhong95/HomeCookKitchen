@@ -1,11 +1,11 @@
 spring:
   application:
-    name: ChefUser
+    name: chefuser
   datasource:
     driver-class-name: org.postgresql.Driver
     username: username
     password: password
-    url: jdbc:postgresql://localhost:5433/customerDB
+    url: jdbc:postgresql://postgres_chef:5432/chefDB
   jpa:
     generate-ddl: false
     show-sql: false
