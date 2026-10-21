@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 @RestControllerAdvice
 @Slf4j
-public class GlobalErrorHandler {
+public class ErrorHandler {
 
 
     //========== 400 BAD REQUEST ==========
