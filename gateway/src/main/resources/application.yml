@@ -10,9 +10,44 @@ spring:
     consul:
       host: consul
       port: 8500
-    # gateway:
-      # routes:
-      # Legg til rutene herr senere
+    gateway:
+      server:
+        webflux:
+          globalcors:
+            add-to-simple-url-handler-mapping: true
+            cors-configurations:
+              '[/**]':
+                allowedOrigins:
+                  - "http://localhost:5173"
+                allowedHeaders:
+                  - "*"
+                allowedMethods:
+                  - "GET"
+                  - "POST"
+                  - "PUT"
+                  - "DELETE"
+                  - "OPTIONS"
+                allowCredentials: true
+          routes:
+            - id: chef-route
+              uri: lb://chefuser
+              predicates:
+                - Path=/api/chef/**
+
+            - id: customer-route
+              uri: lb://custuser
+              predicates:
+                - Path=/api/customer/**
+
+            - id: product-route
+              uri: lb://recipeproduct
+              predicates:
+                - Path=/api/productListing/**, /api/recipe/**
+
+            - id: purchase-route
+              uri: lb://purchase
+              predicates:
+                - Path=/api/purchase/**
 
 management:
   endpoints:
