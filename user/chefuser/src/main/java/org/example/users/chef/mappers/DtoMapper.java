@@ -15,12 +15,27 @@ public class DtoMapper {
     // CHEF MAPPINGS //
 
     public ChefResponseDto toChefResponseDto(Chef chef) {
+        List<AddressResponseDto> addressDtos;
+
+        if (chef.getAddresses() != null) {
+            addressDtos = toAddressResponseDtoList(chef.getAddresses(), chef.getId());
+        } else {
+            addressDtos = List.of();
+        }
+
         return new ChefResponseDto(
                 chef.getId(),
                 chef.getName(),
                 chef.getEmail(),
-                chef.getPhoneNumber()
+                chef.getPhoneNumber(),
+                addressDtos
         );
+    }
+
+    public List<ChefResponseDto> toChefResponseDtoList(List<Chef> chefs) {
+        return chefs.stream()
+                .map(this::toChefResponseDto)
+                .toList();
     }
 
     // ADDRESS MAPPINGS //

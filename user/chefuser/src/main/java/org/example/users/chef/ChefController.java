@@ -31,18 +31,22 @@ public class ChefController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Chef> getChefById(@PathVariable Long id){
+    public ResponseEntity<ChefResponseDto> getChefById(@PathVariable Long id){
         Chef result = chefService.getChefById(id);
-        return ResponseEntity.ok(result);
+
+        ChefResponseDto response = dtoMapper.toChefResponseDto(result);
+        return ResponseEntity.ok(response);
     }
 
     @GetMapping()
-    public ResponseEntity<List<Chef>> getAllChefs() {
+    public ResponseEntity<List<ChefResponseDto>> getAllChefs() {
         List<Chef> result = chefService.getAllChefs();
             if (result.isEmpty()) {
                 return ResponseEntity.notFound().build();
             }
-            return ResponseEntity.ok(result);
+            List<ChefResponseDto> response = dtoMapper.toChefResponseDtoList(result);
+
+            return ResponseEntity.ok(response);
         }
 
 

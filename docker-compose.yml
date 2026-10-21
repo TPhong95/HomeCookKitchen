@@ -15,6 +15,22 @@ services:
     networks:
       - m2026
 
+  #GATEWAY
+  gateway:
+    image: gateway:0.0.1-SNAPSHOT
+    container_name: gateway
+    build:
+      context: ./gateway
+    environment:
+      SPRING_CONFIG_IMPORT: "optional:consul:"
+      SPRING_CLOUD_CONSUL_HOST: "consul"
+    ports:
+      - "8100:8100"
+    depends_on:
+      - consul
+    networks:
+      - m2026
+
   #CHEF SERVICE & DB
   postgres_chef:
     image: postgres:17-alpine
