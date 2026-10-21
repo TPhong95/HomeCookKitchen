@@ -6,7 +6,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("api/purchase")
+@RequestMapping("/api/purchase")
 public class PurchaseController {
     private final PurchaseService purchaseService;
     private final PurchaseOrchestrationService purchaseOrchestrationService;
