@@ -48,7 +48,7 @@ public class CustomerService {
             customerToUpdate.setName(DTO.name());
         }
         if (DTO.email() != null && !DTO.email().isEmpty()) {
-            customerToUpdate.setName(DTO.email());
+            customerToUpdate.setEmail(DTO.email());
         }
         validateUniqueEmail(DTO.email());
         if ((DTO.name() == null || DTO.name().isEmpty()) || (DTO.email() == null || DTO.email().isEmpty())) {
