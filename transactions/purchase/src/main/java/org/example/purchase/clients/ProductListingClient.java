@@ -13,7 +13,7 @@ public class ProductListingClient {
     public ProductListingClient(
             //@Value("${deck.service.url}") String url
     ) {
-        this.url = "http://localhost:8006/api/";
+        this.url = "http://gateway:8100/api/";
 
         this.restClient = RestClient.create();
         //this.url = url;
