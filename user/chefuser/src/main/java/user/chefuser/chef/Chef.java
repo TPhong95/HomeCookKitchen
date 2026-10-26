@@ -1,10 +1,10 @@
-package org.example.users.chef;
+package user.chefuser.chef;
 
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.example.users.chef.address.Address;
+import user.chefuser.chef.address.Address;
 
 import java.util.ArrayList;
 import java.util.List;

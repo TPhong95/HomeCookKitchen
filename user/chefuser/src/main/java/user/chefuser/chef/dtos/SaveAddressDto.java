@@ -1,4 +1,4 @@
-package org.example.users.chef.dtos;
+package user.chefuser.chef.dtos;
 
 public record SaveAddressDto(
         String street,

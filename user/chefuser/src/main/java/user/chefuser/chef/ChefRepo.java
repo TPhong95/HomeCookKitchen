@@ -1,8 +1,8 @@
-package org.example.users.chef.address;
+package user.chefuser.chef;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface AddressRepo extends JpaRepository<Address, Long> {
+public interface ChefRepo extends JpaRepository<Chef, Long> {
 }

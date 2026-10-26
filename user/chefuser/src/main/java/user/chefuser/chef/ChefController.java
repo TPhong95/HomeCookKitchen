@@ -1,10 +1,10 @@
-package org.example.users.chef;
+package user.chefuser.chef;
 
-import org.example.users.chef.address.Address;
-import org.example.users.chef.dtos.AddressResponseDto;
-import org.example.users.chef.dtos.ChefResponseDto;
-import org.example.users.chef.dtos.SaveAddressDto;
-import org.example.users.chef.mappers.DtoMapper;
+import user.chefuser.chef.address.Address;
+import user.chefuser.chef.dtos.AddressResponseDto;
+import user.chefuser.chef.dtos.ChefResponseDto;
+import user.chefuser.chef.dtos.SaveAddressDto;
+import user.chefuser.chef.mappers.DtoMapper;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
