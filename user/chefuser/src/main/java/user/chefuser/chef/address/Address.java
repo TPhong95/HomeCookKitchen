@@ -1,11 +1,10 @@
-package org.example.users.chef.address;
+package user.chefuser.chef.address;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.example.users.chef.Chef;
+import user.chefuser.chef.Chef;
 
 @Entity
 @Getter

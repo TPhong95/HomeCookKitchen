@@ -1,9 +1,8 @@
-package org.example.transaction;
+package org.example.purchase;
 
-import org.example.purchase.PurchaseApplication;
 import org.springframework.boot.SpringApplication;
 
-public class TestTransactionApplication {
+public class TestPurchaseApplication {
 
     public static void main(String[] args) {
         SpringApplication.from(PurchaseApplication::main).with(TestcontainersConfiguration.class).run(args);

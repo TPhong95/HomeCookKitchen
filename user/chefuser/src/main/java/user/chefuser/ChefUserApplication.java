@@ -1,13 +1,13 @@
-package org.example.users;
+package user.chefuser;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class UsersApplication {
+public class ChefUserApplication {
 
     public static void main(String[] args) {
-        SpringApplication.run(UsersApplication.class, args);
+        SpringApplication.run(ChefUserApplication.class, args);
     }
 
 }
