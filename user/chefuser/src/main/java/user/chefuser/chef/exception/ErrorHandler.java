@@ -2,6 +2,7 @@ package user.chefuser.chef.exception;
 
 
 import lombok.extern.slf4j.Slf4j;
+import user.chefuser.chef.exception.notfound.AddressNotFoundException;
 import user.chefuser.chef.exception.notfound.ChefNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -10,7 +11,7 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 @RestControllerAdvice
 @Slf4j
-public class GlobalErrorHandler {
+public class ErrorHandler {
 
     //========== 400 BAD REQUEST ==========
 
@@ -27,7 +28,8 @@ public class GlobalErrorHandler {
     //========== 404 NOT FOUND ==========
 
     @ExceptionHandler({
-            ChefNotFoundException.class
+            ChefNotFoundException.class,
+            AddressNotFoundException.class
 
     })
     public ResponseEntity<String> handleNotFoundException(RuntimeException e) {

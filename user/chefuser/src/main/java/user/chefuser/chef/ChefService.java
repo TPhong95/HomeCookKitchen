@@ -2,6 +2,7 @@ package user.chefuser.chef;
 
 import user.chefuser.chef.address.Address;
 import user.chefuser.chef.dtos.SaveAddressDto;
+import user.chefuser.chef.exception.notfound.AddressNotFoundException;
 import user.chefuser.chef.exception.notfound.ChefNotFoundException;
 import user.chefuser.chef.mappers.DtoMapper;
 import org.springframework.stereotype.Service;
@@ -28,9 +29,8 @@ public class ChefService {
     }
 
     public Chef getChefById(Long id){
-        return chefRepo.findById(id).orElseThrow(()->{
-            return new ChefNotFoundException("Chef with id: " + id + " not found");
-        });
+        return chefRepo.findById(id).orElseThrow(()-> new ChefNotFoundException("Chef with id: " + id + " not found"));
+
     }
 
     public List<Chef> getAllChefs(){
@@ -39,12 +39,19 @@ public class ChefService {
 
     @Transactional
     public void deleteChefById(Long id){
+        if (!chefRepo.existsById(id)){
+            throw new ChefNotFoundException("Chef with id: " + id + " not found");
+        }
         Chef chef = getChefById(id);
         chefRepo.delete(chef);
     }
 
     @Transactional
     public List<Address> saveAddressToChef(Long chefId, SaveAddressDto dto) {
+        if (!chefRepo.existsById(chefId)){
+            throw new ChefNotFoundException("Chef with id: " + chefId + " not found");
+        }
+
         Chef chef = getChefById(chefId);
 
         Address address = dtoMapper.toAddressEntity(dto, chef);
@@ -57,12 +64,14 @@ public class ChefService {
 
     @Transactional
     public void deleteAddressFromChef(Long chefId, Long addressId) {
+        if (!chefRepo.existsById(chefId)){
+            throw new ChefNotFoundException("Chef with id: " + chefId + " not found");
+        }
         Chef chef = getChefById(chefId);
         Address addressToDelete = chef.getAddresses().stream()
                 .filter(a -> a.getId().equals(addressId))
                 .findFirst()
-                //husk å fikse expection på addresse
-                .orElseThrow(() -> new ChefNotFoundException("Address with id: " + addressId + " not found"));
+                .orElseThrow(() -> new AddressNotFoundException("Address with id: " + addressId + " not found"));
 
         chef.removeAddress(addressToDelete);
         chefRepo.save(chef);

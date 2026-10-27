@@ -41,9 +41,7 @@ public class ChefController {
     @GetMapping()
     public ResponseEntity<List<ChefResponseDto>> getAllChefs() {
         List<Chef> result = chefService.getAllChefs();
-            if (result.isEmpty()) {
-                return ResponseEntity.notFound().build();
-            }
+
             List<ChefResponseDto> response = dtoMapper.toChefResponseDtoList(result);
 
             return ResponseEntity.ok(response);
