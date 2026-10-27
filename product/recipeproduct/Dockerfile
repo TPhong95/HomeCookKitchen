@@ -1,12 +1,14 @@
-FROM maven:3.9-eclipse-temurin-21 AS build
+#Build step
+FROM maven:3.9.11-eclipse-temurin-21 AS build
 WORKDIR /build
 COPY pom.xml .
-RUN mvn dependency:go-offline -B
 COPY src ./src
 RUN mvn clean package -DskipTests
 
+# Run step
 FROM eclipse-temurin:21-jre-alpine
-WORKDIR /app
-COPY --from=build /build/target/*.jar app.jar
+WORKDIR /usr/src/recipeproduct
+COPY --from=build /build/target/recipeproduct-0.0.1-SNAPSHOT.jar ./app.jar
 EXPOSE 8006
 ENTRYPOINT ["java", "-jar", "app.jar"]
+# Hardcoded profile - ENTRYPOINT ["java", "-jar", "app.jar", "--spring.profiles.active=docker"]

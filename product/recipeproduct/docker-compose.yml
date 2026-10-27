@@ -19,7 +19,7 @@ services:
     ports:
       - "8006"
     environment:
-      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres_product:5432/productDB
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/productDB
       SPRING_DATASOURCE_USERNAME: username
       SPRING_DATASOURCE_PASSWORD: password
     depends_on:

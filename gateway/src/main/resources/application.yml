@@ -25,6 +25,7 @@ spring:
                   - "GET"
                   - "POST"
                   - "PUT"
+                  - "PATCH"
                   - "DELETE"
                   - "OPTIONS"
                 allowCredentials: true
@@ -39,10 +40,15 @@ spring:
               predicates:
                 - Path=/api/customer/**
 
-            - id: product-route
-              uri: lb://recipeproduct
+            - id: recipe-route
+              uri: lb://recipe
               predicates:
-                - Path=/api/productListing/**, /api/recipe/**
+                - Path=/api/recipe/**
+
+            - id: productListing-route
+              uri: lb://productlisting
+              predicates:
+                - Path=/api/productListing/**
 
             - id: purchase-route
               uri: lb://purchase
