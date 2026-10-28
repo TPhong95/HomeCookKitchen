@@ -13,7 +13,7 @@ public class RecipeClient {
         this.restClient = RestClient.create();
     }
 
-    public GetRecipeDTO getRecipeById(int recipeId) {
+    public GetRecipeDTO getRecipeById(Long recipeId) {
         String callUri = url + "/" + recipeId;
         GetRecipeDTO DTO = restClient
                 .get()

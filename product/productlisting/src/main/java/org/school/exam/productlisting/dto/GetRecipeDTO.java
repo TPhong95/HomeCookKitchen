@@ -1,8 +1,8 @@
 package org.school.exam.productlisting.dto;
 
 public record GetRecipeDTO(
-        int recipeId,
-        int cookId,
+        Long recipeId,
+        Long cookId,
         String recipeName,
         boolean active
 ) {}

@@ -36,7 +36,7 @@ public class ProductListingOrchestrationService {
     }
 
     private void validateCreateDTO(CreateProductListingDTO DTO) {
-        if (DTO.recipeId() == 0){
+        if (DTO.recipeId() == 0L){
             throw new BadRequestException("Recipe ID must be set and cannot be zero");
         } else if (DTO.quantity() <= 0) {
             throw new BadRequestException("Quantity must be set/cannot be zero or less");

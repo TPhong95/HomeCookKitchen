@@ -3,11 +3,11 @@ package org.school.exam.recipe.dto;
 import org.school.exam.recipe.FoodCategory;
 
 public record CreateRecipeDTO(
-        int cookId,
+        Long cookId,
         String name,
         boolean active,
-        int pictureId,
-        int instanceOf,
+        Long pictureId,
+        Long instanceOf,
         FoodCategory foodCategory,
         boolean gluten,
         boolean crustaceans,

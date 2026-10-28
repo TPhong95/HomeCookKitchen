@@ -24,15 +24,13 @@ public class ProductListingController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<ProductListing> getProductListingById(@PathVariable int id) {
-        Long longId = (long) id;
-        return ResponseEntity.ok(productListingService.findById(longId));
+    public ResponseEntity<ProductListing> getProductListingById(@PathVariable Long id) {
+        return ResponseEntity.ok(productListingService.findById(id));
     }
 
-//    @GetMapping("/chef/{chefId}")
+//    @GetMapping("/chef/{chefId}") //Get active listings by chefId (to view all active listing from same chef)
 //    public ResponseEntity
-//            <List<ProductListing>> getProductListingByChefId(@PathVariable int chefId) {
-//        Long longId = (long) chefId;
+//            <List<ProductListing>> getProductListingByChefId(@PathVariable Long chefId) {
 //        return ResponseEntity.ok(productListingService.findAllByChefId(chefId));
 //    }
 
@@ -42,8 +40,7 @@ public class ProductListingController {
     }
 
     @PatchMapping("/{id}")
-    public ResponseEntity<ProductListing> updateProductListing(@PathVariable int id, @RequestBody CreateProductListingDTO DTO) {
-        Long longId = (long) id;
-        return ResponseEntity.ok(productListingService.update(longId, DTO));
+    public ResponseEntity<ProductListing> updateProductListing(@PathVariable Long id, @RequestBody CreateProductListingDTO DTO) {
+        return ResponseEntity.ok(productListingService.update(id, DTO));
     }
 }

@@ -16,17 +16,17 @@ public class Recipe {
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "recipe_gen")
     @SequenceGenerator(name = "recipe_gen", sequenceName = "recipe_seq", allocationSize = 1)
     @Column(name = "recipe_id")
-    private int recipeId;
+    private Long recipeId;
 
     @Column(name = "chef_id")
-    private int cookId;
+    private Long cookId;
 
     @Column(name = "name")
     private String recipeName;
 
     private boolean active;
-    private int pictureId;
-    private int instanceOf;
+    private Long pictureId;
+    private Long instanceOf;
     @Enumerated(EnumType.STRING)
     @Column(name = "category")
     private FoodCategory foodCategory;
@@ -45,8 +45,8 @@ public class Recipe {
     private boolean lupin;
     private boolean molluscs;
 
-    public Recipe(int cookId, String recipeName, boolean active, int pictureId,
-                  int instanceOf, FoodCategory foodCategory, boolean gluten,
+    public Recipe(Long cookId, String recipeName, boolean active, Long pictureId,
+                  Long instanceOf, FoodCategory foodCategory, boolean gluten,
                   boolean crustaceans, boolean egg, boolean fish, boolean peanuts,
                   boolean soybeans, boolean milk, boolean nuts, boolean celery,
                   boolean mustard, boolean sesame, boolean sulfites, boolean lupin, boolean molluscs)

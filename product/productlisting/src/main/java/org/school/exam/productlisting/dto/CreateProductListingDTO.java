@@ -3,8 +3,8 @@ package org.school.exam.productlisting.dto;
 import java.time.LocalDateTime;
 
 public record CreateProductListingDTO(
-        int recipeId,
-        int chefId,
+        Long recipeId,
+        Long chefId,
         boolean active,
         int quantity,
         float unitPrice,

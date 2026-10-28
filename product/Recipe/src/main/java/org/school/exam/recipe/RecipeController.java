@@ -22,9 +22,8 @@ public class RecipeController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Recipe> getRecipeById(@PathVariable int id) {
-        Long longId = (long) id;
-        return ResponseEntity.ok(recipeService.getRecipeById(longId));
+    public ResponseEntity<Recipe> getRecipeById(@PathVariable Long id) {
+        return ResponseEntity.ok(recipeService.getRecipeById(id));
     }
 
     @PostMapping
@@ -33,8 +32,7 @@ public class RecipeController {
     }
 
     @PatchMapping("/{id}")
-    public ResponseEntity<Recipe> updateRecipe(@PathVariable int id, @RequestBody CreateRecipeDTO DTO) {
-        Long longId = (long) id;
-        return ResponseEntity.ok(recipeService.updateRecipe(longId, DTO));
+    public ResponseEntity<Recipe> updateRecipe(@PathVariable Long id, @RequestBody CreateRecipeDTO DTO) {
+        return ResponseEntity.ok(recipeService.updateRecipe(id, DTO));
     }
 }
