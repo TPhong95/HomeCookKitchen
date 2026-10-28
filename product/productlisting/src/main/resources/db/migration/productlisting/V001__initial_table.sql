@@ -1,8 +1,8 @@
 
 CREATE TABLE IF NOT EXISTS product_listing(
-    pl_id INT PRIMARY KEY,
-    recipe_id INT,
-    chef_id INT,
+    pl_id BIGINT PRIMARY KEY,
+    recipe_id BIGINT,
+    chef_id BIGINT,
     active BOOLEAN,
     quantity INT,
     unit_price FLOAT,
