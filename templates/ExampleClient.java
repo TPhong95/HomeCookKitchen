@@ -11,7 +11,7 @@ public class ChefClient {
 
     public ChefClient(
     ) {
-        this.url = "http://localhost:8006/api/"; //The call to the controller in the other microservice
+        this.url = "http://gateway:8100/api/"; //The call to the controller in the other microservice
         this.restClient = RestClient.create();
     }
 

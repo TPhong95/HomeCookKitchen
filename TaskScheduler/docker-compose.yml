@@ -1,0 +1,26 @@
+version: '3.8'
+
+services:
+  postgres:
+    image: postgres:17-alpine
+    container_name: postgres-tasksSchedulerDB
+    environment:
+      POSTGRES_DB: tasksSchedulerDB
+      POSTGRES_USER: username
+      POSTGRES_PASSWORD: password
+    ports:
+    - '5432:5432'
+    restart: always
+
+  taskScheduler-service:
+    build: .
+    container_name: taskScheduler-service
+    ports:
+      - "8002" # Choose port for service-container to listen on.
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres-tasksSchedulerDB:5432/tasksSchedulerDB
+      SPRING_DATASOURCE_USERNAME: username
+      SPRING_DATASOURCE_PASSWORD: password
+    depends_on:
+      - postgres
+
