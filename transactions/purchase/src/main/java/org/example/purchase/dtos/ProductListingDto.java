@@ -5,10 +5,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 public record ProductListingDto(
         Long productListingId,
-        @JsonProperty("recipeId") RecipeDto recipe,
+        int recipeId,
+        Long chefId,
         float unitPrice
-) {
-    public Long recipeId() {
-        return recipe.recipeId();
-    }
-}
+) {}

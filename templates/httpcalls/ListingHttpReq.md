@@ -7,15 +7,15 @@
 ### JSON RESPONSE
 ```
 {
+    "recipeId": 1,
+    "chefId": 1,
+    "active": true,
     "quantity": 10,
-    "unitPrice": 14.0,
-    "productListingId": 1,
-    "recipeId": {
-        "cookId": 1,
-        "recipeName": "Bolle",
-        "active": true,
-        "recipeId": 1
-    }
+    "unitPrice": 14.99,
+    "purchaseDeadline": "2026-11-01T18:00:00",
+    "readyBy": "2026-11-03T12:00:00",
+    "createdAtTime": "2026-10-28T15:17:29.217928",
+    "productListingId": 1
 }
 ```
 
@@ -24,22 +24,26 @@
 ```
 {
     "recipeId": 1,
+    "chefId" : 1,
+    "active": true,
     "quantity": 10,
-    "unitPrice": 14.99
+    "unitPrice": 14.99,
+    "purchaseDeadline": "2026-11-01T18:00:00",
+    "readyBy": "2026-11-03T12:00:00"
 }
 ```
 ### JSON RESPONSE
 ```
 {
+    "recipeId": 1,
+    "chefId": 1,
+    "active": true,
     "quantity": 10,
-    "unitPrice": 14.0,
-    "productListingId": 1,
-    "recipeId": {
-        "cookId": 1,
-        "recipeName": "Bolle",
-        "active": true,
-        "recipeId": 1
-    }
+    "unitPrice": 14.99,
+    "purchaseDeadline": "2026-11-01T18:00:00",
+    "readyBy": "2026-11-03T12:00:00",
+    "createdAtTime": "2026-10-28T15:17:29.217927682",
+    "productListingId": 1
 }
 ```
 ## GET /api/productListing/all
@@ -48,26 +52,26 @@
 ```
 [
     {
+        "recipeId": 1,
+        "chefId": 1,
+        "active": true,
         "quantity": 10,
-        "unitPrice": 14.0,
-        "productListingId": 1,
-        "recipeId": {
-            "cookId": 1,
-            "recipeName": "Bolle",
-            "active": true,
-            "recipeId": 1
-        }
+        "unitPrice": 14.99,
+        "purchaseDeadline": "2026-11-01T18:00:00",
+        "readyBy": "2026-11-03T12:00:00",
+        "createdAtTime": "2026-10-28T15:17:29.217928",
+        "productListingId": 1
     },
     {
+        "recipeId": 2,
+        "chefId": 1,
+        "active": true,
         "quantity": 14,
-        "unitPrice": 33.0,
-        "productListingId": 2,
-        "recipeId": {
-            "cookId": 1,
-            "recipeName": "Soup",
-            "active": true,
-            "recipeId": 2
-        }
+        "unitPrice": 22.99,
+        "purchaseDeadline": "2026-11-01T18:00:00",
+        "readyBy": "2026-11-03T12:00:00",
+        "createdAtTime": "2026-10-28T15:18:49.839314",
+        "productListingId": 2
     }
 ]
 ```
@@ -76,23 +80,27 @@
 ### JSON REQUEST
 ```
 {
-    "recipeId": 1,
-    "quantity": 44,
-    "unitPrice": 23.99
+  "recipeId": 1,
+  "chefId": 1,
+  "active": true,
+  "quantity": 10,
+  "unitPrice": 149.99,
+  "purchaseDeadline": "2026-11-01T18:00:00",
+  "readyBy": "2026-11-03T12:00:00"
 }
 
 ```
 ### JSON RESPONSE
 ```
 {
-    "quantity": 44,
-    "unitPrice": 23.99,
-    "productListingId": 1,
-    "recipeId": {
-        "cookId": 1,
-        "recipeName": "Bolle",
-        "active": true,
-        "recipeId": 1
-    }
+    "recipeId": 1,
+    "chefId": 1,
+    "active": true,
+    "quantity": 10,
+    "unitPrice": 149.99,
+    "purchaseDeadline": "2026-11-01T18:00:00",
+    "readyBy": "2026-11-03T12:00:00",
+    "createdAtTime": "2026-10-28T15:17:29.217928",
+    "productListingId": 1
 }
 ```

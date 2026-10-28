@@ -10,7 +10,23 @@
     "cookId": 1,
     "recipeName": "Spaggeti",
     "active": true,
-    "productListing": [],
+    "pictureId": 0,
+    "instanceOf": 0,
+    "foodCategory": "ASIAN",
+    "gluten": false,
+    "crustaceans": false,
+    "egg": false,
+    "fish": false,
+    "peanuts": false,
+    "soybeans": false,
+    "milk": false,
+    "nuts": false,
+    "celery": false,
+    "mustard": false,
+    "sesame": false,
+    "sulfites": false,
+    "lupin": false,
+    "molluscs": false,
     "recipeId": 1
 }
 ```
@@ -21,7 +37,24 @@
 {
     "cookId": 1,
     "name": "Spaggeti",
-    "active": true
+    "active": true,
+    "pictureId": 0,
+    "instanceOf": 0,
+    "foodCategory": "ASIAN",
+    "gluten": false,
+    "crustaceans": false,
+    "egg": false,
+    "fish": false,
+    "peanuts": false,
+    "soybeans": false,
+    "milk": false,
+    "nuts": false,
+    "celery": false,
+    "mustard": false,
+    "sesame": false,
+    "sulfites": false,
+    "lupin": false,
+    "molluscs": false
 }
 ```
 ### JSON RESPONSE
@@ -30,7 +63,23 @@
     "cookId": 1,
     "recipeName": "Spaggeti",
     "active": true,
-    "productListing": null,
+    "pictureId": 0,
+    "instanceOf": 0,
+    "foodCategory": "ASIAN",
+    "gluten": false,
+    "crustaceans": false,
+    "egg": false,
+    "fish": false,
+    "peanuts": false,
+    "soybeans": false,
+    "milk": false,
+    "nuts": false,
+    "celery": false,
+    "mustard": false,
+    "sesame": false,
+    "sulfites": false,
+    "lupin": false,
+    "molluscs": false,
     "recipeId": 1
 }
 ```
@@ -43,14 +92,46 @@
         "cookId": 1,
         "recipeName": "Spaggeti",
         "active": true,
-        "productListing": [],
+        "pictureId": 0,
+        "instanceOf": 0,
+        "foodCategory": "ASIAN",
+        "gluten": false,
+        "crustaceans": false,
+        "egg": false,
+        "fish": false,
+        "peanuts": false,
+        "soybeans": false,
+        "milk": false,
+        "nuts": false,
+        "celery": false,
+        "mustard": false,
+        "sesame": false,
+        "sulfites": false,
+        "lupin": false,
+        "molluscs": false,
         "recipeId": 1
     },
     {
         "cookId": 1,
-        "recipeName": "Soup",
+        "recipeName": "Allergy soup",
         "active": true,
-        "productListing": [],
+        "pictureId": 0,
+        "instanceOf": 0,
+        "foodCategory": "ASIAN",
+        "gluten": true,
+        "crustaceans": true,
+        "egg": true,
+        "fish": true,
+        "peanuts": true,
+        "soybeans": true,
+        "milk": true,
+        "nuts": true,
+        "celery": true,
+        "mustard": true,
+        "sesame": true,
+        "sulfites": true,
+        "lupin": true,
+        "molluscs": true,
         "recipeId": 2
     }
 ]
@@ -60,18 +141,51 @@
 ### JSON REQUEST
 ```
 {
-    "cookId": 1,
-    "name": "Bolle",
-    "active": true
-}
+        "cookId": 1,
+        "name": "Less Allergy soup",
+        "active": true,
+        "pictureId": 0,
+        "instanceOf": 0,
+        "foodCategory": "ASIAN",
+        "gluten": true,
+        "crustaceans": false,
+        "egg": true,
+        "fish": true,
+        "peanuts": true,
+        "soybeans": true,
+        "milk": true,
+        "nuts": true,
+        "celery": true,
+        "mustard": true,
+        "sesame": true,
+        "sulfites": true,
+        "lupin": true,
+        "molluscs": true
+    }
 ```
 ### JSON RESPONSE
 ```
 {
     "cookId": 1,
-    "recipeName": "Bolle",
+    "recipeName": "Less Allergy soup",
     "active": true,
-    "productListing": [],
-    "recipeId": 1
+    "pictureId": 0,
+    "instanceOf": 0,
+    "foodCategory": "ASIAN",
+    "gluten": true,
+    "crustaceans": true,
+    "egg": true,
+    "fish": true,
+    "peanuts": true,
+    "soybeans": true,
+    "milk": true,
+    "nuts": true,
+    "celery": true,
+    "mustard": true,
+    "sesame": true,
+    "sulfites": true,
+    "lupin": true,
+    "molluscs": true,
+    "recipeId": 2
 }
 ```

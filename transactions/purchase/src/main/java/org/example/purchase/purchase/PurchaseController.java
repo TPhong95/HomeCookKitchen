@@ -22,6 +22,7 @@ public class PurchaseController {
         return ResponseEntity.ok(result);
     }
 
+    @GetMapping()
     public ResponseEntity<List<Purchase>> getAllPurchases() {
         List<Purchase> result = purchaseService.getAllPurchases();
         if (result.isEmpty()) {
