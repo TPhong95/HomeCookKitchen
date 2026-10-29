@@ -2,10 +2,12 @@ package org.school.exam.productlisting;
 
 import lombok.AllArgsConstructor;
 import org.school.exam.productlisting.dto.CreateProductListingDTO;
+import org.school.exam.productlisting.dto.ProductListingDeadlineDTO;
 import org.school.exam.productlisting.exception.badrequest.BadRequestException;
 import org.school.exam.productlisting.exception.notfound.ProductListingNotFoundException;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
@@ -53,5 +55,29 @@ public class ProductListingService {
         productListing.setUnitPrice(DTO.unitPrice());
         }
         return productListingRepo.save(productListing);
+    }
+
+    public List<ProductListingDeadlineDTO> findAllPassedDeadlines() {
+        var productListings = productListingRepo.findActiveWithPurchaseDeadlineAfter(LocalDateTime.now());
+        if (productListings.isEmpty()) {
+            throw new ProductListingNotFoundException("No product listing(s) found");
+        }
+        return productListings.stream()
+                .map(pl -> new ProductListingDeadlineDTO(
+                        pl.getProductListingId().longValue(),
+                        pl.getActive(),
+                        pl.getPurchaseDeadline()))
+                .toList();
+    }
+
+    public ProductListingDeadlineDTO updateDeadline(Long id) {
+        ProductListing productListing = productListingRepo.findById(id).orElse(null);
+        if (productListing == null) {
+            throw new ProductListingNotFoundException("No product listing with id " + id + " found");
+        }
+        productListing.setActive(false);
+        productListingRepo.save(productListing);
+
+        return new ProductListingDeadlineDTO(productListing.getProductListingId().longValue(), productListing.getActive(), productListing.getPurchaseDeadline());
     }
 }

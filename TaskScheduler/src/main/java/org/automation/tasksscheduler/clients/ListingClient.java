@@ -1,8 +1,12 @@
 package org.automation.tasksscheduler.clients;
 
-import org.automation.tasksscheduler.dto.GetListingDto;
+import org.automation.tasksscheduler.dto.ListingDto;
+import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestClient;
+
+import java.time.LocalDateTime;
+import java.util.List;
 
 @Service
 public class ListingClient {
@@ -16,22 +20,20 @@ public class ListingClient {
     }
 
     //Example functions using get from another service and receiving with a dto
-    public GetListingDto getListings(Long id) {
-        String callUrl = this.url + "chef/" + id;
-        ChefDto chefDto = restClient
+    public List<ListingDto> getListings() {
+        String callUrl = this.url + "productListing/deadline";
+        return restClient
                 .get()
                 .uri(callUrl)
                 .retrieve()
-                .body(ChefDto.class);
-        return chefDto;
+                .body(new ParameterizedTypeReference<List<ListingDto>>() {});
+    }
+
+    public ListingDto updateListingDeadline(ListingDto listingDto) {
+        String callUrl = this.url + "productListing/deadline/" + listingDto.id();
+        return restClient.patch()
+                .uri(callUrl)
+                .retrieve()
+                .body(ListingDto.class);
     }
 }
-
-/*
-    How the ChefDto looks it only receives the "name" variable in the json payload
-
-        public record ChefDto(
-                String name
-        ) {
-        }
-*/

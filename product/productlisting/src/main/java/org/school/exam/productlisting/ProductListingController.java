@@ -1,6 +1,7 @@
 package org.school.exam.productlisting;
 
 import org.school.exam.productlisting.dto.CreateProductListingDTO;
+import org.school.exam.productlisting.dto.ProductListingDeadlineDTO;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -42,5 +43,15 @@ public class ProductListingController {
     @PatchMapping("/{id}")
     public ResponseEntity<ProductListing> updateProductListing(@PathVariable Long id, @RequestBody CreateProductListingDTO DTO) {
         return ResponseEntity.ok(productListingService.update(id, DTO));
+    }
+
+    @GetMapping("/deadline")
+    public ResponseEntity<List<ProductListingDeadlineDTO>> getAllPassedDeadlines() {
+        return ResponseEntity.ok(productListingService.findAllPassedDeadlines());
+    }
+
+    @PatchMapping("/deadline/{id}")
+    public ResponseEntity<ProductListingDeadlineDTO> updateProductListingActive(@PathVariable Long id) {
+        return ResponseEntity.ok(productListingService.updateDeadline(id));
     }
 }

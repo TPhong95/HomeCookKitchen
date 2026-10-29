@@ -2,9 +2,9 @@ package org.automation.tasksscheduler.dto;
 
 import java.time.LocalDateTime;
 
-public record GetListingDto(
+public record ListingDto(
         Long id,
-        Boolean activeOrder,
-        LocalDateTime deadline
+        Boolean active,
+        LocalDateTime purchaseDeadline
 ) {
 }
