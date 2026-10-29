@@ -44,7 +44,7 @@ public class CustomerControllerTest {
     @Test
     void getCustomerById_shouldReturnCustomer() throws Exception {
         Customer customer = new Customer("Bob", "bob@mail.com");
-        when(customerService.findCustomerById(1)).thenReturn(customer);
+        when(customerService.findCustomerById(1L)).thenReturn(customer);
 
         mockMvc.perform(get("/api/customer/1"))
                 .andExpect(status().isOk())
@@ -72,7 +72,7 @@ public class CustomerControllerTest {
         CustomerDTO dto = new CustomerDTO("Updated Name", "updated@mail.com");
         Customer customer = new Customer("Updated Name", "updated@mail.com");
 
-        when(customerService.updateCustomer(eq(1), any(CustomerDTO.class))).thenReturn(customer);
+        when(customerService.updateCustomer(eq(1L), any(CustomerDTO.class))).thenReturn(customer);
 
         mockMvc.perform(patch("/api/customer/1")
                         .contentType(MediaType.APPLICATION_JSON)
@@ -84,7 +84,7 @@ public class CustomerControllerTest {
 
     @Test
     void getCustomerById_shouldReturnNotFoundWhenCustomerDoesNotExist() throws Exception {
-        when(customerService.findCustomerById(999)).thenThrow(new CustomerNotFoundException("Could not find customer with id: 999"));
+        when(customerService.findCustomerById(999L)).thenThrow(new CustomerNotFoundException("Could not find customer with id: 999"));
         mockMvc.perform(get("/api/customer/999"))
                 .andExpect(status().isNotFound()); // Adjust based on your GlobalExceptionHandler mapping
     }

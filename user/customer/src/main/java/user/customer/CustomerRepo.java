@@ -3,7 +3,11 @@ package user.customer;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
+import java.util.Optional;
+
 @Repository
-public interface CustomerRepo extends JpaRepository<Customer, Integer> {
+public interface CustomerRepo extends JpaRepository<Customer, Long> {
     boolean existsByEmail(String email);
+
+    Optional<Customer> findByEmail(String email); //trengs for å slå opp bruker for login
 }

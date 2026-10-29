@@ -21,7 +21,7 @@ public class CustomerService {
         return customers;
     }
 
-    public Customer findCustomerById(int id) {
+    public Customer findCustomerById(Long id) {
         Customer customer = customerRepo.findById(id).orElse(null);
         if (customer == null) {
             throw new CustomerNotFoundException("Could not find customer with id: " + id);
@@ -42,7 +42,7 @@ public class CustomerService {
         return customerRepo.save(newCustomer);
     }
 
-    public Customer updateCustomer(int id, CustomerDTO DTO) {
+    public Customer updateCustomer(Long id, CustomerDTO DTO) {
         Customer customerToUpdate = findCustomerById(id);
         if (DTO.name() != null && !DTO.name().isEmpty()) {
             customerToUpdate.setName(DTO.name());
