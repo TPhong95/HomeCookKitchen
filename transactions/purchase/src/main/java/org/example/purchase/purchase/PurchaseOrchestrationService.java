@@ -38,15 +38,12 @@ public class PurchaseOrchestrationService {
             ProductListingDto productListingDto = productListingClient.getProductListingInfoById(purchaseEventDto.productListingId());
             RecipeDto recipeDto = productListingClient.getRecipeById(productListingDto.recipeId());
             //FIX WHEN CHEF MICROSERVICE IS UP
-            //ChefDto chefDto = chefClient.getChefInfoById(recipeDto.cookId());
+            ChefDto chefDto = chefClient.getChefInfoById(productListingDto.chefId());
 
             //Info about the dish listing
             ListingInfoDto listingInfoDto = new ListingInfoDto(
-                     1L,
-                    //FIX WHEN CHEF MICROSERVICE IS UP
-                    //recipeDto.cookId(),
-                    //chefDto.name(),
-                    "Chef",
+                    productListingDto.chefId(),
+                    chefDto.name(),
                     purchaseEventDto.productListingId(),
                     recipeDto.recipeName(),
                     productListingDto.unitPrice()

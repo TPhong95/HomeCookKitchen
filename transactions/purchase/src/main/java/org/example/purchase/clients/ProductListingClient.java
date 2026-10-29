@@ -29,7 +29,7 @@ public class ProductListingClient {
         return productListing;
     }
 
-    public RecipeDto getRecipeById(Long id) {
+    public RecipeDto getRecipeById(int id) {
         String callUrl = this.url + "recipe/" + id;
         RecipeDto recipeDto = restClient
                 .get()
