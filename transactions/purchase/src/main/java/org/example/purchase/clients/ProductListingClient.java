@@ -13,7 +13,7 @@ public class ProductListingClient {
     public ProductListingClient(
             //@Value("${deck.service.url}") String url
     ) {
-        this.url = "http://localhost:8006/api/";
+        this.url = "http://gateway:8100/api/";
 
         this.restClient = RestClient.create();
         //this.url = url;
@@ -29,7 +29,7 @@ public class ProductListingClient {
         return productListing;
     }
 
-    public RecipeDto getRecipeById(Long id) {
+    public RecipeDto getRecipeById(int id) {
         String callUrl = this.url + "recipe/" + id;
         RecipeDto recipeDto = restClient
                 .get()

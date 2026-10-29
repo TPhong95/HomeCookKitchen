@@ -31,6 +31,17 @@ services:
     networks:
       - m2026
 
+   #Frontend
+  frontend:
+    image: frontend:0.1
+    container_name: frontend
+    build:
+      context: ./frontend
+    ports:
+      - "5173:5173"
+    networks:
+      - m2026
+
   #CHEF SERVICE & DB
   postgres_chef:
     image: postgres:17-alpine
@@ -41,7 +52,7 @@ services:
       POSTGRES_PASSWORD: password
     ports:
       - "5432:5432"
-    restart: always
+    restart: no
     networks:
       - m2026
 
@@ -75,7 +86,7 @@ services:
       POSTGRES_PASSWORD: password
     ports:
       - "5433:5432"
-    restart: always
+    restart: no
     networks:
       - m2026
 
@@ -109,7 +120,7 @@ services:
       POSTGRES_PASSWORD: password
     ports:
       - "5435:5432"
-    restart: always
+    restart: no
     networks:
       - m2026
 
@@ -134,35 +145,34 @@ services:
 
 
   #PRODUCT SERVICE & DB
-  postgres_product:
+  postgres-productlisting:
     image: postgres:17-alpine
-    container_name: postgres-product
+    container_name: postgres-productlistingDB
     environment:
-      POSTGRES_DB: productDB
+      POSTGRES_DB: productlistingDB
       POSTGRES_USER: username
       POSTGRES_PASSWORD: password
+
     ports:
       - "5434:5432"
-    restart: always
+    restart: no
     networks:
       - m2026
 
-  product-service:
-    image: product-service:0.0.1-SNAPSHOT
-    container_name: recipeproduct-service
+  productlisting-service:
     build:
-      context: ./product/recipeproduct
+      context: ./product/productlisting
+    container_name: productlisting
     ports:
       - "8006"
     environment:
-      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres_product:5432/productDB
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres-productlisting:5432/productlistingDB
       SPRING_DATASOURCE_USERNAME: username
       SPRING_DATASOURCE_PASSWORD: password
       SPRING_CONFIG_IMPORT: "optional:consul:"
       SPRING_CLOUD_CONSUL_HOST: "consul"
     depends_on:
-      - postgres_product
-      - consul
+      - postgres-productlisting
     networks:
       - m2026
   # TASK SCHEDULE SERVICE & DB
@@ -198,6 +208,36 @@ services:
     networks:
       - m2026
 
+  postgres-recipe:
+    image: postgres:17-alpine
+    container_name: postgres-recipeDB
+    environment:
+      POSTGRES_DB: recipeDB
+      POSTGRES_USER: username
+      POSTGRES_PASSWORD: password
+
+    ports:
+      - "5436:5432"
+    restart: no
+    networks:
+      - m2026
+
+  recipe-service:
+    build:
+      context: ./product/Recipe
+    container_name: recipe-service
+    ports:
+      - "8008"
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres-recipe:5432/recipeDB
+      SPRING_DATASOURCE_USERNAME: username
+      SPRING_DATASOURCE_PASSWORD: password
+      SPRING_CONFIG_IMPORT: "optional:consul:"
+      SPRING_CLOUD_CONSUL_HOST: "consul"
+    depends_on:
+      - postgres-recipe
+    networks:
+      - m2026
 
 networks:
   m2026:

@@ -1,0 +1,28 @@
+version: '3.8'
+
+services:
+  postgres-productlisting:
+    image: postgres:17-alpine
+    container_name: postgres-productlistingDB
+    environment:
+      POSTGRES_DB: productlistingDB
+      POSTGRES_USER: username
+      POSTGRES_PASSWORD: password
+
+    ports:
+      - "5434:5432"
+    restart: on-failure
+
+  productlisting-service:
+    build: .
+    container_name: productlisting
+    ports:
+      - "8006"
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres-productlisting:5432/productlistingDB
+      SPRING_DATASOURCE_USERNAME: username
+      SPRING_DATASOURCE_PASSWORD: password
+      SPRING_CLOUD_CONSUL_ENABLED: "false"
+      SPRING_CLOUD_DISCOVERY_ENABLED: "false"
+    depends_on:
+      - postgres-productlisting

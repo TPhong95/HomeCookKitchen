@@ -1,0 +1,68 @@
+version: '3.8'
+
+networks:
+  m2026:
+    driver: bridge
+
+services:
+  postgres-productlisting:
+    image: postgres:17-alpine
+    container_name: postgres-productlistingDB
+    environment:
+      POSTGRES_DB: productlistingDB
+      POSTGRES_USER: username
+      POSTGRES_PASSWORD: password
+
+    ports:
+      - "5434:5432"
+    restart: on-failure
+    networks:
+      - m2026
+
+  productlisting-service:
+    build:
+      context: ./productlisting
+    container_name: productlisting
+    ports:
+      - "8006"
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres-productlisting:5432/productlistingDB
+      SPRING_DATASOURCE_USERNAME: username
+      SPRING_DATASOURCE_PASSWORD: password
+      SPRING_CLOUD_CONSUL_ENABLED: "false"
+      SPRING_CLOUD_DISCOVERY_ENABLED: "false"
+    depends_on:
+      - postgres-productlisting
+    networks:
+      - m2026
+
+  postgres-recipe:
+    image: postgres:17-alpine
+    container_name: postgres-recipeDB
+    environment:
+      POSTGRES_DB: recipeDB
+      POSTGRES_USER: username
+      POSTGRES_PASSWORD: password
+
+    ports:
+      - "5436:5432"
+    restart: on-failure
+    networks:
+      - m2026
+
+  recipe-service:
+    build:
+      context: ./Recipe
+    container_name: recipe-service
+    ports:
+      - "8008:8008"
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres-recipe:5432/recipeDB
+      SPRING_DATASOURCE_USERNAME: username
+      SPRING_DATASOURCE_PASSWORD: password
+      SPRING_CLOUD_CONSUL_ENABLED: "false"
+      SPRING_CLOUD_DISCOVERY_ENABLED: "false"
+    depends_on:
+      - postgres-recipe
+    networks:
+      - m2026
