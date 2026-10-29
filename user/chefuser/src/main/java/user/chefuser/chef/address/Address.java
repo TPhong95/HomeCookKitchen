@@ -17,8 +17,9 @@ public class Address {
     private Long id;
 
     private String street;
+    private String postalCode;
     private String city;
-    private String country;
+    private Boolean active;
 
 
     @ManyToOne(fetch = FetchType.LAZY)

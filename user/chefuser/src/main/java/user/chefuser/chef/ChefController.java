@@ -16,10 +16,12 @@ import java.util.List;
 public class ChefController {
     private final ChefService chefService;
     private final DtoMapper dtoMapper;
+    private final ChefOrchestrationService chefOrchestrationService;
 
-    public ChefController(ChefService chefService, DtoMapper dtoMapper) {
+    public ChefController(ChefService chefService, DtoMapper dtoMapper, ChefOrchestrationService chefOrchestrationService) {
         this.chefService = chefService;
         this.dtoMapper = dtoMapper;
+        this.chefOrchestrationService = chefOrchestrationService;
     }
 
     @PostMapping()
@@ -56,7 +58,7 @@ public class ChefController {
 
     @PostMapping("/address/{chefId}")
     public ResponseEntity<List<AddressResponseDto>> saveChefAddress(@RequestBody SaveAddressDto dto, @PathVariable Long chefId) {
-        List<Address> addresses = chefService.saveAddressToChef(chefId, dto);
+        List<Address> addresses = chefOrchestrationService.saveAddressToChef(chefId, dto);
         List<AddressResponseDto> response = dtoMapper.toAddressResponseDtoList(addresses, chefId);
 
         return ResponseEntity.ok(response);

@@ -2,6 +2,7 @@ package user.chefuser.chef.exception;
 
 
 import lombok.extern.slf4j.Slf4j;
+import user.chefuser.chef.exception.badrequest.BadRequestException;
 import user.chefuser.chef.exception.notfound.AddressNotFoundException;
 import user.chefuser.chef.exception.notfound.ChefNotFoundException;
 import org.springframework.http.HttpStatus;
@@ -15,15 +16,14 @@ public class ErrorHandler {
 
     //========== 400 BAD REQUEST ==========
 
-    /*
     @ExceptionHandler({
+            BadRequestException.class
     }
     )
     public ResponseEntity<String> handleBadRequestException(RuntimeException e) {
         log.error("400 Bad Request error: {}", e.getMessage(), e);
         return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
     }
-     */
 
     //========== 404 NOT FOUND ==========
 

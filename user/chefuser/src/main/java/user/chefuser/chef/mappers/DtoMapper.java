@@ -43,8 +43,8 @@ public class DtoMapper {
     public Address toAddressEntity(SaveAddressDto dto, Chef chef) {
         Address address = new Address();
         address.setStreet(dto.street());
+        address.setPostalCode(dto.postalCode());
         address.setCity(dto.city());
-        address.setCountry(dto.country());
         address.setChef(chef);
         return address;
     }
@@ -53,8 +53,8 @@ public class DtoMapper {
         return new AddressResponseDto(
                 address.getId(),
                 address.getStreet(),
+                address.getPostalCode(),
                 address.getCity(),
-                address.getCountry(),
                 chefId
         );
     }

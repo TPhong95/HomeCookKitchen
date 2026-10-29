@@ -47,17 +47,8 @@ public class ChefService {
     }
 
     @Transactional
-    public List<Address> saveAddressToChef(Long chefId, SaveAddressDto dto) {
-        if (!chefRepo.existsById(chefId)){
-            throw new ChefNotFoundException("Chef with id: " + chefId + " not found");
-        }
-
-        Chef chef = getChefById(chefId);
-
-        Address address = dtoMapper.toAddressEntity(dto, chef);
-
+    public List<Address> saveAddressToChef(Chef chef, Address address) {
         chef.addAddress(address);
-
         Chef savedChef = chefRepo.save(chef);
         return savedChef.getAddresses();
     }
