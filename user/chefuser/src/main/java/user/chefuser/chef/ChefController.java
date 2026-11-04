@@ -70,6 +70,14 @@ public class ChefController {
         return ResponseEntity.ok(response);
     }
 
+    @PutMapping("/address/{chefId}/{addressId}")
+    public ResponseEntity<AddressResponseDto> editChefAddress(@PathVariable Long chefId,
+                                                              @PathVariable Long addressId,
+                                                              @RequestBody SaveAddressDto dto) {
+        Address updated = chefOrchestrationService.editChefAddress(chefId, addressId, dto);
+        return ResponseEntity.ok(dtoMapper.toAddressResponseDto(updated, chefId));
+    }
+
     @DeleteMapping("/address/{chefId}/{addressId}")
     public ResponseEntity<String> deleteChefAddress(@PathVariable Long chefId, @PathVariable Long addressId) {
         chefService.deleteAddressFromChef(chefId, addressId);

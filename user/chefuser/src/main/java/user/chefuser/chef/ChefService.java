@@ -1,7 +1,6 @@
 package user.chefuser.chef;
 
 import user.chefuser.chef.address.Address;
-import user.chefuser.chef.dtos.SaveAddressDto;
 import user.chefuser.chef.dtos.UpdateChefDto;
 import user.chefuser.chef.exception.badrequest.BadRequestException;
 import user.chefuser.chef.exception.notfound.AddressNotFoundException;
@@ -71,6 +70,11 @@ public class ChefService {
         chef.addAddress(address);
         Chef savedChef = chefRepo.save(chef);
         return savedChef.getAddresses();
+    }
+
+    @Transactional
+    public Address editChefAddress(Long chefId, Long addressId) {
+        return null;
     }
 
     @Transactional

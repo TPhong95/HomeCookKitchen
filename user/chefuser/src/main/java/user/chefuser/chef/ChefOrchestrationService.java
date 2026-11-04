@@ -29,6 +29,12 @@ public class ChefOrchestrationService {
         return addressList;
     }
 
+    public Address editChefAddress(Long chefId, Long addressId, SaveAddressDto dto) {
+        chefService.getChefById(chefId);
+        validateCreateAddressDTO(dto);
+        return addressService.updateAddress(chefId, addressId, dto);
+    }
+
     private void validateCreateAddressDTO(SaveAddressDto dto) {
         if(dto.city() == null) throw new BadRequestException("You need a city");
         if(dto.street() == null) throw new BadRequestException("You need an address");
