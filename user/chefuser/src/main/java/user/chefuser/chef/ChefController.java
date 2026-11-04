@@ -4,6 +4,7 @@ import user.chefuser.chef.address.Address;
 import user.chefuser.chef.dtos.AddressResponseDto;
 import user.chefuser.chef.dtos.ChefResponseDto;
 import user.chefuser.chef.dtos.SaveAddressDto;
+import user.chefuser.chef.dtos.UpdateChefDto;
 import user.chefuser.chef.mappers.DtoMapper;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -24,6 +25,7 @@ public class ChefController {
         this.chefOrchestrationService = chefOrchestrationService;
     }
 
+    // CHEF //
     @PostMapping()
     public ResponseEntity<ChefResponseDto> saveChef(@RequestBody Chef chef) {
         Chef savedChef = chefService.save(chef);
@@ -43,12 +45,15 @@ public class ChefController {
     @GetMapping()
     public ResponseEntity<List<ChefResponseDto>> getAllChefs() {
         List<Chef> result = chefService.getAllChefs();
+        List<ChefResponseDto> response = dtoMapper.toChefResponseDtoList(result);
+        return ResponseEntity.ok(response);
+    }
 
-            List<ChefResponseDto> response = dtoMapper.toChefResponseDtoList(result);
-
-            return ResponseEntity.ok(response);
-        }
-
+    @PutMapping("/{id}")
+    public ResponseEntity<ChefResponseDto> editChefById(@PathVariable Long id, @RequestBody UpdateChefDto dto) {
+        Chef updated = chefService.editChefInfo(id, dto);
+        return ResponseEntity.ok(dtoMapper.toChefResponseDto(updated));
+    }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<String> deleteChefById(@PathVariable Long id) {
@@ -56,6 +61,7 @@ public class ChefController {
         return ResponseEntity.ok("Chef with id: " + id + " deleted");
     }
 
+    // ADDRESS //
     @PostMapping("/address/{chefId}")
     public ResponseEntity<List<AddressResponseDto>> saveChefAddress(@RequestBody SaveAddressDto dto, @PathVariable Long chefId) {
         List<Address> addresses = chefOrchestrationService.saveAddressToChef(chefId, dto);
