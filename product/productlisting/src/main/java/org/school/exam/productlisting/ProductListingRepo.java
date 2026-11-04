@@ -10,6 +10,6 @@ import java.util.List;
 
 @Repository
 public interface ProductListingRepo extends JpaRepository<ProductListing, Long> {
-    @Query("SELECT p FROM ProductListing p WHERE p.active = true AND p.purchaseDeadline > :now")
+    @Query("SELECT p FROM ProductListing p WHERE p.active = true AND p.purchaseDeadline < :now")
     List<ProductListing> findActiveWithPurchaseDeadlineAfter(@Param("now") LocalDateTime now);
 }

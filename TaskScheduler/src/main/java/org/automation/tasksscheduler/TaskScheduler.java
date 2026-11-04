@@ -25,6 +25,8 @@ public class TaskScheduler {
                 return;
             }
 
+            System.out.println("Found " + listings);
+
             for (ListingDto listing : listings) {
                 if (listing.active()) {
                     listingClient.updateListingDeadline(listing);
