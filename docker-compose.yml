@@ -3,6 +3,21 @@ version: '3.8'
 
 
 services:
+  #TaskScheduler
+  taskscheduler-service:
+    image: taskscheduler-service:0.0.1-SNAPSHOT
+    container_name: taskscheduler-service
+    build:
+      context: ./TaskScheduler
+    ports:
+      - "8020"
+    environment:
+      SPRING_CONFIG_IMPORT: "optional:consul:"
+      SPRING_CLOUD_CONSUL_HOST: "consul"
+    depends_on:
+      - consul
+    networks:
+      - m2026
 
   #CONSUL
   consul:
@@ -160,6 +175,7 @@ services:
       - m2026
 
   productlisting-service:
+    image: productlisting-service:0.0.1-SNAPSHOT
     build:
       context: ./product/productlisting
     container_name: productlisting
@@ -191,6 +207,7 @@ services:
       - m2026
 
   recipe-service:
+    image: recipe-service:0.0.1-SNAPSHOT
     build:
       context: ./product/Recipe
     container_name: recipe-service
