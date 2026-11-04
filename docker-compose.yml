@@ -1,8 +1,47 @@
-version: '3.8'
-
-
 
 services:
+
+  #-------------Logging----------
+  elasticsearch:
+    image: docker.elastic.co/elasticsearch/elasticsearch:9.2.3
+    environment:
+      - discovery.type=single-node
+      - xpack.security.enabled=false
+      - ES_JAVA_OPTS=-Xms512m -Xmx512m
+    ports:
+      - "9200:9200"
+    networks:
+      - m2026
+    healthcheck:
+      test: [ "CMD-SHELL", "curl -fsS http://localhost:9200 >/dev/null" ]
+      interval: 10s
+      timeout: 5s
+      retries: 30
+
+  logstash:
+    image: docker.elastic.co/logstash/logstash:9.2.3
+    ports:
+      - "5000:5000"
+    volumes:
+      - ./logstash/pipeline:/usr/share/logstash/pipeline:ro
+    depends_on:
+      elasticsearch:
+        condition: service_healthy
+    networks:
+      - m2026
+
+  kibana:
+    image: docker.elastic.co/kibana/kibana:9.2.3
+    environment:
+      - ELASTICSEARCH_HOSTS=http://elasticsearch:9200
+    ports:
+      - "5601:5601"
+    depends_on:
+      elasticsearch:
+        condition: service_healthy
+    networks:
+      - m2026
+
   #TaskScheduler
   taskscheduler-service:
     image: taskscheduler-service:0.0.1-SNAPSHOT
@@ -14,6 +53,7 @@ services:
     environment:
       SPRING_CONFIG_IMPORT: "optional:consul:"
       SPRING_CLOUD_CONSUL_HOST: "consul"
+      LOGSTASH_DESTINATION: logstash:5000
     depends_on:
       - consul
     networks:
@@ -73,7 +113,6 @@ services:
 
   chef-service:
     image: chef-service:0.0.1-SNAPSHOT
-    container_name: chef-service
     build:
       context: ./user/chefuser
     ports:
@@ -84,6 +123,7 @@ services:
       SPRING_DATASOURCE_PASSWORD: password
       SPRING_CONFIG_IMPORT: "optional:consul:"
       SPRING_CLOUD_CONSUL_HOST: "consul"
+      LOGSTASH_DESTINATION: logstash:5000
     depends_on:
       - postgres_chef
       - consul
@@ -107,7 +147,6 @@ services:
 
   customer-service:
     image: customer-service:0.0.1-SNAPSHOT
-    container_name: customer-service
     build:
       context: ./user/customer
     ports:
@@ -118,6 +157,7 @@ services:
       SPRING_DATASOURCE_PASSWORD: password
       SPRING_CONFIG_IMPORT: "optional:consul:"
       SPRING_CLOUD_CONSUL_HOST: "consul"
+      LOGSTASH_DESTINATION: logstash:5000
     depends_on:
       - postgres_customer
       - consul
@@ -141,7 +181,6 @@ services:
 
   purchase-service:
     image: purchase-service:0.0.1-SNAPSHOT
-    container_name: purchase-service
     build:
       context: ./transactions/purchase
     ports:
@@ -152,6 +191,7 @@ services:
       SPRING_DATASOURCE_PASSWORD: password
       SPRING_CONFIG_IMPORT: "optional:consul:"
       SPRING_CLOUD_CONSUL_HOST: "consul"
+      LOGSTASH_DESTINATION: logstash:5000
     depends_on:
       - postgres_purchase
       - consul
@@ -178,7 +218,6 @@ services:
     image: productlisting-service:0.0.1-SNAPSHOT
     build:
       context: ./product/productlisting
-    container_name: productlisting
     ports:
       - "8006"
     environment:
@@ -187,6 +226,7 @@ services:
       SPRING_DATASOURCE_PASSWORD: password
       SPRING_CONFIG_IMPORT: "optional:consul:"
       SPRING_CLOUD_CONSUL_HOST: "consul"
+      LOGSTASH_DESTINATION: logstash:5000
     depends_on:
       - postgres-productlisting
     networks:
@@ -210,7 +250,6 @@ services:
     image: recipe-service:0.0.1-SNAPSHOT
     build:
       context: ./product/Recipe
-    container_name: recipe-service
     ports:
       - "8008"
     environment:
@@ -219,6 +258,7 @@ services:
       SPRING_DATASOURCE_PASSWORD: password
       SPRING_CONFIG_IMPORT: "optional:consul:"
       SPRING_CLOUD_CONSUL_HOST: "consul"
+      LOGSTASH_DESTINATION: logstash:5000
     depends_on:
       - postgres-recipe
     networks:

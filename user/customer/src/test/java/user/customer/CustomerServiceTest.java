@@ -5,8 +5,8 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import user.customer.exception.BadRequestException;
-import user.customer.exception.CustomerNotFoundException;
+import user.customer.exception.BadRequestException.BadRequestException;
+import user.customer.exception.NotFoundException.CustomerNotFoundException;
 import user.customer.exception.DuplicateEmailException;
 
 import java.util.List;

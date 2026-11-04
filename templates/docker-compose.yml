@@ -18,7 +18,6 @@ services:
 
   example-service: # eks chef-service
     image: example-service:0.0.1-SNAPSHOT # eks: chef-service:0.0.1-SNAPSHOT
-    container_name: example-service
     build:
       context: ./example/example # Filstien. Eks:   ./user/chefuser
     ports:
