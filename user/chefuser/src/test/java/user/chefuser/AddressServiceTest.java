@@ -151,9 +151,9 @@ public class AddressServiceTest {
         Address res = addressService.deactivateAddress(chefId, addressId);
         assertNotNull(res);
         assertEquals(false, res.getActive());
-        assertEquals(null, res.getStreet());
-        assertEquals(null, res.getStreet());
-        assertEquals(null, res.getPostalCode());
+        assertNull(res.getStreet());
+        assertNull(res.getStreet());
+        assertNull(res.getPostalCode());
         verify(addressRepo).save(res);
     }
 

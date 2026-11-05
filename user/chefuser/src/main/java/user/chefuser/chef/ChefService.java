@@ -4,7 +4,6 @@ import user.chefuser.chef.dtos.CreateChefDto;
 import user.chefuser.chef.dtos.UpdateChefDto;
 import user.chefuser.chef.exception.badrequest.BadRequestException;
 import user.chefuser.chef.exception.notfound.ChefNotFoundException;
-import user.chefuser.chef.mappers.DtoMapper;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 

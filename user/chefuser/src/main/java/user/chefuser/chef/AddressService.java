@@ -20,8 +20,7 @@ public class AddressService {
     }
 
     public Address createAddressObject(Chef chef, SaveAddressDto dto) {
-        Address address = dtoMapper.toAddressEntity(dto, chef);
-        return address;
+        return dtoMapper.toAddressEntity(dto, chef);
     }
 
     @Transactional
