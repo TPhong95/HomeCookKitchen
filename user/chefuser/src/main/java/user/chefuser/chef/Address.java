@@ -1,10 +1,9 @@
-package user.chefuser.chef.address;
+package user.chefuser.chef;
 
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import user.chefuser.chef.Chef;
 
 @Entity
 @Getter
@@ -17,8 +16,9 @@ public class Address {
     private Long id;
 
     private String street;
+    private String postalCode;
     private String city;
-    private String country;
+    private Boolean active = true;
 
 
     @ManyToOne(fetch = FetchType.LAZY)

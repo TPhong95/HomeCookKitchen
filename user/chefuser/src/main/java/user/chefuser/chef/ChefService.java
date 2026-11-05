@@ -1,31 +1,43 @@
 package user.chefuser.chef;
 
-import user.chefuser.chef.address.Address;
-import user.chefuser.chef.dtos.SaveAddressDto;
-import user.chefuser.chef.exception.NotFoundException.AddressNotFoundException;
+import user.chefuser.chef.dtos.CreateChefDto;
+import user.chefuser.chef.dtos.UpdateChefDto;
+import user.chefuser.chef.exception.badrequest.BadRequestException;
 import user.chefuser.chef.exception.NotFoundException.ChefNotFoundException;
-import user.chefuser.chef.mappers.DtoMapper;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.regex.Pattern;
 import java.util.Map;
 
 @Service
 public class ChefService {
     private final ChefRepo chefRepo;
-    private final DtoMapper dtoMapper;
+    /*
+        Everyone loves a good regex
+        https://www.baeldung.com/java-email-validation-regex
+        Pattern.compile is moved as a constant to avoid compiling on every call
+    */
+    private static final Pattern PHONE_PATTERN = Pattern.compile("\\d{8}");
+    private static final Pattern EMAIL_PATTERN = Pattern.compile(
+            "^(?=.{1,64}@)[A-Za-z0-9_-]+(\\.[A-Za-z0-9_-]+)*@"
+                    + "[^-][A-Za-z0-9-]+(\\.[A-Za-z0-9-]+)*(\\.[A-Za-z]{2,})$");
 
-    public ChefService(ChefRepo chefRepo, DtoMapper dtoMapper) {
+    public ChefService(ChefRepo chefRepo) {
         this.chefRepo = chefRepo;
-        this.dtoMapper = dtoMapper;
     }
 
+    /* CHEF */
     @Transactional
-    public Chef save(Chef chef) {
-        if (chef.getAddresses() != null){
-            chef.getAddresses().forEach(address -> address.setChef(chef));
-        }
+    public Chef createChef(CreateChefDto dto) {
+        validateChefInput(dto.name(), dto.email(), dto.phoneNumber());
+
+        Chef chef = new Chef();
+        chef.setName(dto.name());
+        chef.setEmail(dto.email());
+        chef.setPhoneNumber(dto.phoneNumber());
+
         return chefRepo.save(chef);
     }
 
@@ -34,49 +46,70 @@ public class ChefService {
 
     }
 
-    public List<Chef> getAllChefs(){
-        return chefRepo.findAll();
+    public List<Chef> getAllChefs() {
+        return chefRepo.findByActiveTrue();
     }
 
     @Transactional
-    public void deleteChefById(Long id){
-        if (!chefRepo.existsById(id)){
-            throw new ChefNotFoundException("Chef with id: " + id + " not found", Map.of());
-        }
+    public Chef editChefInfo(Long id, UpdateChefDto dto) {
         Chef chef = getChefById(id);
-        chefRepo.delete(chef);
+
+        if (Boolean.FALSE.equals(chef.getActive())) {
+            throw new BadRequestException(String.format("Chef with id: %d is inactive", id), Map.of());
+        }
+
+        validateChefInput(dto.name(), dto.email(), dto.phoneNumber());
+
+        chef.setName(dto.name());
+        chef.setEmail(dto.email());
+        chef.setPhoneNumber(dto.phoneNumber());
+
+        return chefRepo.save(chef);
     }
 
     @Transactional
-    public List<Address> saveAddressToChef(Long chefId, SaveAddressDto dto) {
-        if (!chefRepo.existsById(chefId)){
-            throw new ChefNotFoundException("Chef with id: " + chefId + " not found", Map.of());
+    public Chef deactivateChef(Long id) {
+        Chef chef = getChefById(id);
+        if (Boolean.FALSE.equals(chef.getActive())) {
+            throw new BadRequestException("Chef with id: " + id + " is already inactive", Map.of());
         }
+        chef.setActive(false);
+        chef.setName(null);
+        chef.setEmail(null);
+        chef.setPhoneNumber(null);
+        chef.getAddresses().forEach(address -> address.setActive(false));
 
-        Chef chef = getChefById(chefId);
+        return chefRepo.save(chef);
+    }
 
-        Address address = dtoMapper.toAddressEntity(dto, chef);
 
+    /* ADDRESS */
+    @Transactional
+    public List<Address> saveAddressToChef(Chef chef, Address address) {
         chef.addAddress(address);
-
         Chef savedChef = chefRepo.save(chef);
-        return savedChef.getAddresses();
+        return savedChef.getAddresses().stream()
+                .filter(a -> Boolean.TRUE.equals(a.getActive()))
+                .toList();
     }
 
-    @Transactional
-    public void deleteAddressFromChef(Long chefId, Long addressId) {
-        if (!chefRepo.existsById(chefId)){
-            throw new ChefNotFoundException("Chef with id: " + chefId + " not found", Map.of());
-        }
-        Chef chef = getChefById(chefId);
-        Address addressToDelete = chef.getAddresses().stream()
-                .filter(a -> a.getId().equals(addressId))
-                .findFirst()
-                .orElseThrow(() -> new AddressNotFoundException("Address with id: " + addressId + " not found", Map.of()));
+    /* VALIDATION */
+    private void validateChefInput(String name, String email, String phone) {
+        if (name == null || name.isBlank()
+                || email == null || email.isBlank()
+                || phone == null || phone.isBlank()
+        ) throw new BadRequestException("All fields must contain a value", Map.of());
 
-        chef.removeAddress(addressToDelete);
-        chefRepo.save(chef);
+        if(checkValidEmail(email) != true) throw new BadRequestException("Invalid email format", Map.of());
+        if(checkValidPhone(phone) != true) throw new BadRequestException("Must be Norwegian 8 digit phone number", Map.of());
     }
 
+    private boolean checkValidEmail(String email) {
+        return email != null && EMAIL_PATTERN.matcher(email).matches();
+    }
+
+    private boolean checkValidPhone(String phone) {
+        return phone != null && PHONE_PATTERN.matcher(phone).matches();
+    }
 
 }
