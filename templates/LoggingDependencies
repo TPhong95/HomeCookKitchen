@@ -1,0 +1,42 @@
+IN POM.XML
+
+		<dependency>
+			<groupId>net.logstash.logback</groupId>
+			<artifactId>logstash-logback-encoder</artifactId>
+			<version>9.0</version>
+		</dependency>
+
+ADD TO DOCKER-COMPOSE UNDER ENVIROMENTS:
+
+      LOGSTASH_DESTINATION: logstash:5000
+
+IN src/main/resources/logback-spring.xml
+
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+
+    <springProperty scope="context" name="serviceName" source="spring.application.name"/>
+    <springProperty scope="context" name="instanceId" source="HOSTNAME" defaultValue="unknown"/>
+
+
+    <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder class="net.logstash.logback.encoder.LogstashEncoder">
+            <includeContext>false</includeContext>
+            <customFields>{"service":{"name":"${serviceName}"},"instance":{"id":"${instanceId}"}}</customFields>
+        </encoder>
+    </appender>
+
+    <appender name="LOGSTASH" class="net.logstash.logback.appender.LogstashTcpSocketAppender">
+        <destination>${LOGSTASH_DESTINATION:-localhost:5000}</destination>
+        <encoder class="net.logstash.logback.encoder.LogstashEncoder">
+            <includeContext>false</includeContext>
+            <customFields>{"service":{"name":"${serviceName}"},"instance":{"id":"${instanceId}"}}</customFields>
+        </encoder>
+    </appender>
+
+    <root level="INFO">
+        <appender-ref ref="CONSOLE"/>
+        <appender-ref ref="LOGSTASH"/>
+    </root>
+
+</configuration>

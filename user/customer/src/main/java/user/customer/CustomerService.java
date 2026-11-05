@@ -2,11 +2,12 @@ package user.customer;
 
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
-import user.customer.exception.BadRequestException;
-import user.customer.exception.CustomerNotFoundException;
+import user.customer.exception.BadRequestException.BadRequestException;
+import user.customer.exception.NotFoundException.CustomerNotFoundException;
 import user.customer.exception.DuplicateEmailException;
 
 import java.util.List;
+import java.util.Map;
 
 @Service
 @AllArgsConstructor
@@ -16,25 +17,25 @@ public class CustomerService {
     public List<Customer> findAllCustomers() {
         var customers = customerRepo.findAll();
         if (customers.isEmpty()) {
-            throw new CustomerNotFoundException("No customers found");
+            throw new CustomerNotFoundException("No customers found", Map.of());
         }
         return customers;
     }
 
-    public Customer findCustomerById(int id) {
+    public Customer findCustomerById(Long id) {
         Customer customer = customerRepo.findById(id).orElse(null);
         if (customer == null) {
-            throw new CustomerNotFoundException("Could not find customer with id: " + id);
+            throw new CustomerNotFoundException("Could not find customer: ", Map.of("entityType", "Customer", "entityId", id));
         }
         return customer;
     }
 
     public Customer createCustomer(CustomerDTO DTO) {
         if (DTO.name() == null || DTO.name().isEmpty()) {
-            throw new BadRequestException("Name is needed");
+            throw new BadRequestException("Name is needed", Map.of());
         }
         if (DTO.email() == null || DTO.email().isEmpty()) {
-            throw new BadRequestException("Email is needed");
+            throw new BadRequestException("Email is needed", Map.of());
         }
         validateUniqueEmail(DTO.email());
 
@@ -42,7 +43,7 @@ public class CustomerService {
         return customerRepo.save(newCustomer);
     }
 
-    public Customer updateCustomer(int id, CustomerDTO DTO) {
+    public Customer updateCustomer(Long id, CustomerDTO DTO) {
         Customer customerToUpdate = findCustomerById(id);
         if (DTO.name() != null && !DTO.name().isEmpty()) {
             customerToUpdate.setName(DTO.name());
@@ -52,7 +53,7 @@ public class CustomerService {
         }
         validateUniqueEmail(DTO.email());
         if ((DTO.name() == null || DTO.name().isEmpty()) || (DTO.email() == null || DTO.email().isEmpty())) {
-            throw new BadRequestException("No information to update customer was provided");
+            throw new BadRequestException("No information to update customer was provided", Map.of());
         }
         return customerRepo.save(customerToUpdate);
     }

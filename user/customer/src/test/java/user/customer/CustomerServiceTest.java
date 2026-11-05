@@ -5,8 +5,8 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import user.customer.exception.BadRequestException;
-import user.customer.exception.CustomerNotFoundException;
+import user.customer.exception.BadRequestException.BadRequestException;
+import user.customer.exception.NotFoundException.CustomerNotFoundException;
 import user.customer.exception.DuplicateEmailException;
 
 import java.util.List;
@@ -27,8 +27,8 @@ public class CustomerServiceTest {
 
     @Test
     void findCustomerById_shouldThrowCustomerNotFoundException() {
-        when(customerRepo.findById(999)).thenReturn(Optional.empty());
-        assertThrows(CustomerNotFoundException.class, () -> customerService.findCustomerById(999));
+        when(customerRepo.findById(999L)).thenReturn(Optional.empty());
+        assertThrows(CustomerNotFoundException.class, () -> customerService.findCustomerById(999L));
     }
 
     @Test
@@ -38,11 +38,11 @@ public class CustomerServiceTest {
         existingCustomer.setName("Old Name");
         existingCustomer.setEmail("oldemail@mail.com");
 
-        when(customerRepo.findById(1)).thenReturn(Optional.of(existingCustomer));
+        when(customerRepo.findById(1L)).thenReturn(Optional.of(existingCustomer));
         when(customerRepo.existsByEmail("newemail@mail.com")).thenReturn(false);
         when(customerRepo.save(any(Customer.class))).thenAnswer(i -> i.getArgument(0));
 
-        Customer updatedCustomer = customerService.updateCustomer(1, dto);
+        Customer updatedCustomer = customerService.updateCustomer(1L, dto);
 
         assertEquals("New Name", updatedCustomer.getName(), "Name should match update");
         assertEquals("newemail@mail.com", updatedCustomer.getEmail(), "Email should match update");
@@ -97,9 +97,9 @@ public class CustomerServiceTest {
     @Test
     void updateCustomer_shouldThrowExceptionWhenCustomerNotFound() {
         CustomerDTO dto = new CustomerDTO("Name", "email@mail.com");
-        when(customerRepo.findById(999)).thenReturn(Optional.empty());
+        when(customerRepo.findById(999L)).thenReturn(Optional.empty());
 
-        assertThrows(CustomerNotFoundException.class, () -> customerService.updateCustomer(999, dto));
+        assertThrows(CustomerNotFoundException.class, () -> customerService.updateCustomer(999L, dto));
     }
 
     @Test
@@ -107,8 +107,8 @@ public class CustomerServiceTest {
         CustomerDTO dto = new CustomerDTO("", "email@mail.com"); // Empty name
         Customer existingCustomer = new Customer("Old", "old@mail.com");
 
-        when(customerRepo.findById(1)).thenReturn(Optional.of(existingCustomer));
+        when(customerRepo.findById(1L)).thenReturn(Optional.of(existingCustomer));
 
-        assertThrows(BadRequestException.class, () -> customerService.updateCustomer(1, dto));
+        assertThrows(BadRequestException.class, () -> customerService.updateCustomer(1L, dto));
     }
 }

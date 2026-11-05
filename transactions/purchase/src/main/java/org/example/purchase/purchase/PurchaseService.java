@@ -1,9 +1,10 @@
 package org.example.purchase.purchase;
 
 
-import org.example.purchase.exception.notfound.PurchaseNotFoundException;
+import org.example.purchase.exception.NotFoundException.PurchaseNotFoundException;
 import org.springframework.stereotype.Service;
 import java.util.List;
+import java.util.Map;
 
 @Service
 public class PurchaseService {
@@ -19,7 +20,7 @@ public class PurchaseService {
     }
 
     public Purchase getPurchaseById(int id) {
-        return purchaseRepo.findById(id).orElseThrow(() -> new PurchaseNotFoundException("Purchase with id: " + id + " not found"));
+        return purchaseRepo.findById(id).orElseThrow(() -> new PurchaseNotFoundException("Purchase with id: " + id + " not found", Map.of()));
     }
 
     public List<Purchase> getAllPurchases() {
@@ -29,7 +30,7 @@ public class PurchaseService {
 
     public void deletePurchaseById(int id) {
         if (!purchaseRepo.existsById(id)) {
-            throw new PurchaseNotFoundException("Purchase with id " + id + " not found");
+            throw new PurchaseNotFoundException("Purchase with id " + id + " not found", Map.of());
         }
 
         Purchase purchase = getPurchaseById(id);

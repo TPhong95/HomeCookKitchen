@@ -8,6 +8,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import tools.jackson.databind.ObjectMapper;
 
 import java.util.List;
+import java.util.Map;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
@@ -15,8 +16,8 @@ import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
-import user.customer.exception.BadRequestException;
-import user.customer.exception.CustomerNotFoundException;
+import user.customer.exception.BadRequestException.BadRequestException;
+import user.customer.exception.NotFoundException.CustomerNotFoundException;
 
 @WebMvcTest(CustomerController.class)
 public class CustomerControllerTest {
@@ -44,7 +45,7 @@ public class CustomerControllerTest {
     @Test
     void getCustomerById_shouldReturnCustomer() throws Exception {
         Customer customer = new Customer("Bob", "bob@mail.com");
-        when(customerService.findCustomerById(1)).thenReturn(customer);
+        when(customerService.findCustomerById(1L)).thenReturn(customer);
 
         mockMvc.perform(get("/api/customer/1"))
                 .andExpect(status().isOk())
@@ -72,7 +73,7 @@ public class CustomerControllerTest {
         CustomerDTO dto = new CustomerDTO("Updated Name", "updated@mail.com");
         Customer customer = new Customer("Updated Name", "updated@mail.com");
 
-        when(customerService.updateCustomer(eq(1), any(CustomerDTO.class))).thenReturn(customer);
+        when(customerService.updateCustomer(eq(1L), any(CustomerDTO.class))).thenReturn(customer);
 
         mockMvc.perform(patch("/api/customer/1")
                         .contentType(MediaType.APPLICATION_JSON)
@@ -84,7 +85,7 @@ public class CustomerControllerTest {
 
     @Test
     void getCustomerById_shouldReturnNotFoundWhenCustomerDoesNotExist() throws Exception {
-        when(customerService.findCustomerById(999)).thenThrow(new CustomerNotFoundException("Could not find customer with id: 999"));
+        when(customerService.findCustomerById(999L)).thenThrow(new CustomerNotFoundException("Could not find customer with id: 999", Map.of()));
         mockMvc.perform(get("/api/customer/999"))
                 .andExpect(status().isNotFound()); // Adjust based on your GlobalExceptionHandler mapping
     }
@@ -93,7 +94,7 @@ public class CustomerControllerTest {
     void createCustomer_shouldReturnBadRequestWhenNameIsMissing() throws Exception {
         CustomerDTO dto = new CustomerDTO("", "test@mail.com");
         when(customerService.createCustomer(any(CustomerDTO.class)))
-                .thenThrow(new BadRequestException("Name is needed"));
+                .thenThrow(new BadRequestException("Name is needed", Map.of()));
         mockMvc.perform(post("/api/customer")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(dto)))
