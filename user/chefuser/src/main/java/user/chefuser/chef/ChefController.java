@@ -1,10 +1,6 @@
 package user.chefuser.chef;
 
-import user.chefuser.chef.address.Address;
-import user.chefuser.chef.dtos.AddressResponseDto;
-import user.chefuser.chef.dtos.ChefResponseDto;
-import user.chefuser.chef.dtos.SaveAddressDto;
-import user.chefuser.chef.dtos.UpdateChefDto;
+import user.chefuser.chef.dtos.*;
 import user.chefuser.chef.mappers.DtoMapper;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -27,8 +23,8 @@ public class ChefController {
 
     // CHEF //
     @PostMapping()
-    public ResponseEntity<ChefResponseDto> saveChef(@RequestBody Chef chef) {
-        Chef savedChef = chefService.save(chef);
+    public ResponseEntity<ChefResponseDto> saveChef(@RequestBody CreateChefDto chef) {
+        Chef savedChef = chefService.createChef(chef);
 
         ChefResponseDto response = dtoMapper.toChefResponseDto(savedChef);
         return ResponseEntity.ok(response);
@@ -49,19 +45,31 @@ public class ChefController {
         return ResponseEntity.ok(response);
     }
 
-    @PutMapping("/{id}")
+    @PatchMapping("/{id}")
     public ResponseEntity<ChefResponseDto> editChefById(@PathVariable Long id, @RequestBody UpdateChefDto dto) {
         Chef updated = chefService.editChefInfo(id, dto);
         return ResponseEntity.ok(dtoMapper.toChefResponseDto(updated));
     }
 
-    @DeleteMapping("/{id}")
-    public ResponseEntity<String> deleteChefById(@PathVariable Long id) {
-        chefService.deleteChefById(id);
-        return ResponseEntity.ok("Chef with id: " + id + " deleted");
+    @PatchMapping("/{id}/deactivate")
+    public ResponseEntity<ChefResponseDto> deactivateChef(@PathVariable Long id) {
+        Chef chef = chefService.deactivateChef(id);
+        return ResponseEntity.ok(dtoMapper.toChefResponseDto(chef));
     }
 
     // ADDRESS //
+    @GetMapping("/address/{addressId}")
+    public ResponseEntity<AddressResponseDto> getAddressById (@PathVariable Long addressId) {
+        Address address = chefOrchestrationService.getAddressById(addressId);
+        return ResponseEntity.ok(dtoMapper.toAddressResponseDto(address, address.getChef().getId()));
+    }
+
+    @GetMapping("/address/active/{chefId}")
+    public ResponseEntity<List<ActiveAddressDto>> getActiveAddressByChefId(@PathVariable Long chefId) {
+        List<Address> activeAddresses = chefOrchestrationService.getActiveAddresses(chefId);
+        return ResponseEntity.ok(dtoMapper.toActiveAddressDtoList(activeAddresses, chefId));
+    }
+
     @PostMapping("/address/{chefId}")
     public ResponseEntity<List<AddressResponseDto>> saveChefAddress(@RequestBody SaveAddressDto dto, @PathVariable Long chefId) {
         List<Address> addresses = chefOrchestrationService.saveAddressToChef(chefId, dto);
@@ -70,7 +78,7 @@ public class ChefController {
         return ResponseEntity.ok(response);
     }
 
-    @PutMapping("/address/{chefId}/{addressId}")
+    @PatchMapping("/address/{chefId}/{addressId}")
     public ResponseEntity<AddressResponseDto> editChefAddress(@PathVariable Long chefId,
                                                               @PathVariable Long addressId,
                                                               @RequestBody SaveAddressDto dto) {
@@ -78,10 +86,12 @@ public class ChefController {
         return ResponseEntity.ok(dtoMapper.toAddressResponseDto(updated, chefId));
     }
 
-    @DeleteMapping("/address/{chefId}/{addressId}")
-    public ResponseEntity<String> deleteChefAddress(@PathVariable Long chefId, @PathVariable Long addressId) {
-        chefService.deleteAddressFromChef(chefId, addressId);
-        return ResponseEntity.ok("Address with id: " + addressId + " deleted");
+    @PatchMapping("/address/{chefId}/{addressId}/deactivate")
+    public ResponseEntity<AddressResponseDto> deactivateAddress(@PathVariable Long chefId,
+                                                                @PathVariable Long addressId) {
+        Address address = chefOrchestrationService.deactivateAddress(chefId, addressId);
+        return ResponseEntity.ok(dtoMapper.toAddressResponseDto(address, chefId));
     }
+
 }
 

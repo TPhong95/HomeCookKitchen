@@ -1,7 +1,8 @@
 package user.chefuser.chef.mappers;
 
 import user.chefuser.chef.Chef;
-import user.chefuser.chef.address.Address;
+import user.chefuser.chef.Address;
+import user.chefuser.chef.dtos.ActiveAddressDto;
 import user.chefuser.chef.dtos.AddressResponseDto;
 import user.chefuser.chef.dtos.ChefResponseDto;
 import user.chefuser.chef.dtos.SaveAddressDto;
@@ -18,7 +19,10 @@ public class DtoMapper {
         List<AddressResponseDto> addressDtos;
 
         if (chef.getAddresses() != null) {
-            addressDtos = toAddressResponseDtoList(chef.getAddresses(), chef.getId());
+            List<Address> activeAddresses = chef.getAddresses().stream()
+                    .filter(a -> Boolean.TRUE.equals(a.getActive()))
+                    .toList();
+            addressDtos = toAddressResponseDtoList(activeAddresses, chef.getId());
         } else {
             addressDtos = List.of();
         }
@@ -39,6 +43,14 @@ public class DtoMapper {
     }
 
     // ADDRESS MAPPINGS //
+    public ActiveAddressDto toActiveAddressDto(Address address, Long chefId) {
+        return new ActiveAddressDto(address.getId(), address.getStreet(), address.getPostalCode(),
+                address.getCity(), address.getActive(), chefId);
+    }
+
+    public List<ActiveAddressDto> toActiveAddressDtoList(List<Address> addresses, Long chefId) {
+        return addresses.stream().map(a -> toActiveAddressDto(a, chefId)).toList();
+    }
 
     public Address toAddressEntity(SaveAddressDto dto, Chef chef) {
         Address address = new Address();

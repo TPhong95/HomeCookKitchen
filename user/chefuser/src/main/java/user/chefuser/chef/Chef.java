@@ -4,7 +4,6 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import user.chefuser.chef.address.Address;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,6 +22,7 @@ public class Chef {
     private String name;
     private String email;
     private String phoneNumber;
+    private Boolean active = true;
 
     @OneToMany(mappedBy = "chef", cascade = CascadeType.ALL, orphanRemoval = true)
     List<Address> addresses = new ArrayList<>();

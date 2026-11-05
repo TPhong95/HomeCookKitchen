@@ -2,10 +2,12 @@ package user.chefuser.chef;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import user.chefuser.chef.address.Address;
 import user.chefuser.chef.dtos.SaveAddressDto;
+import user.chefuser.chef.exception.badrequest.BadRequestException;
 import user.chefuser.chef.exception.notfound.AddressNotFoundException;
 import user.chefuser.chef.mappers.DtoMapper;
+
+import java.util.List;
 
 @Service
 public class AddressService {
@@ -24,13 +26,43 @@ public class AddressService {
 
     @Transactional
     public Address updateAddress(Long chefId, Long addressId, SaveAddressDto dto) {
-        Address address = addressRepo.findByIdAndChefId(chefId, addressId)
+        Address address = addressRepo.findByIdAndChefId(addressId, chefId)
                         .orElseThrow(() -> new AddressNotFoundException(
                                 String.format("Address with id: %d not found for chef with id: %d", addressId, chefId)
                         ));
+        if (Boolean.FALSE.equals(address.getActive())) {
+            throw new BadRequestException(
+                    String.format("Address with id: %d is already inactive", addressId));
+        }
         address.setStreet(dto.street());
         address.setPostalCode(dto.postalCode());
         address.setCity(dto.city());
         return addressRepo.save(address);
+    }
+
+    @Transactional
+    public Address deactivateAddress(Long chefId, Long addressId) {
+        Address address = addressRepo.findByIdAndChefId(addressId, chefId)
+                .orElseThrow(() -> new AddressNotFoundException(
+                        String.format("Address with id: %d not found for chef with id: %d", addressId, chefId)));
+
+        if (Boolean.FALSE.equals(address.getActive())) {
+            throw new BadRequestException(
+                    String.format("Address with id: %d is already inactive", addressId));
+        }
+
+        address.setActive(false);
+        return addressRepo.save(address);
+    }
+
+    public Address getAddressById(Long addressId) {
+        return addressRepo.findById(addressId)
+                .orElseThrow(() -> new AddressNotFoundException(
+                        String.format("Address with id: %d not found", addressId)
+                ));
+    }
+
+    public List<Address> getActiveAddressesByChef(Long chefId) {
+        return addressRepo.findActiveByChefId(chefId);
     }
 }

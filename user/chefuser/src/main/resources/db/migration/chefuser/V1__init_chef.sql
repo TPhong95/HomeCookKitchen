@@ -2,7 +2,8 @@ create table if not exists chef(
     id BIGINT primary key,
     name VARCHAR(255),
     email VARCHAR(255),
-    phone_number VARCHAR(255)
+    phone_number VARCHAR(255),
+    active BOOLEAN DEFAULT TRUE
 );
 create sequence chef_seq increment by 1 start with 1;
 

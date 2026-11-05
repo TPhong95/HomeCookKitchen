@@ -1,9 +1,8 @@
 package user.chefuser.chef;
 
-import user.chefuser.chef.address.Address;
+import user.chefuser.chef.dtos.CreateChefDto;
 import user.chefuser.chef.dtos.UpdateChefDto;
 import user.chefuser.chef.exception.badrequest.BadRequestException;
-import user.chefuser.chef.exception.notfound.AddressNotFoundException;
 import user.chefuser.chef.exception.notfound.ChefNotFoundException;
 import user.chefuser.chef.mappers.DtoMapper;
 import org.springframework.stereotype.Service;
@@ -23,10 +22,17 @@ public class ChefService {
 
     /* CHEF */
     @Transactional
-    public Chef save(Chef chef) {
-        if (chef.getAddresses() != null) {
-            chef.getAddresses().forEach(address -> address.setChef(chef));
-        }
+    public Chef createChef(CreateChefDto dto) {
+        if (    dto.name() == null || dto.name().isBlank()
+                || dto.email() == null || dto.email().isBlank()
+                || dto.phoneNumber() == null || dto.phoneNumber().isBlank()
+        ) throw new BadRequestException("All fields must contain a value");
+
+        Chef chef = new Chef();
+        chef.setName(dto.name());
+        chef.setEmail(dto.email());
+        chef.setPhoneNumber(dto.phoneNumber());
+
         return chefRepo.save(chef);
     }
 
@@ -36,12 +42,16 @@ public class ChefService {
     }
 
     public List<Chef> getAllChefs() {
-        return chefRepo.findAll();
+        return chefRepo.findByActiveTrue();
     }
 
     @Transactional
     public Chef editChefInfo(Long id, UpdateChefDto dto) {
         Chef chef = getChefById(id);
+
+        if (Boolean.FALSE.equals(chef.getActive())) {
+            throw new BadRequestException(String.format("Chef with id: %d is inactive", id));
+        }
 
         if (    dto.name() == null || dto.name().isBlank()
                 || dto.email() == null || dto.email().isBlank()
@@ -56,13 +66,17 @@ public class ChefService {
     }
 
     @Transactional
-    public void deleteChefById(Long id) {
-        if (!chefRepo.existsById(id)) {
-            throw new ChefNotFoundException("Chef with id: " + id + " not found");
-        }
+    public Chef deactivateChef(Long id) {
         Chef chef = getChefById(id);
-        chefRepo.delete(chef);
+        if (Boolean.FALSE.equals(chef.getActive())) {
+            throw new BadRequestException("Chef with id: " + id + " is already inactive");
+        }
+        chef.setActive(false);
+        chef.getAddresses().forEach(address -> address.setActive(false));
+
+        return chefRepo.save(chef);
     }
+
 
     /* ADDRESS */
     @Transactional
@@ -71,26 +85,5 @@ public class ChefService {
         Chef savedChef = chefRepo.save(chef);
         return savedChef.getAddresses();
     }
-
-    @Transactional
-    public Address editChefAddress(Long chefId, Long addressId) {
-        return null;
-    }
-
-    @Transactional
-    public void deleteAddressFromChef(Long chefId, Long addressId) {
-        if (!chefRepo.existsById(chefId)) {
-            throw new ChefNotFoundException("Chef with id: " + chefId + " not found");
-        }
-        Chef chef = getChefById(chefId);
-        Address addressToDelete = chef.getAddresses().stream()
-                .filter(a -> a.getId().equals(addressId))
-                .findFirst()
-                .orElseThrow(() -> new AddressNotFoundException("Address with id: " + addressId + " not found"));
-
-        chef.removeAddress(addressToDelete);
-        chefRepo.save(chef);
-    }
-
 
 }
