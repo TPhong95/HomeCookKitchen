@@ -11,7 +11,7 @@ import user.chefuser.chef.AddressService;
 import user.chefuser.chef.Chef;
 import user.chefuser.chef.dtos.SaveAddressDto;
 import user.chefuser.chef.exception.badrequest.BadRequestException;
-import user.chefuser.chef.exception.notfound.AddressNotFoundException;
+import user.chefuser.chef.exception.NotFoundException.AddressNotFoundException;
 import user.chefuser.chef.mappers.DtoMapper;
 
 import java.util.Arrays;

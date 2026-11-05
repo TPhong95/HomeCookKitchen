@@ -4,10 +4,11 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import user.chefuser.chef.dtos.SaveAddressDto;
 import user.chefuser.chef.exception.badrequest.BadRequestException;
-import user.chefuser.chef.exception.notfound.AddressNotFoundException;
+import user.chefuser.chef.exception.NotFoundException.AddressNotFoundException;
 import user.chefuser.chef.mappers.DtoMapper;
 
 import java.util.List;
+import java.util.Map;
 
 @Service
 public class AddressService {
@@ -27,11 +28,10 @@ public class AddressService {
     public Address updateAddress(Long chefId, Long addressId, SaveAddressDto dto) {
         Address address = addressRepo.findByIdAndChefId(addressId, chefId)
                         .orElseThrow(() -> new AddressNotFoundException(
-                                String.format("Address with id: %d not found for chef with id: %d", addressId, chefId)
-                        ));
+                                String.format("Address with id: %d not found for chef with id: %d", addressId, chefId), Map.of()));
         if (Boolean.FALSE.equals(address.getActive())) {
             throw new BadRequestException(
-                    String.format("Address with id: %d is already inactive", addressId));
+                    String.format("Address with id: %d is already inactive", addressId), Map.of());
         }
         address.setStreet(dto.street());
         address.setPostalCode(dto.postalCode());
@@ -43,11 +43,11 @@ public class AddressService {
     public Address deactivateAddress(Long chefId, Long addressId) {
         Address address = addressRepo.findByIdAndChefId(addressId, chefId)
                 .orElseThrow(() -> new AddressNotFoundException(
-                        String.format("Address with id: %d not found for chef with id: %d", addressId, chefId)));
+                        String.format("Address with id: %d not found for chef with id: %d", addressId, chefId), Map.of()));
 
         if (Boolean.FALSE.equals(address.getActive())) {
             throw new BadRequestException(
-                    String.format("Address with id: %d is already inactive", addressId));
+                    String.format("Address with id: %d is already inactive", addressId), Map.of());
         }
         address.setActive(false);
         address.setStreet(null);
@@ -59,7 +59,7 @@ public class AddressService {
     public Address getAddressById(Long addressId) {
         return addressRepo.findById(addressId)
                 .orElseThrow(() -> new AddressNotFoundException(
-                        String.format("Address with id: %d not found", addressId)
+                        String.format("Address with id: %d not found", addressId), Map.of()
                 ));
     }
 

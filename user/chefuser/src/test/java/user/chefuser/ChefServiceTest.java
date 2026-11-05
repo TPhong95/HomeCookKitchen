@@ -11,11 +11,9 @@ import user.chefuser.chef.ChefService;
 import user.chefuser.chef.dtos.CreateChefDto;
 import user.chefuser.chef.dtos.UpdateChefDto;
 import user.chefuser.chef.exception.badrequest.BadRequestException;
-import user.chefuser.chef.exception.notfound.ChefNotFoundException;
+import user.chefuser.chef.exception.NotFoundException.ChefNotFoundException;
 
-import javax.swing.text.html.Option;
 import java.util.Arrays;
-import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;

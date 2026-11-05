@@ -5,6 +5,7 @@ import user.chefuser.chef.dtos.SaveAddressDto;
 import user.chefuser.chef.exception.badrequest.BadRequestException;
 
 import java.util.List;
+import java.util.Map;
 
 @Service
 public class ChefOrchestrationService {
@@ -44,14 +45,14 @@ public class ChefOrchestrationService {
     }
 
     private void validateCreateAddressDTO(SaveAddressDto dto) {
-        if (dto.city() == null) throw new BadRequestException("You need a city");
-        if (dto.street() == null) throw new BadRequestException("You need an address");
-        if (dto.postalCode() == null) throw new BadRequestException("You need a postal code");
-        if (dto.postalCode().length() != 4) throw new BadRequestException("Your postal code must contain 4 digits");
+        if (dto.city() == null) throw new BadRequestException("You need a city", Map.of());
+        if (dto.street() == null) throw new BadRequestException("You need an address", Map.of());
+        if (dto.postalCode() == null) throw new BadRequestException("You need a postal code", Map.of());
+        if (dto.postalCode().length() != 4) throw new BadRequestException("Your postal code must contain 4 digits", Map.of());
         try {
             Long.parseLong(dto.postalCode());
         } catch (NumberFormatException e) {
-            throw new BadRequestException("Your postal code must contain digits");
+            throw new BadRequestException("Your postal code must contain digits", Map.of());
         }
 
     }

@@ -3,12 +3,13 @@ package user.chefuser.chef;
 import user.chefuser.chef.dtos.CreateChefDto;
 import user.chefuser.chef.dtos.UpdateChefDto;
 import user.chefuser.chef.exception.badrequest.BadRequestException;
-import user.chefuser.chef.exception.notfound.ChefNotFoundException;
+import user.chefuser.chef.exception.NotFoundException.ChefNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.regex.Pattern;
+import java.util.Map;
 
 @Service
 public class ChefService {
@@ -40,8 +41,8 @@ public class ChefService {
         return chefRepo.save(chef);
     }
 
-    public Chef getChefById(Long id) {
-        return chefRepo.findById(id).orElseThrow(() -> new ChefNotFoundException("Chef with id: " + id + " not found"));
+    public Chef getChefById(Long id){
+        return chefRepo.findById(id).orElseThrow(()-> new ChefNotFoundException("Chef with id: " + id + " not found", Map.of()));
 
     }
 
@@ -54,7 +55,7 @@ public class ChefService {
         Chef chef = getChefById(id);
 
         if (Boolean.FALSE.equals(chef.getActive())) {
-            throw new BadRequestException(String.format("Chef with id: %d is inactive", id));
+            throw new BadRequestException(String.format("Chef with id: %d is inactive", id), Map.of());
         }
 
         validateChefInput(dto.name(), dto.email(), dto.phoneNumber());
@@ -70,7 +71,7 @@ public class ChefService {
     public Chef deactivateChef(Long id) {
         Chef chef = getChefById(id);
         if (Boolean.FALSE.equals(chef.getActive())) {
-            throw new BadRequestException("Chef with id: " + id + " is already inactive");
+            throw new BadRequestException("Chef with id: " + id + " is already inactive", Map.of());
         }
         chef.setActive(false);
         chef.setName(null);
@@ -97,10 +98,10 @@ public class ChefService {
         if (name == null || name.isBlank()
                 || email == null || email.isBlank()
                 || phone == null || phone.isBlank()
-        ) throw new BadRequestException("All fields must contain a value");
+        ) throw new BadRequestException("All fields must contain a value", Map.of());
 
-        if(checkValidEmail(email) != true) throw new BadRequestException("Invalid email format");
-        if(checkValidPhone(phone) != true) throw new BadRequestException("Must be Norwegian 8 digit phone number");
+        if(checkValidEmail(email) != true) throw new BadRequestException("Invalid email format", Map.of());
+        if(checkValidPhone(phone) != true) throw new BadRequestException("Must be Norwegian 8 digit phone number", Map.of());
     }
 
     private boolean checkValidEmail(String email) {

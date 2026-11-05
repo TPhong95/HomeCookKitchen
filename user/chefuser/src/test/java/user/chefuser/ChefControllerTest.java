@@ -15,11 +15,12 @@ import user.chefuser.chef.dtos.CreateChefDto;
 import user.chefuser.chef.dtos.SaveAddressDto;
 import user.chefuser.chef.dtos.UpdateChefDto;
 import user.chefuser.chef.exception.badrequest.BadRequestException;
-import user.chefuser.chef.exception.notfound.AddressNotFoundException;
-import user.chefuser.chef.exception.notfound.ChefNotFoundException;
+import user.chefuser.chef.exception.NotFoundException.AddressNotFoundException;
+import user.chefuser.chef.exception.NotFoundException.ChefNotFoundException;
 import user.chefuser.chef.mappers.DtoMapper;
 
 import java.util.List;
+import java.util.Map;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
@@ -70,7 +71,7 @@ public class ChefControllerTest {
     void saveChef_shouldReturnBadRequestWhenNameIsMissing() throws Exception {
         CreateChefDto dto = new CreateChefDto("", "gordon@mail.com", "66616661");
         when(chefService.createChef(any(CreateChefDto.class)))
-                .thenThrow(new BadRequestException("All fields must contain a value"));
+                .thenThrow(new BadRequestException("All fields must contain a value", Map.of()));
 
         mockMvc.perform(post("/api/chef")
                         .contentType(MediaType.APPLICATION_JSON)
@@ -82,7 +83,7 @@ public class ChefControllerTest {
     void saveChef_shouldReturnBadRequestWhenEmailIsInvalid() throws Exception {
         CreateChefDto dto = new CreateChefDto("Gordon Ramsay", "notanemail", "66616661");
         when(chefService.createChef(any(CreateChefDto.class)))
-                .thenThrow(new BadRequestException("Invalid email format"));
+                .thenThrow(new BadRequestException("Invalid email format", Map.of()));
 
         mockMvc.perform(post("/api/chef")
                         .contentType(MediaType.APPLICATION_JSON)
@@ -108,7 +109,7 @@ public class ChefControllerTest {
     @Test
     void getChefById_shouldReturnNotFoundWhenChefDoesNotExist() throws Exception {
         when(chefService.getChefById(999L))
-                .thenThrow(new ChefNotFoundException("Chef with id: 999 not found"));
+                .thenThrow(new ChefNotFoundException("Chef with id: 999 not found", Map.of()));
 
         mockMvc.perform(get("/api/chef/999"))
                 .andExpect(status().isNotFound());
@@ -151,7 +152,7 @@ public class ChefControllerTest {
     void editChefById_shouldReturnBadRequestWhenChefIsInactive() throws Exception {
         UpdateChefDto dto = new UpdateChefDto("Robbie Row", "robbie@mail.com", "60605050");
         when(chefService.editChefInfo(eq(1L), any(UpdateChefDto.class)))
-                .thenThrow(new BadRequestException("Chef with id: 1 is inactive"));
+                .thenThrow(new BadRequestException("Chef with id: 1 is inactive", Map.of()));
 
         mockMvc.perform(patch("/api/chef/1")
                         .contentType(MediaType.APPLICATION_JSON)
@@ -176,7 +177,7 @@ public class ChefControllerTest {
     @Test
     void deactivateChef_shouldReturnBadRequestWhenAlreadyInactive() throws Exception {
         when(chefService.deactivateChef(1L))
-                .thenThrow(new BadRequestException("Chef with id: 1 is already inactive"));
+                .thenThrow(new BadRequestException("Chef with id: 1 is already inactive", Map.of()));
 
         mockMvc.perform(patch("/api/chef/1/deactivate"))
                 .andExpect(status().isBadRequest());
@@ -185,7 +186,7 @@ public class ChefControllerTest {
     @Test
     void deactivateChef_shouldReturnNotFoundWhenChefDoesNotExist() throws Exception {
         when(chefService.deactivateChef(999L))
-                .thenThrow(new ChefNotFoundException("Chef with id: 999 not found"));
+                .thenThrow(new ChefNotFoundException("Chef with id: 999 not found", Map.of()));
 
         mockMvc.perform(patch("/api/chef/999/deactivate"))
                 .andExpect(status().isNotFound());
@@ -216,7 +217,7 @@ public class ChefControllerTest {
     @Test
     void getAddressById_shouldReturnNotFoundWhenAddressDoesNotExist() throws Exception {
         when(chefOrchestrationService.getAddressById(999L))
-                .thenThrow(new AddressNotFoundException("Address with id: 999 not found"));
+                .thenThrow(new AddressNotFoundException("Address with id: 999 not found", Map.of()));
 
         mockMvc.perform(get("/api/chef/address/999"))
                 .andExpect(status().isNotFound());
@@ -261,7 +262,7 @@ public class ChefControllerTest {
     void saveChefAddress_shouldReturnBadRequestWhenPostalCodeIsInvalid() throws Exception {
         SaveAddressDto dto = new SaveAddressDto("Storgata 1", "01", "Oslo");
         when(chefOrchestrationService.saveAddressToChef(eq(1L), any(SaveAddressDto.class)))
-                .thenThrow(new BadRequestException("Your postal code must contain 4 digits"));
+                .thenThrow(new BadRequestException("Your postal code must contain 4 digits", Map.of()));
 
         mockMvc.perform(post("/api/chef/address/1")
                         .contentType(MediaType.APPLICATION_JSON)
@@ -290,7 +291,7 @@ public class ChefControllerTest {
     void editChefAddress_shouldReturnNotFoundWhenAddressDoesNotExist() throws Exception {
         SaveAddressDto dto = new SaveAddressDto("Lillegata 2", "5003", "Bergen");
         when(chefOrchestrationService.editChefAddress(eq(1L), eq(999L), any(SaveAddressDto.class)))
-                .thenThrow(new AddressNotFoundException("Address with id: 999 not found for chef with id: 1"));
+                .thenThrow(new AddressNotFoundException("Address with id: 999 not found for chef with id: 1", Map.of()));
 
         mockMvc.perform(patch("/api/chef/address/1/999")
                         .contentType(MediaType.APPLICATION_JSON)
@@ -302,7 +303,7 @@ public class ChefControllerTest {
     void editChefAddress_shouldReturnBadRequestWhenAddressIsInactive() throws Exception {
         SaveAddressDto dto = new SaveAddressDto("Lillegata 2", "5003", "Bergen");
         when(chefOrchestrationService.editChefAddress(eq(1L), eq(5L), any(SaveAddressDto.class)))
-                .thenThrow(new BadRequestException("Address with id: 5 is already inactive"));
+                .thenThrow(new BadRequestException("Address with id: 5 is already inactive", Map.of()));
 
         mockMvc.perform(patch("/api/chef/address/1/5")
                         .contentType(MediaType.APPLICATION_JSON)
@@ -327,7 +328,7 @@ public class ChefControllerTest {
     @Test
     void deactivateAddress_shouldReturnBadRequestWhenAlreadyInactive() throws Exception {
         when(chefOrchestrationService.deactivateAddress(1L, 5L))
-                .thenThrow(new BadRequestException("Address with id: 5 is already inactive"));
+                .thenThrow(new BadRequestException("Address with id: 5 is already inactive", Map.of()));
 
         mockMvc.perform(patch("/api/chef/address/1/5/deactivate"))
                 .andExpect(status().isBadRequest());
