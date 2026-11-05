@@ -1,57 +1,42 @@
 package org.example.purchase.exception;
 
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
-import org.example.purchase.exception.notfound.PurchaseNotFoundException;
+import org.example.purchase.exception.NotFoundException.NotFoundException;
+import org.example.purchase.exception.NotFoundException.PurchaseNotFoundException;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ProblemDetail;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+
+import java.util.LinkedHashMap;
+import java.util.Map;
+
+import static net.logstash.logback.argument.StructuredArguments.entries;
 
 @RestControllerAdvice
 @Slf4j
 public class ErrorHandler {
 
-
-    //========== 400 BAD REQUEST ==========
-/*
-    @ExceptionHandler({
-            }
-    )
-    public ResponseEntity<String> handleBadRequestException(RuntimeException e) {
-        log.error("400 Bad Request error: {}", e.getMessage(), e);
-        return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
-    }
-
-
- */
     //========== 404 NOT FOUND ==========
 
     @ExceptionHandler({
             PurchaseNotFoundException.class
 
     })
-    public ResponseEntity<String> handleNotFoundException(RuntimeException e) {
-        log.error("404 Not Found error: {}", e.getMessage(), e);
-        return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
-    }
-/*
+    public ResponseEntity<ProblemDetail> handleNotFoundException(NotFoundException e, HttpServletRequest request) {
+        Map<String, Object> fields = new LinkedHashMap<>(e.getFields());
 
-    //========== 409 CONFLICT ==========
+        fields.put("status", 404);
+        fields.put("path", request.getRequestURI());
+        fields.put("exception", e.getClass().getSimpleName());
 
-    @ExceptionHandler({
-    })
-    public ResponseEntity<String> handleConflictException(RuntimeException e) {
-        log.error("409 Conflict error: {}",e.getMessage(), e);
-        return new ResponseEntity<>(e.getMessage(), HttpStatus.CONFLICT);
-    }
+        log.error("404 Not Found error: {}", e.getMessage(), entries(fields));
 
-    //========== 500 INTERNAL SERVER ERROR ==========
-
-    @ExceptionHandler(Exception.class)
-    public ResponseEntity<String> handleGenericException(Exception e) {
-        log.error("500 Unexpected error: {}", e.getMessage(), e);
-        return new ResponseEntity<>("An unexpected error occurred", HttpStatus.INTERNAL_SERVER_ERROR);
+        ProblemDetail problem = ProblemDetail.forStatusAndDetail(HttpStatus.NOT_FOUND, e.getMessage());
+        problem.setTitle("404 Not found");
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(problem);
     }
 
- */
 }
