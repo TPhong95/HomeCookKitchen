@@ -3,7 +3,6 @@ package user.chefuser.chef.exception;
 
 import lombok.extern.slf4j.Slf4j;
 import user.chefuser.chef.exception.badrequest.BadRequestException;
-import user.chefuser.chef.exception.forbidden.ChefAddressMismatchException;
 import user.chefuser.chef.exception.notfound.AddressNotFoundException;
 import user.chefuser.chef.exception.notfound.ChefNotFoundException;
 import org.springframework.http.HttpStatus;
@@ -24,16 +23,6 @@ public class ErrorHandler {
     public ResponseEntity<String> handleBadRequestException(RuntimeException e) {
         log.error("400 Bad Request error: {}", e.getMessage(), e);
         return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
-    }
-
-    //========== 403 FORBIDDEN ==========
-
-    @ExceptionHandler({
-            ChefAddressMismatchException.class
-    })
-    public ResponseEntity<String> handleAddressChefMismatchException(RuntimeException e) {
-        log.error("403 Forbidden error: {}", e.getMessage(), e);
-        return new ResponseEntity<>(e.getMessage(), HttpStatus.FORBIDDEN);
     }
 
     //========== 404 NOT FOUND ==========
