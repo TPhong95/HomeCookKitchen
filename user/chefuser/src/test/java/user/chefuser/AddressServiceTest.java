@@ -152,8 +152,8 @@ public class AddressServiceTest {
         assertNotNull(res);
         assertEquals(false, res.getActive());
         assertNull(res.getStreet());
-        assertNull(res.getStreet());
         assertNull(res.getPostalCode());
+        assertNull(res.getCity());
         verify(addressRepo).save(res);
     }
 

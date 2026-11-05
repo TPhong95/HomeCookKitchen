@@ -32,9 +32,4 @@ public class Chef {
         address.setChef(this);
     }
 
-    public void removeAddress(Address address){
-        addresses.remove(address);
-        address.setChef(null);
-    }
-
 }

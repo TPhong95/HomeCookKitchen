@@ -2,10 +2,11 @@ package user.chefuser.chef.datainit;
 
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
+import user.chefuser.chef.Address;
 import user.chefuser.chef.Chef;
 import user.chefuser.chef.ChefRepo;
 import user.chefuser.chef.ChefService;
-import user.chefuser.chef.dtos.SaveAddressDto;
+import user.chefuser.chef.dtos.CreateChefDto;
 
 @Component
 public class ChefDataInitializer implements CommandLineRunner {
@@ -22,36 +23,58 @@ public class ChefDataInitializer implements CommandLineRunner {
     public void run(String... args) throws Exception {
         if (chefRepo.count() == 0) {
 
-            Chef chef1 = new Chef();
-            chef1.setName("Gordon Ramsay");
-            chef1.setEmail("gordonram@gmail.com");
-            chef1.setPhoneNumber("666 666 666");
-            Chef savedChef1 = chefService.save(chef1);
-            chefService.saveAddressToChef(savedChef1.getId(), new SaveAddressDto("10 Baker Street, London", "12345678", "gordon@ramsay.com"));
+            CreateChefDto chef1 = new CreateChefDto("Gordon Ramsay", "gordonram@gmail.com", "66616661");
+            Chef savedChef1 = chefService.createChef(chef1);
+            Address c1a1 = new Address();
+            c1a1.setStreet("10 Baker Street");
+            c1a1.setPostalCode("1234");
+            c1a1.setCity("Trondheim");
+            chefService.saveAddressToChef(savedChef1, c1a1);
+            Address c1a2 = new Address();
+            c1a2.setStreet("12 Eggs Way");
+            c1a2.setPostalCode("8128");
+            c1a2.setCity("Oslo");
+            chefService.saveAddressToChef(savedChef1, c1a2);
 
-            Chef chef2 = new Chef();
-            chef2.setName("Eyvind Hellstrøm");
-            Chef savedChef2 = chefService.save(chef2);
-            chefService.saveAddressToChef(savedChef2.getId(), new SaveAddressDto("Søndre gate 1, Oslo", "87654321", "eyvind@hellstrom.no"));
+            CreateChefDto chef2 = new CreateChefDto("Eyvind Hellstrøm", "eyvind@hellstrom.se", "55443322");
+            Chef savedChef2 = chefService.createChef(chef2);
+            Address c2a1 = new Address();
+            c2a1.setStreet("Søndre gate 1");
+            c2a1.setPostalCode("5544");
+            c2a1.setCity("Oslo");
+            chefService.saveAddressToChef(savedChef2, c2a1);
 
-            Chef chef3 = new Chef();
-            chef3.setName("Jamie Oliver");
-            Chef savedChef3 = chefService.save(chef3);
-            chefService.saveAddressToChef(savedChef3.getId(), new SaveAddressDto("15 Whitchurch Road, London", "11223344", "jamie@oliver.com"));
+            CreateChefDto chef3 = new CreateChefDto("Jamie Oliver", "ollie@jamie.com", "20192020");
+            Chef savedChef3 = chefService.createChef(chef3);
+            Address c3a1 = new Address();
+            c3a1.setStreet("15 Whitchurch Road");
+            c3a1.setPostalCode("0123");
+            c3a1.setCity("Sandvika");
+            chefService.saveAddressToChef(savedChef3, c3a1);
+            Address c3a2 = new Address();
+            c3a2.setStreet("16 Churchwit Drive");
+            c3a2.setPostalCode("1234");
+            c3a2.setCity("Vikersund");
+            chefService.saveAddressToChef(savedChef3, c3a2);
 
-            Chef chef4 = new Chef();
-            chef4.setName("Julia Child");
-            Chef savedChef4 = chefService.save(chef4);
-            chefService.saveAddressToChef(savedChef4.getId(), new SaveAddressDto("103 Irving Street, Cambridge", "55667788", "julia@child.com"));
+            CreateChefDto chef4 = new CreateChefDto("Julia Child", "julia@child.com", "55440000");
+            Chef savedChef4 = chefService.createChef(chef4);
+            Address c4a1 = new Address();
+            c4a1.setStreet("103 Irving Street");
+            c4a1.setPostalCode("4040");
+            c4a1.setCity("Oslo");
+            chefService.saveAddressToChef(savedChef4,c4a1);
 
-            Chef chef5 = new Chef();
-            chef5.setName("Marco Pierre White");
-            Chef savedChef5 = chefService.save(chef5);
-            chefService.saveAddressToChef(savedChef5.getId(), new SaveAddressDto("Exeter Street, London", "99887766", "marco@white.com"));
+            CreateChefDto chef5 = new CreateChefDto("Marco Pierre White", "marco@white.com", "99887766");
+            Chef savedChef5 = chefService.createChef(chef5);
+            Address c5a1 = new Address();
+            c5a1.setStreet("3 Exeter Street");
+            c5a1.setPostalCode("1203");
+            c5a1.setCity("Oslo");
+            chefService.saveAddressToChef(savedChef5, c5a1);
 
-            Chef chef6 = new Chef();
-            chef6.setName("Markus Nilsen");
-            chefService.save(chef6);
+            CreateChefDto chef6 = new CreateChefDto("Markus Nilsen", "markus@nilsen.no", "32112332");
+            chefService.createChef(chef6);
 
             System.out.println(">>> " + chefRepo.count() + " chefs were added to the chef database! <<<");
         }
