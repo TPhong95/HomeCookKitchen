@@ -50,8 +50,10 @@ public class AddressService {
             throw new BadRequestException(
                     String.format("Address with id: %d is already inactive", addressId));
         }
-
         address.setActive(false);
+        address.setStreet(null);
+        address.setPostalCode(null);
+        address.setCity(null);
         return addressRepo.save(address);
     }
 
@@ -65,4 +67,12 @@ public class AddressService {
     public List<Address> getActiveAddressesByChef(Long chefId) {
         return addressRepo.findActiveByChefId(chefId);
     }
+
+    /* VALIDATION */
+    /*
+        If this is ever in actual production,
+        we can validate addresses against Kartverket,
+        but we are not risking external dependencies
+        on the exam
+       */
 }

@@ -9,24 +9,29 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.regex.Pattern;
 
 @Service
 public class ChefService {
     private final ChefRepo chefRepo;
-    private final DtoMapper dtoMapper;
+    /*
+        Everyone loves a good regex
+        https://www.baeldung.com/java-email-validation-regex
+        Pattern.compile is moved as a constant to avoid compiling on every call
+    */
+    private static final Pattern PHONE_PATTERN = Pattern.compile("\\d{8}");
+    private static final Pattern EMAIL_PATTERN = Pattern.compile(
+            "^(?=.{1,64}@)[A-Za-z0-9_-]+(\\.[A-Za-z0-9_-]+)*@"
+                    + "[^-][A-Za-z0-9-]+(\\.[A-Za-z0-9-]+)*(\\.[A-Za-z]{2,})$");
 
-    public ChefService(ChefRepo chefRepo, DtoMapper dtoMapper) {
+    public ChefService(ChefRepo chefRepo) {
         this.chefRepo = chefRepo;
-        this.dtoMapper = dtoMapper;
     }
 
     /* CHEF */
     @Transactional
     public Chef createChef(CreateChefDto dto) {
-        if (    dto.name() == null || dto.name().isBlank()
-                || dto.email() == null || dto.email().isBlank()
-                || dto.phoneNumber() == null || dto.phoneNumber().isBlank()
-        ) throw new BadRequestException("All fields must contain a value");
+        validateChefInput(dto.name(), dto.email(), dto.phoneNumber());
 
         Chef chef = new Chef();
         chef.setName(dto.name());
@@ -53,10 +58,7 @@ public class ChefService {
             throw new BadRequestException(String.format("Chef with id: %d is inactive", id));
         }
 
-        if (    dto.name() == null || dto.name().isBlank()
-                || dto.email() == null || dto.email().isBlank()
-                || dto.phoneNumber() == null || dto.phoneNumber().isBlank()
-        ) throw new BadRequestException("All fields must contain a value");
+        validateChefInput(dto.name(), dto.email(), dto.phoneNumber());
 
         chef.setName(dto.name());
         chef.setEmail(dto.email());
@@ -87,6 +89,25 @@ public class ChefService {
         chef.addAddress(address);
         Chef savedChef = chefRepo.save(chef);
         return savedChef.getAddresses();
+    }
+
+    /* VALIDATION */
+    private void validateChefInput(String name, String email, String phone) {
+        if (name == null || name.isBlank()
+                || email == null || email.isBlank()
+                || phone == null || phone.isBlank()
+        ) throw new BadRequestException("All fields must contain a value");
+
+        if(checkValidEmail(email) != true) throw new BadRequestException("Invalid email format");
+        if(checkValidPhone(phone) != true) throw new BadRequestException("Must be Norwegian 8 digit phone number");
+    }
+
+    private boolean checkValidEmail(String email) {
+        return email != null && EMAIL_PATTERN.matcher(email).matches();
+    }
+
+    private boolean checkValidPhone(String phone) {
+        return phone != null && PHONE_PATTERN.matcher(phone).matches();
     }
 
 }
