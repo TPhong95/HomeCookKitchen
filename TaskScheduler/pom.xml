@@ -128,7 +128,7 @@
                     <java>
                         <eclipse>
                             <version>4.33.0</version>
-                            <file>${maven.multiModuleProjectDirectory}/eclipse-formatter.xml</file>
+                            <file>${project.basedir}/../eclipse-formatter.xml</file>
                         </eclipse>
                         <removeUnusedImports/>
                     </java>
