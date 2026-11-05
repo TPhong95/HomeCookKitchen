@@ -87,7 +87,9 @@ public class ChefService {
     public List<Address> saveAddressToChef(Chef chef, Address address) {
         chef.addAddress(address);
         Chef savedChef = chefRepo.save(chef);
-        return savedChef.getAddresses();
+        return savedChef.getAddresses().stream()
+                .filter(a -> Boolean.TRUE.equals(a.getActive()))
+                .toList();
     }
 
     /* VALIDATION */
