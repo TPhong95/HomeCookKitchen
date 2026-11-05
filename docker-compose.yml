@@ -61,6 +61,7 @@ services:
       KAFKA_CLUSTERS_0_BOOTSTRAPSERVERS: 'kafka:9093'
     networks:
       - m2026
+    #(Add volumes to persist config later)
 
   consul-register-kafbat:
     image: curlimages/curl:8.8.0
