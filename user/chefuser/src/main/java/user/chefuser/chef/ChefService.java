@@ -72,6 +72,9 @@ public class ChefService {
             throw new BadRequestException("Chef with id: " + id + " is already inactive");
         }
         chef.setActive(false);
+        chef.setName(null);
+        chef.setEmail(null);
+        chef.setPhoneNumber(null);
         chef.getAddresses().forEach(address -> address.setActive(false));
 
         return chefRepo.save(chef);
