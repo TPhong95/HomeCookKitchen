@@ -1,0 +1,77 @@
+body {
+  background-color: #f8ffdf;
+}
+
+.frontpage-wrapper {
+  font-family: "Segoe UI", serif;
+  min-height: 100vh;
+  color: #1d3b58;
+}
+
+.frontpage-top-banner {
+  color: #ffffff;
+  background-color: #9f4bff;
+  padding: 0.5rem 2rem;
+}
+
+.frontpage-description {
+  padding: 0 2rem;
+}
+
+.existing-user-wrapper {
+  display: flex;
+  gap: 2rem;
+  padding: 2rem;
+}
+
+.existing-user-box {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  flex: 1;
+  border: 2px solid #0a4c86;
+  border-radius: 8px;
+  padding: 1.2rem;
+}
+
+.existing-chef-box {
+  background-color: #dcefff;
+  border-color: #346739;
+}
+
+.existing-customer-box {
+  background-color: #6dd673;
+  border-color: #346739;
+}
+
+.user-title {
+  margin: 0;
+}
+
+.existing-user-box select {
+  padding: 0.6rem;
+  border: 1px solid #0a4c86;
+  border-radius: 4px;
+  font-size: 1rem;
+}
+
+.login-btn {
+  background-color: #c0ff63;
+  border: 1px solid #346739;
+  padding: 0.6rem 1.2rem;
+  border-radius: 4px;
+  font-weight: bold;
+  cursor: pointer;
+  transition-duration: 0.2s;
+}
+
+.login-btn:hover {
+  background-color: #a0da4e;
+}
+
+.login-btn:disabled {
+  background-color: #e2e8f0;
+  border-color: #cbd5e1;
+  color: #94a3b8;
+  cursor: not-allowed;
+}
