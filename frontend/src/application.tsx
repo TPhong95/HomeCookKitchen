@@ -8,7 +8,6 @@ import {History} from "./components/chef/history.tsx";
 import {CustomerProfile} from "./components/customer/customerprofile.tsx";
 import {BrowseListing} from "./components/customer/browse.tsx";
 import {Orders} from "./components/customer/orders.tsx";
-import {Cart} from "./components/customer/cart.tsx";
 import {CustomerHistory} from "./components/customer/history.tsx";
 
 export function Application() {
@@ -31,7 +30,6 @@ export function Application() {
         <Route path={"/user/customer/profile"} element={<CustomerProfile/>}/>
         <Route path={"/user/customer/browse"} element={<BrowseListing/>}/>
         <Route path={"/user/customer/orders"} element={<Orders/>}/>
-        <Route path={"/user/customer/cart"} element={<Cart/>}/>
         <Route path={"/user/customer/history"} element={<CustomerHistory/>}/>
       </Routes>
     </>
