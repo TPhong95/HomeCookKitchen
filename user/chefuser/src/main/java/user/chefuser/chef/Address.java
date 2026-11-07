@@ -24,7 +24,4 @@ public class Address {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "chef_id")
     private Chef chef;
-
-    @OneToOne(mappedBy = "address")
-    private HomeVibe homeVibe;
 }

@@ -6,7 +6,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ProblemDetail;
 import user.chefuser.chef.exception.NotFoundException.AddressNotFoundException;
 import user.chefuser.chef.exception.NotFoundException.ChefNotFoundException;
-import user.chefuser.chef.exception.NotFoundException.HomeVibeNotFoundException;
 import user.chefuser.chef.exception.badrequest.BadRequestException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -26,8 +25,8 @@ public class ErrorHandler {
 
     @ExceptionHandler({
             ChefNotFoundException.class,
-            AddressNotFoundException.class,
-            HomeVibeNotFoundException.class
+            AddressNotFoundException.class
+
     })
     public ResponseEntity<ProblemDetail> handleNotFoundException(NotFoundException e, HttpServletRequest request) {
         Map<String, Object> fields = new LinkedHashMap<>(e.getFields());

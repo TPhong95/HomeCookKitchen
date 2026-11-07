@@ -53,7 +53,7 @@ public class ChefController {
 
     @PatchMapping("/{id}/deactivate")
     public ResponseEntity<ChefResponseDto> deactivateChef(@PathVariable Long id) {
-        Chef chef = chefOrchestrationService.deactivateChef(id);
+        Chef chef = chefService.deactivateChef(id);
         return ResponseEntity.ok(dtoMapper.toChefResponseDto(chef));
     }
 

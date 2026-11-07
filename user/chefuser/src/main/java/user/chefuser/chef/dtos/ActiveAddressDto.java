@@ -6,7 +6,6 @@ public record ActiveAddressDto(
         String postalCode,
         String city,
         Boolean active,
-        Long chefId,
-        HomeVibeDto homeVibe
+        Long chefId
 ) {
 }

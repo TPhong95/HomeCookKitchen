@@ -8,7 +8,12 @@ import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
 import tools.jackson.databind.ObjectMapper;
 import user.chefuser.chef.*;
-import user.chefuser.chef.dtos.*;
+import user.chefuser.chef.dtos.ActiveAddressDto;
+import user.chefuser.chef.dtos.AddressResponseDto;
+import user.chefuser.chef.dtos.ChefResponseDto;
+import user.chefuser.chef.dtos.CreateChefDto;
+import user.chefuser.chef.dtos.SaveAddressDto;
+import user.chefuser.chef.dtos.UpdateChefDto;
 import user.chefuser.chef.exception.badrequest.BadRequestException;
 import user.chefuser.chef.exception.NotFoundException.AddressNotFoundException;
 import user.chefuser.chef.exception.NotFoundException.ChefNotFoundException;
@@ -160,7 +165,7 @@ public class ChefControllerTest {
         Chef chef = new Chef();
         ChefResponseDto response = new ChefResponseDto(1L, null, null, null, List.of());
 
-        when(chefOrchestrationService.deactivateChef(1L)).thenReturn(chef);
+        when(chefService.deactivateChef(1L)).thenReturn(chef);
         when(dtoMapper.toChefResponseDto(chef)).thenReturn(response);
 
         mockMvc.perform(patch("/api/chef/1/deactivate"))
@@ -171,7 +176,7 @@ public class ChefControllerTest {
 
     @Test
     void deactivateChef_shouldReturnBadRequestWhenAlreadyInactive() throws Exception {
-        when(chefOrchestrationService.deactivateChef(1L))
+        when(chefService.deactivateChef(1L))
                 .thenThrow(new BadRequestException("Chef with id: 1 is already inactive", Map.of()));
 
         mockMvc.perform(patch("/api/chef/1/deactivate"))
@@ -180,7 +185,7 @@ public class ChefControllerTest {
 
     @Test
     void deactivateChef_shouldReturnNotFoundWhenChefDoesNotExist() throws Exception {
-        when(chefOrchestrationService.deactivateChef(999L))
+        when(chefService.deactivateChef(999L))
                 .thenThrow(new ChefNotFoundException("Chef with id: 999 not found", Map.of()));
 
         mockMvc.perform(patch("/api/chef/999/deactivate"))
@@ -195,8 +200,7 @@ public class ChefControllerTest {
         chef.setId(1L);
         Address address = new Address();
         address.setChef(chef);
-        HomeVibeDto vibe = new HomeVibeDto("Cosy flat with a view", Genre.JAZZ, true, false, true);
-        AddressResponseDto response = new AddressResponseDto(5L, "Storgata 1", "0150", "Oslo", 1L, vibe);
+        AddressResponseDto response = new AddressResponseDto(5L, "Storgata 1", "0150", "Oslo", 1L);
 
         when(chefOrchestrationService.getAddressById(5L)).thenReturn(address);
         when(dtoMapper.toAddressResponseDto(address, 1L)).thenReturn(response);
@@ -207,9 +211,7 @@ public class ChefControllerTest {
                 .andExpect(jsonPath("$.street").value("Storgata 1"))
                 .andExpect(jsonPath("$.postalCode").value("0150"))
                 .andExpect(jsonPath("$.city").value("Oslo"))
-                .andExpect(jsonPath("$.chefId").value(1))
-                .andExpect(jsonPath("$.homeVibe.description").value("Cosy flat with a view"))
-                .andExpect(jsonPath("$.homeVibe.music").value("JAZZ"));
+                .andExpect(jsonPath("$.chefId").value(1));
     }
 
     @Test
@@ -224,11 +226,10 @@ public class ChefControllerTest {
     @Test
     void getActiveAddressByChefId_shouldReturnActiveAddresses() throws Exception {
         List<Address> addresses = List.of(new Address(), new Address());
-        HomeVibeDto vibe = new HomeVibeDto("Cosy flat with a view", Genre.JAZZ, true, false, true);
-        HomeVibeDto notAVibe = new HomeVibeDto("Beer cans everywhere", Genre.NONE, false, false, false);
         List<ActiveAddressDto> response = List.of(
-                new ActiveAddressDto(1L, "Storgata 1", "0150", "Oslo", true, 1L, vibe),
-                new ActiveAddressDto(2L, "Lillegata 2", "5003", "Bergen", true, 1L, notAVibe));
+                new ActiveAddressDto(1L, "Storgata 1", "0150", "Oslo", true, 1L),
+                new ActiveAddressDto(2L, "Lillegata 2", "5003", "Bergen", true, 1L));
+
         when(chefOrchestrationService.getActiveAddresses(1L)).thenReturn(addresses);
         when(dtoMapper.toActiveAddressDtoList(addresses, 1L)).thenReturn(response);
 
@@ -236,20 +237,17 @@ public class ChefControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$[0].city").value("Oslo"))
                 .andExpect(jsonPath("$[0].active").value(true))
-                .andExpect(jsonPath("$[1].city").value("Bergen"))
-                .andExpect(jsonPath("$[0].homeVibe.music").value("JAZZ"))
-                .andExpect(jsonPath("$[1].homeVibe.music").value("NONE"));
+                .andExpect(jsonPath("$[1].city").value("Bergen"));
     }
 
     @Test
     void saveChefAddress_shouldReturnAddressList() throws Exception {
-        HomeVibeDto vibe = new HomeVibeDto("Cosy flat with a view", Genre.JAZZ, true, false, true);
-        SaveAddressDto dto = new SaveAddressDto("Storgata 1", "0150", "Oslo", vibe);
+        SaveAddressDto dto = new SaveAddressDto("Storgata 1", "0150", "Oslo");
         List<Address> addresses = List.of(new Address());
         List<AddressResponseDto> response = List.of(
-                new AddressResponseDto(1L, "Storgata 1", "0150", "Oslo", 1L, vibe));
+                new AddressResponseDto(1L, "Storgata 1", "0150", "Oslo", 1L));
 
-        when(chefOrchestrationService.saveAddressToChef(1L, dto)).thenReturn(addresses);
+        when(chefOrchestrationService.saveAddressToChef(eq(1L), any(SaveAddressDto.class))).thenReturn(addresses);
         when(dtoMapper.toAddressResponseDtoList(addresses, 1L)).thenReturn(response);
 
         mockMvc.perform(post("/api/chef/address/1")
@@ -257,13 +255,12 @@ public class ChefControllerTest {
                         .content(objectMapper.writeValueAsString(dto)))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$[0].street").value("Storgata 1"))
-                .andExpect(jsonPath("$[0].chefId").value(1))
-                .andExpect(jsonPath("$[0].homeVibe.music").value("JAZZ"))
-                .andExpect(jsonPath("$[0].homeVibe.familyFriendly").value(true));
+                .andExpect(jsonPath("$[0].chefId").value(1));
     }
+
     @Test
     void saveChefAddress_shouldReturnBadRequestWhenPostalCodeIsInvalid() throws Exception {
-        SaveAddressDto dto = new SaveAddressDto("Storgata 1", "01", "Oslo", null);
+        SaveAddressDto dto = new SaveAddressDto("Storgata 1", "01", "Oslo");
         when(chefOrchestrationService.saveAddressToChef(eq(1L), any(SaveAddressDto.class)))
                 .thenThrow(new BadRequestException("Your postal code must contain 4 digits", Map.of()));
 
@@ -275,12 +272,11 @@ public class ChefControllerTest {
 
     @Test
     void editChefAddress_shouldReturnUpdatedAddress() throws Exception {
-        HomeVibeDto vibe = new HomeVibeDto("Cosy flat with a view", Genre.JAZZ, true, false, true);
-        SaveAddressDto dto = new SaveAddressDto("Lillegata 2", "5003", "Bergen", vibe);
+        SaveAddressDto dto = new SaveAddressDto("Lillegata 2", "5003", "Bergen");
         Address address = new Address();
-        AddressResponseDto response = new AddressResponseDto(5L, "Lillegata 2", "5003", "Bergen", 1L, vibe);
+        AddressResponseDto response = new AddressResponseDto(5L, "Lillegata 2", "5003", "Bergen", 1L);
 
-        when(chefOrchestrationService.editChefAddress(1L, 5L, dto)).thenReturn(address);
+        when(chefOrchestrationService.editChefAddress(eq(1L), eq(5L), any(SaveAddressDto.class))).thenReturn(address);
         when(dtoMapper.toAddressResponseDto(address, 1L)).thenReturn(response);
 
         mockMvc.perform(patch("/api/chef/address/1/5")
@@ -288,16 +284,12 @@ public class ChefControllerTest {
                         .content(objectMapper.writeValueAsString(dto)))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.street").value("Lillegata 2"))
-                .andExpect(jsonPath("$.city").value("Bergen"))
-                .andExpect(jsonPath("$.homeVibe.description").value("Cosy flat with a view"))
-                .andExpect(jsonPath("$.homeVibe.music").value("JAZZ"))
-                .andExpect(jsonPath("$.homeVibe.pets").value(true))
-                .andExpect(jsonPath("$.homeVibe.outdoor").value(false))
-                .andExpect(jsonPath("$.homeVibe.familyFriendly").value(true));
+                .andExpect(jsonPath("$.city").value("Bergen"));
     }
+
     @Test
     void editChefAddress_shouldReturnNotFoundWhenAddressDoesNotExist() throws Exception {
-        SaveAddressDto dto = new SaveAddressDto("Lillegata 2", "5003", "Bergen", null);
+        SaveAddressDto dto = new SaveAddressDto("Lillegata 2", "5003", "Bergen");
         when(chefOrchestrationService.editChefAddress(eq(1L), eq(999L), any(SaveAddressDto.class)))
                 .thenThrow(new AddressNotFoundException("Address with id: 999 not found for chef with id: 1", Map.of()));
 
@@ -309,7 +301,7 @@ public class ChefControllerTest {
 
     @Test
     void editChefAddress_shouldReturnBadRequestWhenAddressIsInactive() throws Exception {
-        SaveAddressDto dto = new SaveAddressDto("Lillegata 2", "5003", "Bergen", null);
+        SaveAddressDto dto = new SaveAddressDto("Lillegata 2", "5003", "Bergen");
         when(chefOrchestrationService.editChefAddress(eq(1L), eq(5L), any(SaveAddressDto.class)))
                 .thenThrow(new BadRequestException("Address with id: 5 is already inactive", Map.of()));
 
@@ -322,8 +314,7 @@ public class ChefControllerTest {
     @Test
     void deactivateAddress_shouldReturnDeactivatedAddress() throws Exception {
         Address address = new Address();
-        HomeVibeDto anonymisedVibe = new HomeVibeDto(null, Genre.JAZZ, true, false, true);
-        AddressResponseDto response = new AddressResponseDto(5L, null, null, null, 1L, anonymisedVibe);
+        AddressResponseDto response = new AddressResponseDto(5L, null, null, null, 1L);
 
         when(chefOrchestrationService.deactivateAddress(1L, 5L)).thenReturn(address);
         when(dtoMapper.toAddressResponseDto(address, 1L)).thenReturn(response);
@@ -331,9 +322,7 @@ public class ChefControllerTest {
         mockMvc.perform(patch("/api/chef/address/1/5/deactivate"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id").value(5))
-                .andExpect(jsonPath("$.street").doesNotExist())
-                .andExpect(jsonPath("$.homeVibe.description").doesNotExist())
-                .andExpect(jsonPath("$.homeVibe.music").value("JAZZ"));
+                .andExpect(jsonPath("$.street").doesNotExist());
     }
 
     @Test

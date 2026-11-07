@@ -5,7 +5,6 @@ public record AddressResponseDto(
         String street,
         String postalCode,
         String city,
-        Long chefId,
-        HomeVibeDto homeVibe
+        Long chefId
 ) {
 }
