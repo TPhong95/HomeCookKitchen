@@ -17,3 +17,16 @@ create table if not exists address(
     CONSTRAINT fk_address_chef FOREIGN KEY (chef_id) REFERENCES chef(id) ON DELETE CASCADE
 );
 create sequence address_seq increment by 1 start with 1;
+
+create table if not exists home_vibe(
+    id BIGINT primary key,
+    address_id BIGINT NOT NULL,
+    description VARCHAR(500),
+    music VARCHAR(50),
+    pets BOOLEAN DEFAULT FALSE,
+    outdoor BOOLEAN DEFAULT FALSE,
+    family_friendly BOOLEAN DEFAULT FALSE,
+    CONSTRAINT fk_home_vibe_address FOREIGN KEY (address_id) REFERENCES address(id) ON DELETE CASCADE,
+    CONSTRAINT uq_home_vibe_address UNIQUE (address_id)
+    );
+create sequence home_vibe_seq increment by 1 start with 1;
