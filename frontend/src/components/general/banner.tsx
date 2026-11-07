@@ -21,7 +21,6 @@ export function Banner() {
     { link: "/user/customer/browse", text: "Browse" },
     { link: "/user/customer/orders", text: "Orders" },
     { link: "/user/customer/history", text: "History" },
-    { link: "/user/customer/cart", text: "Cart" },
   ]
 
   const navigation = role === "chef" ? chefNavigation : customerNavigation;
