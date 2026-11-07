@@ -12,11 +12,11 @@ import {
 } from "../shared/chefinterface.ts";
 import toast from "react-hot-toast";
 
-async function patchJson<T>(url: string, body: unknown): Promise<T> {
+async function sendJson<T>(method: "POST" | "PATCH", url: string, body?: unknown): Promise<T> {
   const res = await fetch(url, {
-    method: "PATCH",
+    method,
     headers: {"Content-Type": "application/json"},
-    body: JSON.stringify(body),
+    body: body === undefined ? undefined : JSON.stringify(body),
   });
 
   if (!res.ok) {
@@ -35,6 +35,14 @@ const EMPTY_VIBE: HomeVibe = {
   familyFriendly: false,
 };
 
+type AddressForm = Pick<ChefAddress, "street" | "postalCode" | "city">;
+
+const EMPTY_ADDRESS: AddressForm = {
+  street: "",
+  postalCode: "",
+  city: "",
+};
+
 export function ChefProfile() {
   const {user} = useUserContext();
   const chefId = user?.role === "chef" ? user.id : null;
@@ -49,12 +57,15 @@ export function ChefProfile() {
   const [tempName, setTempName] = useState("");
   const [tempPhoneNumber, setTempPhoneNumber] = useState("");
   const [tempEmail, setTempEmail] = useState("");
-  const [tempAddress, setTempAddress] = useState<ChefAddress | null>(null);
+  const [tempAddress, setTempAddress] = useState<AddressForm>(EMPTY_ADDRESS);
   const [tempVibe, setTempVibe] = useState<HomeVibe>(EMPTY_VIBE);
+  const [editingAddressId, setEditingAddressId] = useState<number | null>(null);
+  const [addressToDeactivate, setAddressToDeactivate] = useState<ChefAddress | null>(null);
 
   // Modals
   const editProfileDialogRef = useRef<HTMLDialogElement>(null);
   const editAddressDialogRef = useRef<HTMLDialogElement>(null);
+  const deactivateAddressDialogRef = useRef<HTMLDialogElement>(null);
 
   useEffect(() => {
     if (chefId === null) return;
@@ -89,7 +100,8 @@ export function ChefProfile() {
     if (chefId === null) return;
 
     try {
-      const updated = await patchJson<ChefResponse>(
+      const updated = await sendJson<ChefResponse>(
+        "PATCH",
         `http://localhost:8100/api/chef/${chefId}`,
         {name: tempName, email: tempEmail, phoneNumber: tempPhoneNumber}
       );
@@ -104,36 +116,72 @@ export function ChefProfile() {
     }
   }
 
+  const handleCreateAddressModal = () => {
+    setEditingAddressId(null);
+    setTempAddress(EMPTY_ADDRESS);
+    setTempVibe(EMPTY_VIBE);
+    editAddressDialogRef.current?.showModal();
+  };
+
   const handleEditAddressModal = (address: ChefAddress) => {
-    setTempAddress({...address});
+    setEditingAddressId(address.id);
+    setTempAddress({street: address.street, postalCode: address.postalCode, city: address.city});
     setTempVibe({...(address.homeVibe ?? EMPTY_VIBE)});
     editAddressDialogRef.current?.showModal();
   };
 
   const handleSaveAddress = async () => {
-    if (!tempAddress || chefId === null) return;
+    if (chefId === null) return;
+
+    const body = {...tempAddress, homeVibe: tempVibe};
 
     try {
-      const updated = await patchJson<ChefAddress>(
-        `http://localhost:8100/api/chef/address/${chefId}/${tempAddress.id}`,
-        {
-          street: tempAddress.street,
-          postalCode: tempAddress.postalCode,
-          city: tempAddress.city,
-          homeVibe: tempVibe,
-        }
-      );
-
-      setAddresses(prev => prev.map(a => (a.id === updated.id ? updated : a)));
-      toast.success("Updated address successfully");
+      if (editingAddressId === null) {
+        const allAddresses = await sendJson<ChefAddress[]>(
+          "POST",
+          `http://localhost:8100/api/chef/address/${chefId}`,
+          body
+        );
+        setAddresses(allAddresses);
+        toast.success("Created address successfully");
+      } else {
+        const updated = await sendJson<ChefAddress>(
+          "PATCH",
+          `http://localhost:8100/api/chef/address/${chefId}/${editingAddressId}`,
+          body
+        );
+        setAddresses(prev => prev.map(a => (a.id === updated.id ? updated : a)));
+        toast.success("Updated address successfully");
+      }
       editAddressDialogRef.current?.close();
     } catch (error) {
       toast.error(error instanceof Error ? error.message : "Something went wrong");
     }
   };
 
-  function updateTempAddress<K extends keyof ChefAddress>(field: K, value: ChefAddress[K]) {
-    setTempAddress(prev => (prev ? {...prev, [field]: value} : prev));
+  const handleDeactivateAddressModal = (address: ChefAddress) => {
+    setAddressToDeactivate(address);
+    deactivateAddressDialogRef.current?.showModal();
+  };
+
+  const handleDeactivateAddress = async () => {
+    if (!addressToDeactivate || chefId === null) return;
+
+    try {
+      await sendJson<ChefAddress>(
+        "PATCH",
+        `http://localhost:8100/api/chef/address/${chefId}/${addressToDeactivate.id}/deactivate`
+      );
+      setAddresses(prev => prev.filter(a => a.id !== addressToDeactivate.id));
+      toast.success("Address marked as inactive");
+      deactivateAddressDialogRef.current?.close();
+    } catch (error) {
+      toast.error(error instanceof Error ? error.message : "Something went wrong");
+    }
+  };
+
+  function updateTempAddress<K extends keyof AddressForm>(field: K, value: AddressForm[K]) {
+    setTempAddress(prev => ({...prev, [field]: value}));
   }
 
   function updateTempVibe<K extends keyof HomeVibe>(field: K, value: HomeVibe[K]) {
@@ -174,6 +222,12 @@ export function ChefProfile() {
 
             <div className={styles["vibe-section-header-banner"]}>
               <h1>Addresses</h1>
+              <button
+                className={styles["edit-profile-description-btn"]}
+                onClick={handleCreateAddressModal}
+              >
+                + Create address
+              </button>
             </div>
 
             {addresses.length === 0 && (
@@ -185,12 +239,20 @@ export function ChefProfile() {
               <div className={styles["contact-info"]} key={address.id}>
                 <div className={styles["vibe-section-header-banner"]}>
                   <h3>{address.street}</h3>
-                  <button
-                    className={styles["edit-profile-description-btn"]}
-                    onClick={() => handleEditAddressModal(address)}
-                  >
-                    Edit address
-                  </button>
+                  <div className={styles["address-btn-group"]}>
+                    <button
+                      className={styles["edit-profile-description-btn"]}
+                      onClick={() => handleEditAddressModal(address)}
+                    >
+                      Edit address
+                    </button>
+                    <button
+                      className={styles["deactivate-address-btn"]}
+                      onClick={() => handleDeactivateAddressModal(address)}
+                    >
+                      Mark as inactive
+                    </button>
+                  </div>
                 </div>
                 <ul className={styles["address-list"]}>
                   <li><strong>Street: </strong>{address.street}</li>
@@ -261,87 +323,108 @@ export function ChefProfile() {
           className={styles["edit-profile-dialog"]}
           ref={editAddressDialogRef}
         >
-          {tempAddress && (
-            <>
-              <div className={styles["modal-contact-details"]}>
-                <div>Street:</div>
+          <h2>{editingAddressId === null ? "Create new address" : "Edit address"}</h2>
+          <div className={styles["modal-contact-details"]}>
+            <div>Street:</div>
+            <input
+              type="text"
+              value={tempAddress.street}
+              onChange={(e) => updateTempAddress("street", e.target.value)}
+            />
+            <div>Postal Code:</div>
+            <input
+              type="text"
+              value={tempAddress.postalCode}
+              onChange={(e) => updateTempAddress("postalCode", e.target.value)}
+            />
+            <div>City:</div>
+            <input
+              type="text"
+              value={tempAddress.city}
+              onChange={(e) => updateTempAddress("city", e.target.value)}
+            />
+            <div>Description:</div>
+            <textarea
+              value={tempVibe.description}
+              onChange={(e) => updateTempVibe("description", e.target.value)}
+              maxLength={500}
+              rows={3}
+            />
+            <div>Music:</div>
+            <select
+              value={tempVibe.music}
+              onChange={(e) => updateTempVibe("music", e.target.value as Genre)}
+            >
+              {GENRES.map(genre => (
+                <option key={genre} value={genre}>{GENRE_LABELS[genre]}</option>
+              ))}
+            </select>
+            <div className={styles["home-description-container"]}>
+              <label className={styles["label-container"]}>
                 <input
-                  type="text"
-                  value={tempAddress.street}
-                  onChange={(e) => updateTempAddress("street", e.target.value)}
+                  type="checkbox"
+                  checked={tempVibe.pets}
+                  onChange={(e) => updateTempVibe("pets", e.target.checked)}
                 />
-                <div>Postal Code:</div>
+                Pets
+              </label>
+              <label className={styles["label-container"]}>
                 <input
-                  type="text"
-                  value={tempAddress.postalCode}
-                  onChange={(e) => updateTempAddress("postalCode", e.target.value)}
+                  type="checkbox"
+                  checked={tempVibe.outdoor}
+                  onChange={(e) => updateTempVibe("outdoor", e.target.checked)}
                 />
-                <div>City:</div>
+                Outdoor
+              </label>
+              <label className={styles["label-container"]}>
                 <input
-                  type="text"
-                  value={tempAddress.city}
-                  onChange={(e) => updateTempAddress("city", e.target.value)}
+                  type="checkbox"
+                  checked={tempVibe.familyFriendly}
+                  onChange={(e) => updateTempVibe("familyFriendly", e.target.checked)}
                 />
-                <div>Description:</div>
-                <textarea
-                  value={tempVibe.description}
-                  onChange={(e) => updateTempVibe("description", e.target.value)}
-                  maxLength={500}
-                  rows={3}
-                />
-                <div>Music:</div>
-                <select
-                  value={tempVibe.music}
-                  onChange={(e) => updateTempVibe("music", e.target.value as Genre)}
-                >
-                  {GENRES.map(genre => (
-                    <option key={genre} value={genre}>{GENRE_LABELS[genre]}</option>
-                  ))}
-                </select>
-                <div className={styles["home-description-container"]}>
-                  <label className={styles["label-container"]}>
-                    <input
-                      type="checkbox"
-                      checked={tempVibe.pets}
-                      onChange={(e) => updateTempVibe("pets", e.target.checked)}
-                    />
-                    Pets
-                  </label>
-                  <label className={styles["label-container"]}>
-                    <input
-                      type="checkbox"
-                      checked={tempVibe.outdoor}
-                      onChange={(e) => updateTempVibe("outdoor", e.target.checked)}
-                    />
-                    Outdoor
-                  </label>
-                  <label className={styles["label-container"]}>
-                    <input
-                      type="checkbox"
-                      checked={tempVibe.familyFriendly}
-                      onChange={(e) => updateTempVibe("familyFriendly", e.target.checked)}
-                    />
-                    Family Friendly
-                  </label>
-                </div>
-              </div>
-              <p>Save changes?</p>
-              <div className={styles["save-changes-box"]}>
-                <button
-                  className={styles["yes-btn"]}
-                  onClick={handleSaveAddress}
-                >
-                  Yes
-                </button>
-                <button
-                  className={styles["no-btn"]}
-                  onClick={() => editAddressDialogRef.current?.close()}
-                >
-                  No
-                </button>
-              </div>
-            </>
-          )}
+                Family Friendly
+              </label>
+            </div>
+          </div>
+          <p>{editingAddressId === null ? "Create address?" : "Save changes?"}</p>
+          <div className={styles["save-changes-box"]}>
+            <button
+              className={styles["yes-btn"]}
+              onClick={handleSaveAddress}
+            >
+              Yes
+            </button>
+            <button
+              className={styles["no-btn"]}
+              onClick={() => editAddressDialogRef.current?.close()}
+            >
+              No
+            </button>
+          </div>
+        </dialog>
+
+        <dialog
+          className={styles["edit-profile-dialog"]}
+          ref={deactivateAddressDialogRef}
+        >
+          <p>
+            Mark <strong>{addressToDeactivate?.street}</strong> as inactive?
+            It will no longer be shown on your profile.
+          </p>
+          <div className={styles["save-changes-box"]}>
+            <button
+              className={styles["yes-btn"]}
+              onClick={handleDeactivateAddress}
+            >
+              Yes
+            </button>
+            <button
+              className={styles["no-btn"]}
+              onClick={() => deactivateAddressDialogRef.current?.close()}
+            >
+              No
+            </button>
+          </div>
         </dialog>
       </div>
     </div>

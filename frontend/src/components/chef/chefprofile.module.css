@@ -127,3 +127,24 @@ Mid-blue: #99eeff
   font-weight: bold;
   color: #1d3b58;
 }
+
+.address-btn-group {
+  display: flex;
+}
+
+.deactivate-address-btn {
+  background-color: #ffb9b9;
+  color: #000000;
+  border: 1px solid #346739;
+  margin-right: 1rem;
+  padding: 0.6rem 1.2rem;
+  font-weight: bold;
+  font-size: 1rem;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.deactivate-address-btn:hover {
+  background-color: #ff7c7c;
+}
