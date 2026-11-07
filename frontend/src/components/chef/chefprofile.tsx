@@ -3,6 +3,7 @@ import styles from './chefprofile.module.css'
 import {Banner} from "../general/banner.tsx";
 import {useUserContext} from "../context/useUserContext.tsx";
 import {type ChefAddress, type ChefResponse, type ChefAddressWithDescription} from "../shared/chefinterface.ts";
+import toast from "react-hot-toast";
 
 async function patchJson<T>(url: string, body: unknown): Promise<T> {
   const res = await fetch(url, {
@@ -12,8 +13,8 @@ async function patchJson<T>(url: string, body: unknown): Promise<T> {
   });
 
   if (!res.ok) {
-    const errorBody: { message?: string } | null = await res.json().catch(() => null);
-    throw new Error(errorBody?.message ?? `Request failed: ${res.status}`);
+    const errorBody: { detail?: string } | null = await res.json().catch(() => null);
+    throw new Error(errorBody?.detail ?? `Request failed: ${res.status}`);
   }
 
   return res.json();
@@ -61,7 +62,7 @@ export function ChefProfile() {
           familyFriendly: false,
         })));
       } catch (error) {
-        console.log(error);
+        toast.error(error instanceof Error ? error.message : "Something went wrong");
       }
     }
 
@@ -87,9 +88,10 @@ export function ChefProfile() {
       setName(updated.name);
       setPhoneNumber(updated.phoneNumber);
       setEmail(updated.email);
+      toast.success("Updated contact info successfully");
       editProfileDialogRef.current?.close();
     } catch (error) {
-      alert("Fix some react-hot-toast: " + error.message);
+      toast.error(error instanceof Error ? error.message : "Something went wrong");
     }
 
 
@@ -110,9 +112,10 @@ export function ChefProfile() {
       );
 
       setAddresses(prev => prev.map(a => (a.id === updated.id ? {...a, ...updated} : a)));
+      toast.success("Updated address successfully");
       editAddressDialogRef.current?.close();
     } catch (error) {
-      alert("Fix some react-hot-toast: " + error.message);
+      toast.error(error instanceof Error ? error.message : "Something went wrong");
     }
   };
 
