@@ -77,20 +77,8 @@ public class ChefService {
         chef.setName(null);
         chef.setEmail(null);
         chef.setPhoneNumber(null);
-        chef.getAddresses().forEach(address -> address.setActive(false));
 
         return chefRepo.save(chef);
-    }
-
-
-    /* ADDRESS */
-    @Transactional
-    public List<Address> saveAddressToChef(Chef chef, Address address) {
-        chef.addAddress(address);
-        Chef savedChef = chefRepo.save(chef);
-        return savedChef.getAddresses().stream()
-                .filter(a -> Boolean.TRUE.equals(a.getActive()))
-                .toList();
     }
 
     /* VALIDATION */

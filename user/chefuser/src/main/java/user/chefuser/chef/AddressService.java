@@ -20,8 +20,11 @@ public class AddressService {
         this.dtoMapper = dtoMapper;
     }
 
-    public Address createAddressObject(Chef chef, SaveAddressDto dto) {
-        return dtoMapper.toAddressEntity(dto, chef);
+    @Transactional
+    public Address createAddress(Chef chef, SaveAddressDto dto) {
+        Address address = dtoMapper.toAddressEntity(dto, chef);
+        chef.addAddress(address);
+        return addressRepo.save(address);
     }
 
     @Transactional
@@ -49,10 +52,7 @@ public class AddressService {
             throw new BadRequestException(
                     String.format("Address with id: %d is already inactive", addressId), Map.of());
         }
-        address.setActive(false);
-        address.setStreet(null);
-        address.setPostalCode(null);
-        address.setCity(null);
+        anonymiseAddress(address);
         return addressRepo.save(address);
     }
 
@@ -74,4 +74,12 @@ public class AddressService {
         but we are not risking external dependencies
         on the exam
        */
+
+    /* UTILS */
+    public void anonymiseAddress(Address address) {
+        address.setActive(false);
+        address.setStreet(null);
+        address.setPostalCode(null);
+        address.setCity(null);
+    }
 }
