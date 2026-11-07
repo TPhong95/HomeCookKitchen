@@ -2,10 +2,8 @@ package user.chefuser.chef.mappers;
 
 import user.chefuser.chef.Chef;
 import user.chefuser.chef.Address;
-import user.chefuser.chef.dtos.ActiveAddressDto;
-import user.chefuser.chef.dtos.AddressResponseDto;
-import user.chefuser.chef.dtos.ChefResponseDto;
-import user.chefuser.chef.dtos.SaveAddressDto;
+import user.chefuser.chef.HomeVibe;
+import user.chefuser.chef.dtos.*;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -45,7 +43,7 @@ public class DtoMapper {
     // ADDRESS MAPPINGS //
     public ActiveAddressDto toActiveAddressDto(Address address, Long chefId) {
         return new ActiveAddressDto(address.getId(), address.getStreet(), address.getPostalCode(),
-                address.getCity(), address.getActive(), chefId);
+                address.getCity(), address.getActive(), chefId, toHomeVibeDto(address.getHomeVibe()));
     }
 
     public List<ActiveAddressDto> toActiveAddressDtoList(List<Address> addresses, Long chefId) {
@@ -67,7 +65,8 @@ public class DtoMapper {
                 address.getStreet(),
                 address.getPostalCode(),
                 address.getCity(),
-                chefId
+                chefId,
+                toHomeVibeDto(address.getHomeVibe())
         );
     }
 
@@ -75,5 +74,11 @@ public class DtoMapper {
         return addresses.stream()
                 .map(address -> toAddressResponseDto(address, chefId))
                 .toList();
+    }
+
+    public HomeVibeDto toHomeVibeDto(HomeVibe vibe) {
+        if (vibe == null) return null;
+        return new HomeVibeDto(vibe.getDescription(), vibe.getMusic(),
+                vibe.getPets(), vibe.getOutdoor(), vibe.getFamilyFriendly());
     }
 }

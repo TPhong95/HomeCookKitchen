@@ -41,7 +41,7 @@ public class AddressServiceTest {
     void createAddressObject_shouldCreateAddress() {
         Chef chef = new Chef();
         chef.setId(1L);
-        SaveAddressDto dto = new SaveAddressDto("Storgata 1", "0150", "Oslo");
+        SaveAddressDto dto = new SaveAddressDto("Storgata 1", "0150", "Oslo", null);
 
         Address mapped = new Address();
         mapped.setStreet("Storgata 1");
@@ -49,8 +49,9 @@ public class AddressServiceTest {
         mapped.setCity("Oslo");
         mapped.setChef(chef);
         when(dtoMapper.toAddressEntity(dto, chef)).thenReturn(mapped);
+        when(addressRepo.save(any(Address.class))).thenAnswer(i -> i.getArgument(0));
 
-        Address res = addressService.createAddressObject(chef, dto);
+        Address res = addressService.createAddress(chef, dto);
         assertNotNull(res);
         assertEquals("Storgata 1", res.getStreet());
         assertEquals("0150", res.getPostalCode());
@@ -76,7 +77,7 @@ public class AddressServiceTest {
         when(addressRepo.findByIdAndChefId(addressId, chefId)).thenReturn(Optional.of(address));
         when(addressRepo.save(any(Address.class))).thenAnswer(i -> i.getArgument(0));
 
-        SaveAddressDto dto = new SaveAddressDto("Lillegata 2", "5003", "Bergen");
+        SaveAddressDto dto = new SaveAddressDto("Lillegata 2", "5003", "Bergen", null);
 
         Address res = addressService.updateAddress(chefId, addressId, dto);
         assertNotNull(res);
@@ -89,7 +90,7 @@ public class AddressServiceTest {
     @Test
     void updateAddress_shouldThrowNotFound() {
         when(addressRepo.findByIdAndChefId(100L, 1L)).thenReturn(Optional.empty());
-        SaveAddressDto dto = new SaveAddressDto("Lillegata 2", "5003", "Bergen");
+        SaveAddressDto dto = new SaveAddressDto("Lillegata 2", "5003", "Bergen", null);
 
         AddressNotFoundException e = assertThrows(AddressNotFoundException.class,
                 () -> addressService.updateAddress(1L, 100L, dto));
@@ -102,7 +103,7 @@ public class AddressServiceTest {
         address.setId(5L);
         address.setActive(false);
         when(addressRepo.findByIdAndChefId(5L, 1L)).thenReturn(Optional.of(address));
-        SaveAddressDto dto = new SaveAddressDto("Lillegata 2", "5003", "Bergen");
+        SaveAddressDto dto = new SaveAddressDto("Lillegata 2", "5003", "Bergen", null);
 
         BadRequestException e = assertThrows(BadRequestException.class,
                 () -> addressService.updateAddress(1L, 5L, dto));
