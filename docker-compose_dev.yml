@@ -207,6 +207,12 @@ services:
       - consul
     networks:
       - m2026
+    healthcheck:
+      test: [ "CMD-SHELL", "wget -qO- http://localhost:8002/actuator/health || exit 1" ]
+      interval: 5s
+      timeout: 3s
+      retries: 20
+      start_period: 20s
 
 
   #CUSTOMER SERVICE & DB
@@ -241,6 +247,12 @@ services:
       - consul
     networks:
       - m2026
+    healthcheck:
+      test: [ "CMD-SHELL", "wget -qO- http://localhost:8003/actuator/health || exit 1" ]
+      interval: 5s
+      timeout: 3s
+      retries: 20
+      start_period: 20s
 
 
   # PURCHASE SERVICE & DB
@@ -276,6 +288,12 @@ services:
       - productlisting-service
     networks:
       - m2026
+    healthcheck:
+      test: [ "CMD-SHELL", "wget -qO- http://localhost:8011/actuator/health || exit 1" ]
+      interval: 5s
+      timeout: 3s
+      retries: 20
+      start_period: 20s
 
 
   #PRODUCT SERVICE & DB
@@ -312,6 +330,12 @@ services:
       - customer-service
     networks:
       - m2026
+    healthcheck:
+      test: [ "CMD-SHELL", "wget -qO- http://localhost:8006/actuator/health || exit 1" ]
+      interval: 5s
+      timeout: 3s
+      retries: 20
+      start_period: 20s
 
   postgres-recipe:
     image: postgres:17-alpine
@@ -343,14 +367,28 @@ services:
     depends_on:
       - postgres-recipe
       - chef-service
-
     networks:
       - m2026
+    healthcheck:
+      test: [ "CMD-SHELL", "wget -qO- http://localhost:8008/actuator/health || exit 1" ]
+      interval: 5s
+      timeout: 3s
+      retries: 20
+      start_period: 20s
+
   initdata:
     build: ./initdata
     depends_on:
+      chef-service:
+        condition: service_healthy
+      customer-service:
+        condition: service_healthy
+      recipe-service:
+        condition: service_healthy
+      productlisting-service:
+        condition: service_healthy
       purchase-service:
-        condition: service_started
+        condition: service_healthy
       gateway:
         condition: service_healthy
     restart: "no"
