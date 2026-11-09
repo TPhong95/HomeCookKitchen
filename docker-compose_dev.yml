@@ -1,0 +1,372 @@
+
+services:
+
+  #-------------Logging----------
+  elasticsearch:
+    image: docker.elastic.co/elasticsearch/elasticsearch:9.2.3
+    environment:
+      - discovery.type=single-node
+      - xpack.security.enabled=false
+      - ES_JAVA_OPTS=-Xms512m -Xmx512m
+    ports:
+      - "9200:9200"
+    networks:
+      - m2026
+    healthcheck:
+      test: [ "CMD-SHELL", "curl -fsS http://localhost:9200 >/dev/null" ]
+      interval: 10s
+      timeout: 5s
+      retries: 30
+
+  logstash:
+    image: docker.elastic.co/logstash/logstash:9.2.3
+    ports:
+      - "5000:5000"
+    volumes:
+      - ./logstash/pipeline:/usr/share/logstash/pipeline:ro
+    depends_on:
+      elasticsearch:
+        condition: service_healthy
+    networks:
+      - m2026
+
+  kibana:
+    image: docker.elastic.co/kibana/kibana:9.2.3
+    environment:
+      - ELASTICSEARCH_HOSTS=http://elasticsearch:9200
+    ports:
+      - "5601:5601"
+    depends_on:
+      elasticsearch:
+        condition: service_healthy
+    networks:
+      - m2026
+
+  #TaskScheduler
+  taskscheduler-service:
+    image: taskscheduler-service:0.0.1-SNAPSHOT
+    container_name: taskscheduler-service
+    build:
+      context: ./TaskScheduler
+    ports:
+      - "8020"
+    environment:
+      SPRING_CONFIG_IMPORT: "optional:consul:"
+      SPRING_CLOUD_CONSUL_HOST: "consul"
+      LOGSTASH_DESTINATION: logstash:5000
+    depends_on:
+      - consul
+    networks:
+      - m2026
+
+  #Kafka
+  kafka:
+    image: apache/kafka:4.3.2
+    container_name: kafka
+    ports:
+      - "9092:9092"
+    depends_on:
+      - consul
+    healthcheck:
+      test: [ "CMD", "/opt/kafka/bin/kafka-broker-api-versions.sh", "--bootstrap-server", "localhost:9092" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 15s
+    environment:
+      KAFKA_NODE_ID: 1
+      KAFKA_PROCESS_ROLES: broker,controller
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: CONTROLLER:PLAINTEXT,HOST:PLAINTEXT,DOCKER:PLAINTEXT
+      KAFKA_LISTENERS: CONTROLLER://:9091,HOST://:9092,DOCKER://:9093
+      KAFKA_ADVERTISED_LISTENERS: HOST://localhost:9092,DOCKER://kafka:9093
+      KAFKA_CONTROLLER_LISTENER_NAMES: CONTROLLER
+      KAFKA_CONTROLLER_QUORUM_VOTERS: 1@localhost:9091
+      KAFKA_INTER_BROKER_LISTENER_NAME: DOCKER
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+    networks:
+      - m2026
+
+  consul-register-kafka:
+    image: curlimages/curl:8.8.0
+    container_name: consul-register-kafka
+    depends_on:
+      - consul
+      - kafka
+    networks:
+      - m2026
+    restart: on-failure
+    command: >
+      sh -c "curl -s -X PUT http://consul:8500/v1/agent/service/register
+      -H 'Content-Type: application/json'
+      -d '{\"Name\": \"kafka\", \"Address\": \"kafka\", \"Port\": 9093}'"
+
+  kafbat-ui: #Kafka web GUI
+    image: docker.io/kafbat/kafka-ui:v1.5.0
+    container_name: kafbat-ui
+    ports:
+      - "8080:8080"
+    depends_on:
+      kafka:
+        condition: service_healthy
+    environment:
+      # Enable editing topics/messages within the web application interface
+      DYNAMIC_CONFIG_ENABLED: 'true'
+      # Configure the cluster connection pointing to the internal listener
+      KAFKA_CLUSTERS_0_NAME: 'local-kraft-cluster'
+      KAFKA_CLUSTERS_0_BOOTSTRAPSERVERS: 'kafka:9093'
+    networks:
+      - m2026
+    #(Add volumes to persist config later)
+
+  consul-register-kafbat:
+    image: curlimages/curl:8.8.0
+    container_name: consul-register-kafbat
+    depends_on:
+      - consul
+      - kafbat-ui
+    networks:
+      - m2026
+    restart: on-failure
+    command: >
+      sh -c "curl -s -X PUT http://consul:8500/v1/agent/service/register
+      -H 'Content-Type: application/json'
+      -d '{\"Name\": \"kafbat-ui\", \"Address\": \"kafbat-ui\", \"Port\": 8080}'"
+
+  #CONSUL
+  consul:
+    image: hashicorp/consul:2.0.0
+    container_name: consul
+    ports:
+      - "8500:8500"
+      - "8600:8600/udp"
+    command: agent -dev -node=m26 -client=0.0.0.0
+    networks:
+      - m2026
+
+  #GATEWAY
+  gateway:
+    image: gateway:0.0.1-SNAPSHOT
+    container_name: gateway
+    build:
+      context: ./gateway
+    environment:
+      SPRING_CONFIG_IMPORT: "optional:consul:"
+      SPRING_CLOUD_CONSUL_HOST: "consul"
+    ports:
+      - "8100:8100"
+    depends_on:
+      - consul
+    networks:
+      - m2026
+
+   #Frontend
+  frontend:
+    image: frontend:0.1
+    container_name: frontend
+    build:
+      context: ./frontend
+    ports:
+      - "5173:5173"
+    networks:
+      - m2026
+
+  #CHEF SERVICE & DB
+  postgres_chef:
+    image: postgres:17-alpine
+    container_name: postgres-chef
+    environment:
+      POSTGRES_DB: chefDB
+      POSTGRES_USER: username
+      POSTGRES_PASSWORD: password
+    ports:
+      - "5432:5432"
+    restart: no
+    networks:
+      - m2026
+
+  chef-service:
+    image: chef-service:0.0.1-SNAPSHOT
+    build:
+      context: ./user/chefuser
+    ports:
+      - "8002"
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres_chef:5432/chefDB
+      SPRING_DATASOURCE_USERNAME: username
+      SPRING_DATASOURCE_PASSWORD: password
+      SPRING_CONFIG_IMPORT: "optional:consul:"
+      SPRING_CLOUD_CONSUL_HOST: "consul"
+      LOGSTASH_DESTINATION: logstash:5000
+    depends_on:
+      - postgres_chef
+      - consul
+    healthcheck:
+      test: [ "CMD", "wget", "--spider", "-q", "http://localhost:8002/api/chef/1" ]
+      interval: 3s
+      timeout: 3s
+      retries: 60
+      start_period: 120s
+    networks:
+      - m2026
+
+
+  #CUSTOMER SERVICE & DB
+  postgres_customer:
+    image: postgres:17-alpine
+    container_name: postgres-customer
+    environment:
+      POSTGRES_DB: customerDB
+      POSTGRES_USER: username
+      POSTGRES_PASSWORD: password
+    ports:
+      - "5433:5432"
+    restart: no
+    networks:
+      - m2026
+
+  customer-service:
+    image: customer-service:0.0.1-SNAPSHOT
+    build:
+      context: ./user/customer
+    ports:
+      - "8003"
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres_customer:5432/customerDB
+      SPRING_DATASOURCE_USERNAME: username
+      SPRING_DATASOURCE_PASSWORD: password
+      SPRING_CONFIG_IMPORT: "optional:consul:"
+      SPRING_CLOUD_CONSUL_HOST: "consul"
+      LOGSTASH_DESTINATION: logstash:5000
+    depends_on:
+      - postgres_customer
+      - consul
+    networks:
+      - m2026
+
+
+  # PURCHASE SERVICE & DB
+  postgres_purchase:
+    image: postgres:17-alpine
+    container_name: postgres-purchase
+    environment:
+      POSTGRES_DB: purchaseDB
+      POSTGRES_USER: username
+      POSTGRES_PASSWORD: password
+    ports:
+      - "5435:5432"
+    restart: no
+    networks:
+      - m2026
+
+  purchase-service:
+    image: purchase-service:0.0.1-SNAPSHOT
+    build:
+      context: ./transactions/purchase
+    ports:
+      - "8011"
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres_purchase:5432/purchaseDB
+      SPRING_DATASOURCE_USERNAME: username
+      SPRING_DATASOURCE_PASSWORD: password
+      SPRING_CONFIG_IMPORT: "optional:consul:"
+      SPRING_CLOUD_CONSUL_HOST: "consul"
+      LOGSTASH_DESTINATION: logstash:5000
+    depends_on:
+      postgres_purchase:
+        condition: service_started
+      consul:
+        condition: service_started
+      productlisting-service:
+        condition: service_healthy
+    networks:
+      - m2026
+
+
+  #PRODUCT SERVICE & DB
+  postgres-productlisting:
+    image: postgres:17-alpine
+    container_name: postgres-productlistingDB
+    environment:
+      POSTGRES_DB: productlistingDB
+      POSTGRES_USER: username
+      POSTGRES_PASSWORD: password
+
+    ports:
+      - "5434:5432"
+    restart: no
+    networks:
+      - m2026
+
+  productlisting-service:
+    image: productlisting-service:0.0.1-SNAPSHOT
+    build:
+      context: ./product/productlisting
+    ports:
+      - "8006"
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres-productlisting:5432/productlistingDB
+      SPRING_DATASOURCE_USERNAME: username
+      SPRING_DATASOURCE_PASSWORD: password
+      SPRING_CONFIG_IMPORT: "optional:consul:"
+      SPRING_CLOUD_CONSUL_HOST: "consul"
+      LOGSTASH_DESTINATION: logstash:5000
+    depends_on:
+      postgres-productlisting:
+        condition: service_started
+      recipe-service:
+        condition: service_healthy
+      customer-service:
+        condition: service_started
+    networks:
+      - m2026
+    healthcheck:
+      test: ["CMD", "wget", "--spider", "-q", "http://localhost:8006/api/productListing/1"]
+      interval: 3s
+      timeout: 3s
+      retries: 60
+      start_period: 120s
+
+  postgres-recipe:
+    image: postgres:17-alpine
+    container_name: postgres-recipeDB
+    environment:
+      POSTGRES_DB: recipeDB
+      POSTGRES_USER: username
+      POSTGRES_PASSWORD: password
+
+    ports:
+      - "5436:5432"
+    restart: no
+    networks:
+      - m2026
+
+  recipe-service:
+    image: recipe-service:0.0.1-SNAPSHOT
+    build:
+      context: ./product/Recipe
+    ports:
+      - "8008"
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres-recipe:5432/recipeDB
+      SPRING_DATASOURCE_USERNAME: username
+      SPRING_DATASOURCE_PASSWORD: password
+      SPRING_CONFIG_IMPORT: "optional:consul:"
+      SPRING_CLOUD_CONSUL_HOST: "consul"
+      LOGSTASH_DESTINATION: logstash:5000
+    depends_on:
+      postgres-recipe:
+        condition: service_started
+      chef-service:
+        condition: service_healthy
+    healthcheck:
+      test: [ "CMD", "wget", "--spider", "-q", "http://localhost:8008/api/recipe/1" ]
+      interval: 3s
+      timeout: 3s
+      retries: 60
+      start_period: 120s
+    networks:
+      - m2026
+
+networks:
+  m2026:
+    driver: bridge
