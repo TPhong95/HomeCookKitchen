@@ -41,7 +41,6 @@ services:
         condition: service_healthy
     networks:
       - m2026
-
   #TaskScheduler
   taskscheduler-service:
     image: taskscheduler-service:0.0.1-SNAPSHOT
@@ -158,8 +157,14 @@ services:
       - consul
     networks:
       - m2026
+    healthcheck:
+      test: [ "CMD-SHELL", "wget -qO- http://localhost:8100/actuator/health || exit 1" ]
+      interval: 5s
+      timeout: 3s
+      retries: 20
+      start_period: 20s
 
-   #Frontend
+    #Frontend
   frontend:
     image: frontend:0.1
     container_name: frontend
@@ -200,14 +205,14 @@ services:
     depends_on:
       - postgres_chef
       - consul
-    healthcheck:
-      test: [ "CMD", "wget", "--spider", "-q", "http://localhost:8002/api/chef/1" ]
-      interval: 3s
-      timeout: 3s
-      retries: 60
-      start_period: 120s
     networks:
       - m2026
+    healthcheck:
+      test: [ "CMD-SHELL", "wget -qO- http://localhost:8002/actuator/health || exit 1" ]
+      interval: 5s
+      timeout: 3s
+      retries: 20
+      start_period: 20s
 
 
   #CUSTOMER SERVICE & DB
@@ -242,6 +247,12 @@ services:
       - consul
     networks:
       - m2026
+    healthcheck:
+      test: [ "CMD-SHELL", "wget -qO- http://localhost:8003/actuator/health || exit 1" ]
+      interval: 5s
+      timeout: 3s
+      retries: 20
+      start_period: 20s
 
 
   # PURCHASE SERVICE & DB
@@ -272,14 +283,17 @@ services:
       SPRING_CLOUD_CONSUL_HOST: "consul"
       LOGSTASH_DESTINATION: logstash:5000
     depends_on:
-      postgres_purchase:
-        condition: service_started
-      consul:
-        condition: service_started
-      productlisting-service:
-        condition: service_healthy
+      - postgres_purchase
+      - consul
+      - productlisting-service
     networks:
       - m2026
+    healthcheck:
+      test: [ "CMD-SHELL", "wget -qO- http://localhost:8011/actuator/health || exit 1" ]
+      interval: 5s
+      timeout: 3s
+      retries: 20
+      start_period: 20s
 
 
   #PRODUCT SERVICE & DB
@@ -311,20 +325,17 @@ services:
       SPRING_CLOUD_CONSUL_HOST: "consul"
       LOGSTASH_DESTINATION: logstash:5000
     depends_on:
-      postgres-productlisting:
-        condition: service_started
-      recipe-service:
-        condition: service_healthy
-      customer-service:
-        condition: service_started
+      - postgres-productlisting
+      - recipe-service
+      - customer-service
     networks:
       - m2026
     healthcheck:
-      test: ["CMD", "wget", "--spider", "-q", "http://localhost:8006/api/productListing/1"]
-      interval: 3s
+      test: [ "CMD-SHELL", "wget -qO- http://localhost:8006/actuator/health || exit 1" ]
+      interval: 5s
       timeout: 3s
-      retries: 60
-      start_period: 120s
+      retries: 20
+      start_period: 20s
 
   postgres-recipe:
     image: postgres:17-alpine
@@ -354,16 +365,33 @@ services:
       SPRING_CLOUD_CONSUL_HOST: "consul"
       LOGSTASH_DESTINATION: logstash:5000
     depends_on:
-      postgres-recipe:
-        condition: service_started
+      - postgres-recipe
+      - chef-service
+    networks:
+      - m2026
+    healthcheck:
+      test: [ "CMD-SHELL", "wget -qO- http://localhost:8008/actuator/health || exit 1" ]
+      interval: 5s
+      timeout: 3s
+      retries: 20
+      start_period: 20s
+
+  initdata:
+    build: ./initdata
+    depends_on:
       chef-service:
         condition: service_healthy
-    healthcheck:
-      test: [ "CMD", "wget", "--spider", "-q", "http://localhost:8008/api/recipe/1" ]
-      interval: 3s
-      timeout: 3s
-      retries: 60
-      start_period: 120s
+      customer-service:
+        condition: service_healthy
+      recipe-service:
+        condition: service_healthy
+      productlisting-service:
+        condition: service_healthy
+      purchase-service:
+        condition: service_healthy
+      gateway:
+        condition: service_healthy
+    restart: "no"
     networks:
       - m2026
 
