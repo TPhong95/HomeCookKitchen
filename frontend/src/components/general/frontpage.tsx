@@ -8,29 +8,46 @@ interface ExistingChef {
   name: string;
 }
 
+interface ExistingCustomer {
+  customerId: number;
+  name: string;
+}
+
 export function FrontPage() {
   const {login} = useUserContext();
 
   const navigate = useNavigate();
 
   const [existingChefs, setExistingChefs] = useState<ExistingChef[]>([]);
+  const [existingCustomers, setExistingCustomers] = useState<ExistingCustomer[]>([]);
   const [selectedChefId, setSelectedChefId] = useState<number | "">("");
+  const [selectedCustomerId, setSelectedCustomerId] = useState<number | "">("");
 
   useEffect(() => {
     async function loadExistingUsers() {
       try {
         const [
           chefRes,
-          /* customerRes, */
+          customerRes,
         ] = await Promise.all([
           fetch("http://localhost:8100/api/chef"),
-          /* fetch("http://localhost:8100/api/customer/all") */
+          fetch("http://localhost:8100/api/customer/all"),
         ]);
 
-        if (!chefRes.ok) throw new Error(`Chef request failed: ${chefRes.status}`);
+        if (chefRes.ok) {
+          const chefData: ExistingChef[] = await chefRes.json();
+          setExistingChefs(chefData.map(chef => ({id: chef.id, name: chef.name})));
+        } else {
+          console.log(`Chef request failed: ${chefRes.status}`);
+        }
 
-        const chefData: ExistingChef[] = await chefRes.json();
-        setExistingChefs(chefData.map(chef => ({id: chef.id, name: chef.name})));
+        if (customerRes.ok) {
+          const customerData: ExistingCustomer[] = await customerRes.json();
+          setExistingCustomers(customerData.map(customer => ({customerId: customer.customerId, name: customer.name})));
+        } else {
+          console.log(`Customer request failed: ${customerRes.status}`);
+        }
+
       } catch (error) {
         console.log(error);
       }
@@ -45,17 +62,24 @@ export function FrontPage() {
     navigate("/user/chef/profile");
   }
 
+  function handleLoginWithExistingCustomer() {
+    if (selectedCustomerId === "") return;
+    login({id: selectedCustomerId, role: "customer"});
+    navigate("/user/customer/profile");
+  }
+
   return (
     <div className={styles["frontpage-wrapper"]}>
       <div className={styles["frontpage-top-banner"]}>
         <h1>Test landing page</h1>
       </div>
       <div className={styles["frontpage-description"]}>
-        <p>The purpose of this page is to allow the user three options:</p>
+        <p>The purpose of this page is to allow the user four options:</p>
         <ol>
           <li>Log in with an existing chef</li>
-          <li>Log in with an existing customer (not yet implemented)</li>
+          <li>Log in with an existing customer</li>
           <li>Creating own user (not yet implemented)</li>
+          <li>Logging in with personal user (not yet implemented)</li>
         </ol>
       </div>
       <div className={styles["existing-user-wrapper"]}>
@@ -80,11 +104,23 @@ export function FrontPage() {
         </div>
         <div className={`${styles["existing-user-box"]} ${styles["existing-customer-box"]}`}>
           <h2 className={styles["user-title"]}>Customer</h2>
-          <select disabled>
-            <option value={""}>(not implemented)</option>
+          <select
+            value={selectedCustomerId}
+            onChange={(e) => setSelectedCustomerId(e.target.value ? Number(e.target.value) : "")}
+          >
+            <option value={""}>
+              {existingCustomers.length === 0 ? "-- No customers found --" : "-- Select a customer --"}
+            </option>
+            {existingCustomers.map((c: ExistingCustomer) => (
+              <option key={c.customerId} value={c.customerId}>{c.name}</option>
+            ))}
           </select>
-          <button className={styles["login-btn"]} disabled>
-            Login with customer (not yet)
+          <button
+            className={styles["login-btn"]}
+            onClick={handleLoginWithExistingCustomer}
+            disabled={selectedCustomerId === ""}
+          >
+            Login with customer
           </button>
         </div>
       </div>
