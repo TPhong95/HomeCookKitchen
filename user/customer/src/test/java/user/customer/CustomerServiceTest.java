@@ -7,7 +7,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import user.customer.exception.BadRequestException.BadRequestException;
 import user.customer.exception.NotFoundException.CustomerNotFoundException;
-import user.customer.exception.DuplicateEmailException;
+import user.customer.exception.DuplicateException.DuplicateEmailException;
 
 import java.util.List;
 import java.util.Optional;
@@ -105,10 +105,6 @@ public class CustomerServiceTest {
     @Test
     void updateCustomer_shouldThrowBadRequestWhenInfoIsMissing() {
         CustomerDTO dto = new CustomerDTO("", "email@mail.com"); // Empty name
-        Customer existingCustomer = new Customer("Old", "old@mail.com");
-
-        when(customerRepo.findById(1L)).thenReturn(Optional.of(existingCustomer));
 
         assertThrows(BadRequestException.class, () -> customerService.updateCustomer(1L, dto));
-    }
-}
+    }}
