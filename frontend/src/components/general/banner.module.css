@@ -58,3 +58,26 @@
   object-fit: cover;
 }
 
+.logout-container {
+  padding: 1rem;
+}
+
+.logout-btn {
+  background-color: #0a4c86;
+  color: #ffffff;
+  border: none;
+  padding: 0.6rem 1rem;
+  border-radius: 4px;
+  cursor: pointer;
+  font-weight: bold;
+  font-size: 0.85rem;
+  width: 100%;
+  transition: background-color 0.2s;
+}
+
+.banner-sidebar.customer .logout-btn {
+  background-color: #79AE6F;
+  color: #346739;
+  border: 1px solid #F2EDC2;
+}
+

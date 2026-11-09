@@ -1,11 +1,11 @@
-import {NavLink} from "react-router-dom";
-import {useState} from "react";
+import {NavLink, useNavigate} from "react-router-dom";
 import styles from "./banner.module.css";
+import {useUserContext} from "../context/useUserContext.tsx";
 
 export function Banner() {
-  /* When we hook this up to UserContext, we can replace the code below with this
-  * const { role } = useUserContext() */
-  const [role, setRole] = useState<"chef" | "customer">("chef");
+  const {user, logout} = useUserContext();
+  const navigate = useNavigate();
+  const role = user?.role ?? null;
 
   const chefNavigation = [
     { link: "/", text: "Home" },
@@ -23,10 +23,19 @@ export function Banner() {
     { link: "/user/customer/history", text: "History" },
   ]
 
-  const navigation = role === "chef" ? chefNavigation : customerNavigation;
+  // [NEW] Shown when nobody is logged in
+  const loggedOutNavigation = [
+    { link: "/", text: "Home" },
+  ]
 
-  const toggleRole = () => {
-    setRole(prev => (prev === "chef" ? "customer" : "chef"));
+  const navigation =
+    role === "chef" ? chefNavigation
+      : role === "customer" ? customerNavigation
+        : loggedOutNavigation;
+
+  const handleLogout = () => {
+    logout();
+    navigate("/");
   }
 
   // Note that NavLink is used if we want to highlight which page we are on (for future styling)
@@ -37,40 +46,30 @@ export function Banner() {
         <img src="../../../testdata/profilepic.jpg" alt={"profile picture goes here"}/>
       </div>
       <div className={styles["nav-container"]}>
-      <ul>
-        {navigation.map((nav) => (
-          <li
-            className={styles["list-item"]}
-            key={nav.text}
-          >
-            <NavLink to={nav.link}>
-              {nav.text}
-            </NavLink>
-          </li>
-        ))}
-      </ul>
+        <ul>
+          {navigation.map((nav) => (
+            <li
+              className={styles["list-item"]}
+              key={nav.text}
+            >
+              <NavLink to={nav.link}>
+                {nav.text}
+              </NavLink>
+            </li>
+          ))}
+        </ul>
       </div>
 
-      {/* // FIX This is a debugger function, styling doesn't belong here either, but I am avoiding dead code in CSS */}
-      <div style={{ padding: "1rem", marginTop: "auto" }}>
-        <button
-          onClick={toggleRole}
-          style={{
-            backgroundColor: role === "chef" ? "#0a4c86" : "#79AE6F",
-            color: role === "chef" ? "#ffffff" : "#346739",
-            border: role === "chef" ? "none" : "1px solid #F2EDC2",
-            padding: "0.6rem 1rem",
-            borderRadius: "4px",
-            cursor: "pointer",
-            fontWeight: "bold",
-            fontSize: "0.85rem",
-            width: "100%",
-            transition: "background-color 0.2s"
-          }}
-        >
-          {role === "chef" ? "👨‍🍳 Chef" : "🛒 Customer"}
-        </button>
-      </div>
+      {user && (
+        <div className={styles["logout-container"]}>
+          <button
+            className={styles["logout-btn"]}
+            onClick={handleLogout}
+          >
+            Log out
+          </button>
+        </div>
+      )}
     </div>
   )
 }
