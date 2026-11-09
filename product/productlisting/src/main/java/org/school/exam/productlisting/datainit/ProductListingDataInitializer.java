@@ -33,7 +33,7 @@ public class ProductListingDataInitializer implements CommandLineRunner {
             CreateProductListingDTO productListing2 = new CreateProductListingDTO(2L, 2L, true, 30, 20.00f, LocalDateTime.now().plusHours(1), LocalDateTime.now().plusHours(2));
             ProductListing savedProductListing2 = orchestrationService.createProductListing(productListing2);
 
-            CreateProductListingDTO productListing3 = new CreateProductListingDTO(3L, 3L, true, 15, 4.99f, LocalDateTime.now().plusMinutes(1), LocalDateTime.now().plusHours(2));
+            CreateProductListingDTO productListing3 = new CreateProductListingDTO(3L, 3L, true, 15, 4.99f, LocalDateTime.now().plusMinutes(4), LocalDateTime.now().plusHours(2));
             ProductListing savedProductListing3 = orchestrationService.createProductListing(productListing3);
 
             CreateProductListingDTO productListing4 = new CreateProductListingDTO(4L, 4L, true, 22, 24.99f, LocalDateTime.now().plusHours(1), LocalDateTime.now().plusHours(2));

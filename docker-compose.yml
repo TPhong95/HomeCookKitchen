@@ -266,9 +266,12 @@ services:
       SPRING_CLOUD_CONSUL_HOST: "consul"
       LOGSTASH_DESTINATION: logstash:5000
     depends_on:
-      - postgres_purchase
-      - consul
-      - productlisting-service
+      postgres_purchase:
+        condition: service_started
+      consul:
+        condition: service_started
+      productlisting-service:
+        condition: service_healthy
     networks:
       - m2026
 
@@ -307,6 +310,12 @@ services:
       - customer-service
     networks:
       - m2026
+    healthcheck:
+      test: ["CMD", "wget", "--spider", "-q", "http://localhost:8006/api/productListing/1"]
+      interval: 5s
+      timeout: 3s
+      retries: 30
+      start_period: 20s
 
   postgres-recipe:
     image: postgres:17-alpine
