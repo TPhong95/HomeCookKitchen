@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 import user.customer.exception.BadRequestException.BadRequestException;
 import user.customer.exception.NotFoundException.CustomerNotFoundException;
 import user.customer.exception.NotFoundException.NotFoundException;
+import user.customer.exception.DuplicateException.*;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -60,5 +61,24 @@ public class ErrorHandler {
         ProblemDetail problem = ProblemDetail.forStatusAndDetail(HttpStatus.NOT_FOUND, e.getMessage());
         problem.setTitle("404 Not found");
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(problem);
+    }
+
+    //========== 409 CONFLICT ==========
+
+    @ExceptionHandler({
+            DuplicateEmailException.class
+    })
+    public ResponseEntity<ProblemDetail> handleDuplicateEmailException(DuplicateEmailException e, HttpServletRequest request) {
+        Map<String, Object> fields = new LinkedHashMap<>();
+
+        fields.put("status", 409);
+        fields.put("path", request.getRequestURI());
+        fields.put("exception", e.getClass().getSimpleName());
+
+        log.error("409 Conflict error: {}", e.getMessage(), entries(fields));
+
+        ProblemDetail problem = ProblemDetail.forStatusAndDetail(HttpStatus.CONFLICT, e.getMessage());
+        problem.setTitle("409 Conflict");
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(problem);
     }
 }
