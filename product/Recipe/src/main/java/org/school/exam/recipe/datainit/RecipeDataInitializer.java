@@ -1,3 +1,4 @@
+/*
 package org.school.exam.recipe.datainit;
 
 import org.school.exam.recipe.Recipe;
@@ -48,3 +49,4 @@ public class RecipeDataInitializer implements CommandLineRunner {
         }
     }
 }
+*/
