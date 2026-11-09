@@ -16,9 +16,9 @@ public class RecipeController {
         this.recipeService = recipeService;
     }
 
-    @GetMapping("/all")
-    public ResponseEntity<List<Recipe>> getAllRecipes() {
-        return ResponseEntity.ok(recipeService.getAllRecipes());
+    @GetMapping("/chef/{chefId}")
+    public ResponseEntity<List<Recipe>> getRecipesByChef(@PathVariable Long chefId) {
+        return ResponseEntity.ok(recipeService.getRecipesByChef(chefId));
     }
 
     @GetMapping("/{id}")

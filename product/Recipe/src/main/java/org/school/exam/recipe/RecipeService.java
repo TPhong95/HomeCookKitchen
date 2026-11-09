@@ -14,14 +14,6 @@ import java.util.Map;
 public class RecipeService {
     private final RecipeRepo recipeRepo;
 
-    public List<Recipe> getAllRecipes(){
-        List<Recipe> recipes = recipeRepo.findAll();
-        if (recipes.isEmpty()){
-            throw new RecipeNotFoundException("No recipe(s) found", Map.of());
-        }
-        return recipes;
-    }
-
     public Recipe getRecipeById(Long id){
         Recipe recipe = recipeRepo.findById(id).orElse(null);
         if (recipe == null){
@@ -38,7 +30,7 @@ public class RecipeService {
         }
         Recipe recipe =
                 new Recipe(
-                        DTO.cookId(), DTO.name(), DTO.active(), DTO.pictureId(),
+                        DTO.cookId(), DTO.name(), DTO.active(), DTO.pictureUrl(), DTO.description(),
                         DTO.instanceOf(), DTO.foodCategory(), DTO.gluten(), DTO.crustaceans(),
                         DTO.egg(), DTO.fish(), DTO.peanuts(), DTO.soybeans(), DTO.milk(),
                         DTO.nuts(), DTO.celery(), DTO.mustard(), DTO.sesame(), DTO.sulfites(),
@@ -48,16 +40,35 @@ public class RecipeService {
     }
 
     public Recipe updateRecipe(Long id, CreateRecipeDTO DTO){
-        Recipe recipe = recipeRepo.findById(id).orElse(null);
-        if (recipe == null){
-            throw new RecipeNotFoundException("No recipe with id " + id + " found", Map.of());
+        Recipe recipe = recipeRepo.findById(id).orElseThrow(
+                () -> new RecipeNotFoundException("No recipe with id " + id + " found", Map.of()));
+        if (DTO.name() == null || DTO.name().isEmpty()){
+            throw new BadRequestException("Name is required", Map.of());
         }
-        if (!DTO.name().equals(recipe.getRecipeName())){
-            recipe.setRecipeName(DTO.name());
-        }
-        if (!(DTO.cookId() == recipe.getCookId())){
-            recipe.setCookId(DTO.cookId());
-        }
+        recipe.setRecipeName(DTO.name());
+        recipe.setActive(DTO.active());
+        recipe.setPictureUrl(DTO.pictureUrl());
+        recipe.setDescription(DTO.description());
+        recipe.setInstanceOf(DTO.instanceOf());
+        recipe.setFoodCategory(DTO.foodCategory());
+        recipe.setGluten(DTO.gluten());
+        recipe.setCrustaceans(DTO.crustaceans());
+        recipe.setEgg(DTO.egg());
+        recipe.setFish(DTO.fish());
+        recipe.setPeanuts(DTO.peanuts());
+        recipe.setSoybeans(DTO.soybeans());
+        recipe.setMilk(DTO.milk());
+        recipe.setNuts(DTO.nuts());
+        recipe.setCelery(DTO.celery());
+        recipe.setMustard(DTO.mustard());
+        recipe.setSesame(DTO.sesame());
+        recipe.setSulfites(DTO.sulfites());
+        recipe.setLupin(DTO.lupin());
+        recipe.setMolluscs(DTO.molluscs());
         return recipeRepo.save(recipe);
+    }
+
+    public List<Recipe> getRecipesByChef(Long chefId) {
+        return recipeRepo.findByCookId(chefId);
     }
 }
