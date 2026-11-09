@@ -1,0 +1,17 @@
+[
+  {
+    "key": "config/",
+    "flags": 0,
+    "value": ""
+  },
+  {
+    "key": "config/application/",
+    "flags": 0,
+    "value": ""
+  },
+  {
+    "key": "config/application/data",
+    "flags": 0,
+    "value": "c3ByaW5nOgogIGNsb3VkOgogICAgY29uc3VsOgogICAgICBkaXNjb3Zlcnk6CiAgICAgICAgcHJlZmVyLWlwLWFkZHJlc3M6IHRydWUKICAgICAgICBpbnN0YW5jZS1pZDogJHtzcHJpbmcuYXBwbGljYXRpb24ubmFtZX0tJHtyYW5kb20udmFsdWV9Cg=="
+  }
+]

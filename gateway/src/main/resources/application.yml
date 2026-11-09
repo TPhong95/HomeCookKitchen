@@ -10,6 +10,8 @@ spring:
     consul:
       host: consul
       port: 8500
+      config:
+        format: YAML
     gateway:
       server:
         webflux:
