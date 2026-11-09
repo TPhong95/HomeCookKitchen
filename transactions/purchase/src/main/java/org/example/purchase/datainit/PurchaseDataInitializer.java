@@ -1,3 +1,4 @@
+/*
 package org.example.purchase.datainit;
 
 import org.example.purchase.event.PurchaseEventDto;
@@ -51,3 +52,4 @@ public class PurchaseDataInitializer implements CommandLineRunner {
         }
     }
 }
+*/
