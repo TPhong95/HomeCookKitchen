@@ -200,6 +200,12 @@ services:
     depends_on:
       - postgres_chef
       - consul
+    healthcheck:
+      test: [ "CMD", "wget", "--spider", "-q", "http://localhost:8002/api/chef/1" ]
+      interval: 3s
+      timeout: 3s
+      retries: 60
+      start_period: 120s
     networks:
       - m2026
 
@@ -305,17 +311,20 @@ services:
       SPRING_CLOUD_CONSUL_HOST: "consul"
       LOGSTASH_DESTINATION: logstash:5000
     depends_on:
-      - postgres-productlisting
-      - recipe-service
-      - customer-service
+      postgres-productlisting:
+        condition: service_started
+      recipe-service:
+        condition: service_healthy
+      customer-service:
+        condition: service_started
     networks:
       - m2026
     healthcheck:
       test: ["CMD", "wget", "--spider", "-q", "http://localhost:8006/api/productListing/1"]
-      interval: 5s
+      interval: 3s
       timeout: 3s
-      retries: 30
-      start_period: 20s
+      retries: 60
+      start_period: 120s
 
   postgres-recipe:
     image: postgres:17-alpine
@@ -345,8 +354,16 @@ services:
       SPRING_CLOUD_CONSUL_HOST: "consul"
       LOGSTASH_DESTINATION: logstash:5000
     depends_on:
-      - postgres-recipe
-      - chef-service
+      postgres-recipe:
+        condition: service_started
+      chef-service:
+        condition: service_healthy
+    healthcheck:
+      test: [ "CMD", "wget", "--spider", "-q", "http://localhost:8008/api/recipe/1" ]
+      interval: 3s
+      timeout: 3s
+      retries: 60
+      start_period: 120s
     networks:
       - m2026
 
