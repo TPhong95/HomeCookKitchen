@@ -1,38 +1,75 @@
-import {useRef, useState} from "react";
+import {useEffect, useRef, useState} from "react";
 import styles from './customerprofile.module.css'
 import {Banner} from "../general/banner.tsx";
+import {useUserContext} from "../context/useUserContext.tsx";
+import {sendJson} from "../util/api.ts";
+import toast from "react-hot-toast";
+
+interface CustomerResponse {
+  id: number;
+  name: string;
+  email: string;
+}
 
 export function CustomerProfile() {
+  const {user} = useUserContext();
+  const customerId = user?.role === "customer" ? user.id : null;
+
   // Main values
   const [name, setName] = useState("");
-  const [street, setStreet] = useState("");
-  const [postalCode, setPostalCode] = useState("");
   const [email, setEmail] = useState("");
 
   // Temporary values for editing
   const [tempName, setTempName] = useState("");
-  const [tempStreet, setTempStreet] = useState("");
-  const [tempPostalCode, setTempPostalCode] = useState("");
   const [tempEmail, setTempEmail] = useState("");
 
   // Modals
   const editProfileDialogRef = useRef<HTMLDialogElement>(null);
 
+  useEffect(() => {
+    if (customerId === null) return;
+
+    async function loadCustomer(id: number) {
+      try {
+        const res = await fetch(`http://localhost:8100/api/customer/${id}`);
+        if (!res.ok) throw new Error(`Customer request failed: ${res.status}`);
+
+        const customer: CustomerResponse = await res.json();
+
+        setName(customer.name);
+        setEmail(customer.email);
+      } catch (error) {
+        toast.error(error instanceof Error ? error.message : "Something went wrong");
+      }
+    }
+
+    loadCustomer(customerId);
+  }, [customerId]);
+
   const handleEditProfileModal = () => {
     setTempName(name);
-    setTempStreet(street);
-    setTempPostalCode(postalCode);
     setTempEmail(email);
 
     editProfileDialogRef.current?.showModal();
   };
 
-  function handleSaveChanges() {
-    setName(tempName);
-    setStreet(tempStreet);
-    setPostalCode(tempPostalCode);
-    setEmail(tempEmail);
-    editProfileDialogRef.current?.close();
+  async function handleSaveChanges() {
+    if (customerId === null) return;
+
+    try {
+      const updated = await sendJson<CustomerResponse>(
+        "PATCH",
+        `http://localhost:8100/api/customer/${customerId}`,
+        {name: tempName, email: tempEmail}
+      );
+
+      setName(updated.name);
+      setEmail(updated.email);
+      toast.success("Updated contact info successfully");
+      editProfileDialogRef.current?.close();
+    } catch (error) {
+      toast.error(error instanceof Error ? error.message : "Something went wrong");
+    }
   }
 
   return (
@@ -46,24 +83,28 @@ export function CustomerProfile() {
           )}
 
         </div>
-        <div className={styles["vibe-section-header-banner"]}>
-          <h1>Contact Info</h1>
-          <button
-            className={styles["edit-profile-description-btn"]}
-            onClick={handleEditProfileModal}
-          >
-            Edit contact info
-          </button>
-        </div>
-        <div className={styles["contact-info"]}>
-          <p><strong>Name: </strong>{name}</p>
-          <p><strong>Address:</strong></p>
-          <ul className={styles["address-list"]}>
-            <li><strong>Street: </strong>{street}</li>
-            <li><strong>Postcode: </strong>{postalCode}</li>
-          </ul>
-          <p><strong>Email: </strong>{email}</p>
-        </div>
+
+        {customerId === null ? (
+          <div className={styles["contact-info"]}>
+            <p>Not logged in as a customer. Pick a customer on the front page.</p>
+          </div>
+        ) : (
+          <>
+            <div className={styles["vibe-section-header-banner"]}>
+              <h1>Contact Info</h1>
+              <button
+                className={styles["edit-profile-description-btn"]}
+                onClick={handleEditProfileModal}
+              >
+                Edit contact info
+              </button>
+            </div>
+            <div className={styles["contact-info"]}>
+              <p><strong>Name: </strong>{name}</p>
+              <p><strong>Email: </strong>{email}</p>
+            </div>
+          </>
+        )}
 
         <dialog
           className={styles["edit-profile-dialog"]}
@@ -75,18 +116,6 @@ export function CustomerProfile() {
               type="text"
               value={tempName}
               onChange={(e) => setTempName(e.target.value)}
-            />
-            <div>Street:</div>
-            <input
-              type="text"
-              value={tempStreet}
-              onChange={(e) => setTempStreet(e.target.value)}
-            />
-            <div>Postal Code:</div>
-            <input
-              type="text"
-              value={tempPostalCode}
-              onChange={(e) => setTempPostalCode(e.target.value)}
             />
             <div>Email:</div>
             <input
