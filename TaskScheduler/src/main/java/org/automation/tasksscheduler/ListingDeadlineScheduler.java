@@ -10,10 +10,10 @@ import java.util.List;
 
 @Slf4j
 @Service
-public class TaskScheduler {
+public class ListingDeadlineScheduler {
     private final ListingClient listingClient;
 
-    public TaskScheduler(ListingClient listingClient) {
+    public ListingDeadlineScheduler(ListingClient listingClient) {
         this.listingClient = listingClient;
     }
 

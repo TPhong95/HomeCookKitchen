@@ -1,10 +1,14 @@
 spring:
   application:
     name: TaskScheduler
+  config:
+    import: "optional:consul:"
   cloud:
     consul:
       host: consul
       port: 8500
+      config:
+        format: YAML
 server:
   port: 8020
 management:
