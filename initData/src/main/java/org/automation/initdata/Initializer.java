@@ -1,6 +1,7 @@
-package org.automation.initdata.dtos;
+package org.automation.initdata;
 
 import org.automation.initdata.client.*;
+import org.automation.initdata.dtos.*;
 import org.automation.initdata.enums.Genre;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
@@ -89,24 +90,28 @@ public class Initializer implements CommandLineRunner {
         customerClient.createCustomer(customer5);
 
         //RECIPE
-
-        CreateRecipeDTO recipe1 = new CreateRecipeDTO(1L, "Soup", true, 0L, 0L, ASIAN,
+        String pictureUrl1 = "https://www.thespruceeats.com/thmb/XRUmww4wwE88XXKd4-6HnFYm6ME=/750x0/filters:no_upscale():max_bytes(150000):strip_icc():focal(3119x0:3121x2):format(webp)/easy-and-hearty-vegetable-soup-99538-hero-01-1d3b936ff03144af95ddca7640259c11.jpg";
+        CreateRecipeDTO recipe1 = new CreateRecipeDTO(1L, "Soup", true, pictureUrl1, "This is canned soup",0L, ASIAN,
                 false, true, false, true, false, true, false, false, false, false, false, false, false, true);
         recipeClient.createRecipe(recipe1);
 
-        CreateRecipeDTO recipe2 = new CreateRecipeDTO(2L, "Burger", true, 0L, 0L, BURGER,
+        String pictureUrl2 = "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT80AylpKjDlZPtVgeSuEIhNYdrSbi501NoLft80xV-aK5BRCfcqNSIDtxI1zpc-o-RVsafSwDV8GpEweFrzYjz87vXOM8hYt4XtlPMouf4wQ&s=10";
+        CreateRecipeDTO recipe2 = new CreateRecipeDTO(2L, "Burger", true, pictureUrl2, "This is without cheese", 0L, BURGER,
                 true, true, false, false, false, false, false, false, false, false, false, false, false, false);
         recipeClient.createRecipe(recipe2);
 
-        CreateRecipeDTO recipe3 = new CreateRecipeDTO(3L, "Noodles", true, 0L, 0L, UNDEFINED,
+        String pictureUrl3 = "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSAt49Jy6aKOME_xegYQErf2wqevYOPbzBit3VNYISfUw2Lb_GbCWMyg0vLhloR_QiNxAz9FHSxOku2iNJmETRiBqisrNYmA18aLPXNw9ldEw&s=10";
+        CreateRecipeDTO recipe3 = new CreateRecipeDTO(3L, "Noodles", true, pictureUrl3, "Cup noodles", 0L, UNDEFINED,
                 false, true, false, true, false, true, false, false, false, false, false, false, false, true);
         recipeClient.createRecipe(recipe3);
 
-        CreateRecipeDTO recipe4 = new CreateRecipeDTO(4L, "Spaghetti", true, 0L, 0L, UNDEFINED,
+        String pictureUrl4 = "https://www.allrecipes.com/thmb/DZLFEwAZT2vRyo9-XjzUoALJFyI=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc()/19356-spaghetti-italian-VAT-Beauty-4x3-af05b7565e014c16b1c5f86d45a18738.jpg";
+        CreateRecipeDTO recipe4 = new CreateRecipeDTO(4L, "Spaghetti", true, pictureUrl4, "Looks like coding", 0L, UNDEFINED,
                 false, true, false, true, false, true, false, false, false, false, false, false, false, true);
         recipeClient.createRecipe(recipe4);
 
-        CreateRecipeDTO recipe5 = new CreateRecipeDTO(1L, "Salad", true, 0L, 0L, UNDEFINED,
+        String pictureUrl5 = "https://cdn.loveandlemons.com/wp-content/uploads/2024/12/caesar-salad-500x500.jpg";
+        CreateRecipeDTO recipe5 = new CreateRecipeDTO(1L, "Salad", true, pictureUrl5, "Healthy kind", 0L, UNDEFINED,
                 false, true, false, true, false, true, false, false, false, false, false, false, false, true);
         recipeClient.createRecipe(recipe5);
 
