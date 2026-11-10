@@ -1,45 +1,5 @@
 services:
 
-  #-------------Logging----------
-  elasticsearch:
-    image: docker.elastic.co/elasticsearch/elasticsearch:9.2.3
-    environment:
-      - discovery.type=single-node
-      - xpack.security.enabled=false
-      - ES_JAVA_OPTS=-Xms512m -Xmx512m
-    ports:
-      - "9200:9200"
-    networks:
-      - m2026
-    healthcheck:
-      test: [ "CMD-SHELL", "curl -fsS http://localhost:9200 >/dev/null" ]
-      interval: 10s
-      timeout: 5s
-      retries: 30
-
-  logstash:
-    image: docker.elastic.co/logstash/logstash:9.2.3
-    ports:
-      - "5000:5000"
-    volumes:
-      - ./logstash/pipeline:/usr/share/logstash/pipeline:ro
-    depends_on:
-      elasticsearch:
-        condition: service_healthy
-    networks:
-      - m2026
-
-  kibana:
-    image: docker.elastic.co/kibana/kibana:9.2.3
-    environment:
-      - ELASTICSEARCH_HOSTS=http://elasticsearch:9200
-    ports:
-      - "5601:5601"
-    depends_on:
-      elasticsearch:
-        condition: service_healthy
-    networks:
-      - m2026
   #TaskScheduler
   taskscheduler-service:
     image: taskscheduler-service:0.0.1-SNAPSHOT
@@ -85,52 +45,6 @@ services:
       KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
     networks:
       - m2026
-
-  consul-register-kafka:
-    image: curlimages/curl:8.8.0
-    container_name: consul-register-kafka
-    depends_on:
-      - consul
-      - kafka
-    networks:
-      - m2026
-    restart: on-failure
-    command: >
-      sh -c "curl -s -X PUT http://consul:8500/v1/agent/service/register
-      -H 'Content-Type: application/json'
-      -d '{\"Name\": \"kafka\", \"Address\": \"kafka\", \"Port\": 9093}'"
-
-  kafbat-ui: #Kafka web GUI
-    image: docker.io/kafbat/kafka-ui:v1.5.0
-    container_name: kafbat-ui
-    ports:
-      - "8080:8080"
-    depends_on:
-      kafka:
-        condition: service_healthy
-    environment:
-      # Enable editing topics/messages within the web application interface
-      DYNAMIC_CONFIG_ENABLED: 'true'
-      # Configure the cluster connection pointing to the internal listener
-      KAFKA_CLUSTERS_0_NAME: 'local-kraft-cluster'
-      KAFKA_CLUSTERS_0_BOOTSTRAPSERVERS: 'kafka:9093'
-    networks:
-      - m2026
-    #(Add volumes to persist config later)
-
-  consul-register-kafbat:
-    image: curlimages/curl:8.8.0
-    container_name: consul-register-kafbat
-    depends_on:
-      - consul
-      - kafbat-ui
-    networks:
-      - m2026
-    restart: on-failure
-    command: >
-      sh -c "curl -s -X PUT http://consul:8500/v1/agent/service/register
-      -H 'Content-Type: application/json'
-      -d '{\"Name\": \"kafbat-ui\", \"Address\": \"kafbat-ui\", \"Port\": 8080}'"
 
   #CONSUL
   consul:
