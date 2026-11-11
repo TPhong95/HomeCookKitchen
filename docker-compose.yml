@@ -73,6 +73,7 @@ services:
     build:
       context: ./gateway
     environment:
+      SPRING_PROFILES_ACTIVE: prod
       SPRING_CONFIG_IMPORT: "optional:consul:"
       SPRING_CLOUD_CONSUL_HOST: "consul"
       SPRING_CLOUD_CONSUL_CONFIG_FORMAT: YAML
@@ -122,6 +123,7 @@ services:
     ports:
       - "8002"
     environment:
+      SPRING_PROFILES_ACTIVE: prod
       SPRING_DATASOURCE_URL: jdbc:postgresql://postgres_chef:5432/chefDB
       SPRING_DATASOURCE_USERNAME: username
       SPRING_DATASOURCE_PASSWORD: password
@@ -165,6 +167,7 @@ services:
     ports:
       - "8003"
     environment:
+      SPRING_PROFILES_ACTIVE: prod
       SPRING_DATASOURCE_URL: jdbc:postgresql://postgres_customer:5432/customerDB
       SPRING_DATASOURCE_USERNAME: username
       SPRING_DATASOURCE_PASSWORD: password
@@ -208,6 +211,7 @@ services:
     ports:
       - "8011"
     environment:
+      SPRING_PROFILES_ACTIVE: prod
       SPRING_DATASOURCE_URL: jdbc:postgresql://postgres_purchase:5432/purchaseDB
       SPRING_DATASOURCE_USERNAME: username
       SPRING_DATASOURCE_PASSWORD: password
@@ -254,6 +258,7 @@ services:
     ports:
       - "8006"
     environment:
+      SPRING_PROFILES_ACTIVE: prod
       SPRING_DATASOURCE_URL: jdbc:postgresql://postgres-productlisting:5432/productlistingDB
       SPRING_DATASOURCE_USERNAME: username
       SPRING_DATASOURCE_PASSWORD: password
@@ -300,6 +305,7 @@ services:
     ports:
       - "8008"
     environment:
+      SPRING_PROFILES_ACTIVE: prod
       SPRING_DATASOURCE_URL: jdbc:postgresql://postgres-recipe:5432/recipeDB
       SPRING_DATASOURCE_USERNAME: username
       SPRING_DATASOURCE_PASSWORD: password
