@@ -14,7 +14,8 @@
         <module>product/Recipe</module>
         <module>product/productlisting</module>
         <module>transactions/purchase</module>
-        <module>TaskScheduler</module>
+        <module>taskscheduler</module>
+        <module>gateway</module>
     </modules>
     <build>
         <plugins>
