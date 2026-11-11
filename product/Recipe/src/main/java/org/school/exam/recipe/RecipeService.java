@@ -95,6 +95,10 @@ public class RecipeService {
         return recipeRepo.findByCookId(chefId);
     }
 
+    public List<Recipe> getRecipesByChefWhereNotInvalidated(Long chefId) {
+        return recipeRepo.findByCookIdAndInvalidatedFalse(chefId);
+    }
+
     public Recipe updateRecipeActive(Long id, RecipeActiveDTO DTO){
         Recipe recipe = recipeRepo.findById(id).orElseThrow(
                 () -> new RecipeNotFoundException("No recipe with id " + id + " found", Map.of()));

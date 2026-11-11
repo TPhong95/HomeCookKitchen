@@ -19,7 +19,7 @@ public class RecipeController {
 
     @GetMapping("/chef/{chefId}")
     public ResponseEntity<List<Recipe>> getRecipesByChef(@PathVariable Long chefId) {
-        return ResponseEntity.ok(recipeService.getRecipesByChef(chefId));
+        return ResponseEntity.ok(recipeService.getRecipesByChefWhereNotInvalidated(chefId));
     }
 
     @GetMapping("/{id}")
