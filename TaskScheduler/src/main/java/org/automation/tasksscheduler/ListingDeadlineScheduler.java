@@ -19,9 +19,13 @@ public class ListingDeadlineScheduler {
 
     @Scheduled(cron = "${scheduler.listing-deadline.cron:0 */1 * * * *}")
     public void getActiveListingsWithPassedDeadline() {
+        log.atDebug().log("Running Listing deadline check");
         try {
             List<ListingDto> listings = listingClient.getListings();
-
+            log.atDebug()
+                    .addKeyValue("listingCount", listings.size())
+                    .addKeyValue("listings", listings)
+                    .log("Received listings:");
             if (listings.isEmpty()) {
                 System.out.println("No items to process");
                 return;
