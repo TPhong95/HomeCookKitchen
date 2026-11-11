@@ -5,8 +5,8 @@ import java.time.LocalDateTime;
 public record CreateProductListingDTO(
         Long recipeId,
         Long chefId,
-        boolean active,
-        int quantity,
+        Long addressId,
+        int quantityOffered,
         float unitPrice,
         LocalDateTime purchaseDeadline,
         LocalDateTime readyBy

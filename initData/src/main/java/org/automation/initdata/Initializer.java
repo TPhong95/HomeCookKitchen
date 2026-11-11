@@ -117,19 +117,19 @@ public class Initializer implements CommandLineRunner {
 
         //LISTING
 
-        CreateProductListingDTO productListing1 = new CreateProductListingDTO(1L, 1L, true, 20, 14.99f, LocalDateTime.now().plusHours(1), LocalDateTime.now().plusHours(2));
+        CreateProductListingDTO productListing1 = new CreateProductListingDTO(1L, 1L, chefClient.getFirstAddressByChefId(1L), 20, 14.99f, LocalDateTime.now().plusHours(1), LocalDateTime.now().plusHours(2));
         listingClient.createListing(productListing1);
 
-        CreateProductListingDTO productListing2 = new CreateProductListingDTO(2L, 2L, true, 30, 20.00f, LocalDateTime.now().plusHours(1), LocalDateTime.now().plusHours(2));
+        CreateProductListingDTO productListing2 = new CreateProductListingDTO(2L, 2L, chefClient.getFirstAddressByChefId(2L), 30, 20.00f, LocalDateTime.now().plusHours(1), LocalDateTime.now().plusHours(2));
         listingClient.createListing(productListing2);
 
-        CreateProductListingDTO productListing3 = new CreateProductListingDTO(3L, 3L, true, 15, 4.99f, LocalDateTime.now().plusMinutes(4), LocalDateTime.now().plusHours(2));
+        CreateProductListingDTO productListing3 = new CreateProductListingDTO(3L, 3L, chefClient.getFirstAddressByChefId(3L), 15, 4.99f, LocalDateTime.now().plusMinutes(4), LocalDateTime.now().plusHours(2));
         listingClient.createListing(productListing3);
 
-        CreateProductListingDTO productListing4 = new CreateProductListingDTO(4L, 4L, true, 22, 24.99f, LocalDateTime.now().plusHours(1), LocalDateTime.now().plusHours(2));
+        CreateProductListingDTO productListing4 = new CreateProductListingDTO(4L, 4L, chefClient.getFirstAddressByChefId(4L), 22, 24.99f, LocalDateTime.now().plusHours(1), LocalDateTime.now().plusHours(2));
         listingClient.createListing(productListing4);
 
-        CreateProductListingDTO productListing5 = new CreateProductListingDTO(5L, 1L, true, 33, 12.99f, LocalDateTime.now().plusHours(1), LocalDateTime.now().plusHours(2));
+        CreateProductListingDTO productListing5 = new CreateProductListingDTO(5L, 1L, chefClient.getFirstAddressByChefId(1L), 33, 12.99f, LocalDateTime.now().plusHours(1), LocalDateTime.now().plusHours(2));
         listingClient.createListing(productListing5);
 
         // PURCHASE

@@ -21,7 +21,7 @@ public class ProductListing {
 
     private Long recipeId;
     private String recipeName;
-    private String pictureUrl;
+    private String recipeUrl;
     private String recipeDescription;
     private Long addressId;
     private String compositeAddress;
@@ -36,7 +36,7 @@ public class ProductListing {
     private LocalDateTime readyBy;
 
     public ProductListing(Long productListingId, Long recipeId, String recipeName,
-                          String pictureUrl, String recipeDescription, Long addressId,
+                          String recipeUrl, String recipeDescription, Long addressId,
                           String compositeAddress, Long chefId, String chefName,
                           Boolean active, int quantityOffered, int quantityPurchased,
                           float unitPrice, LocalDateTime createdAtTime, LocalDateTime purchaseDeadline,
@@ -44,7 +44,7 @@ public class ProductListing {
         this.productListingId = productListingId;
         this.recipeId = recipeId;
         this.recipeName = recipeName;
-        this.pictureUrl = pictureUrl;
+        this.recipeUrl = recipeUrl;
         this.recipeDescription = recipeDescription;
         this.addressId = addressId;
         this.compositeAddress = compositeAddress;

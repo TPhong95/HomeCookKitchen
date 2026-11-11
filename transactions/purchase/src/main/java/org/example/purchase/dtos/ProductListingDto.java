@@ -1,11 +1,15 @@
 package org.example.purchase.dtos;
 
 
-import com.fasterxml.jackson.annotation.JsonProperty;
+import java.time.LocalDateTime;
 
 public record ProductListingDto(
         Long productListingId,
         int recipeId,
         Long chefId,
-        float unitPrice
+        Long addressId,
+        int quantityOffered,
+        float unitPrice,
+        LocalDateTime purchaseDeadline,
+        LocalDateTime readyBy
 ) {}
