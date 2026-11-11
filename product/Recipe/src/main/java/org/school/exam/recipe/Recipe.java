@@ -23,7 +23,7 @@ public class Recipe {
 
     @Column(name = "name")
     private String recipeName;
-
+    private boolean invalidated;
     private boolean active;
     private String pictureUrl;
     private String description;
@@ -54,6 +54,7 @@ public class Recipe {
     {
         this.cookId = cookId;
         this.recipeName = recipeName;
+        this.invalidated = false;
         this.active = active;
         this.pictureUrl = pictureUrl;
         this.description = description;
