@@ -1,9 +1,7 @@
 package org.school.exam.productlisting;
 
 import lombok.AllArgsConstructor;
-import org.school.exam.productlisting.dto.CreateProductListingDTO;
 import org.school.exam.productlisting.dto.ProductListingDeadlineDTO;
-import org.school.exam.productlisting.exception.BadRequestException.BadRequestException;
 import org.school.exam.productlisting.exception.NotFoundException.ProductListingNotFoundException;
 import org.springframework.stereotype.Service;
 
@@ -19,10 +17,19 @@ public class ProductListingService {
 
     public List<ProductListing> findAll() {
         var productListings = productListingRepo.findAll();
-        if (productListings.isEmpty()) {
-            throw new ProductListingNotFoundException("No product listing(s) found", Map.of());
-        }
         return productListings;
+    }
+
+    public List<ProductListing> findAllForCustomer() {
+        return productListingRepo.findActiveForCustomer();
+    }
+
+    public List<ProductListing> findChefActiveListings(Long id) {
+        return productListingRepo.findChefActiveListings(id);
+    }
+
+    public List<ProductListing> findChefHistoricListings(Long id) {
+        return productListingRepo.findChefHistoricListings(id);
     }
 
     public ProductListing findById(Long id) {
@@ -41,6 +48,7 @@ public class ProductListingService {
         return productListingRepo.save(productListing);
     }
 
+    /*
     public ProductListing update(Long id, CreateProductListingDTO DTO) {
         ProductListing productListing = productListingRepo.findById(id).orElse(null);
         if (productListing == null) {
@@ -49,8 +57,8 @@ public class ProductListingService {
         if (DTO == null){
             throw new BadRequestException("Cannot update a product listing without receiving information", Map.of());
         }
-        if (DTO.quantity() != productListing.getQuantity()) {
-        productListing.setQuantity(DTO.quantity());
+        if (DTO.quantityOffered() != productListing.getQuantityOffered()) {
+        productListing.setQuantityOffered(DTO.quantityOffered());
         }
         if (DTO.unitPrice() != productListing.getUnitPrice()) {
         productListing.setUnitPrice(DTO.unitPrice());
@@ -58,11 +66,14 @@ public class ProductListingService {
         return productListingRepo.save(productListing);
     }
 
+     */
+
+    public void delete(ProductListing productListing) {
+        productListingRepo.delete(productListing);
+    }
+
     public List<ProductListingDeadlineDTO> findAllPassedDeadlines() {
         var productListings = productListingRepo.findActiveWithPurchaseDeadlineAfter(LocalDateTime.now());
-        if (productListings.isEmpty()) {
-            throw new ProductListingNotFoundException("No product listing(s) found", Map.of());
-        }
         return productListings.stream()
                 .map(pl -> new ProductListingDeadlineDTO(
                         pl.getProductListingId().longValue(),

@@ -2,6 +2,7 @@ package org.school.exam.productlisting;
 
 import org.school.exam.productlisting.dto.CreateProductListingDTO;
 import org.school.exam.productlisting.dto.ProductListingDeadlineDTO;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -19,9 +20,25 @@ public class ProductListingController {
         this.productListingOrchestrationService = productListingOrchestrationService;
     }
 
+    // DEBUG ENDPOINT TO LIST EVERYTHING
     @GetMapping("/all")
     public ResponseEntity<List<ProductListing>> getAllProductListings() {
         return ResponseEntity.ok(productListingService.findAll());
+    }
+
+    @GetMapping("/active")
+    public ResponseEntity<List<ProductListing>> getCustomerListings() {
+        return ResponseEntity.ok(productListingOrchestrationService.findListingsForCustomer());
+    }
+
+    @GetMapping("/chef/{id}/active")
+    public ResponseEntity<List<ProductListing>> getChefActiveListings(@PathVariable Long id) {
+        return ResponseEntity.ok(productListingOrchestrationService.getChefActiveListings(id));
+    }
+
+    @GetMapping("/chef/{id}/historic")
+    public ResponseEntity<List<ProductListing>> getChefHistoricListings(@PathVariable Long id) {
+        return ResponseEntity.ok(productListingOrchestrationService.getChefHistoricListings(id));
     }
 
     @GetMapping("/{id}")
@@ -37,12 +54,22 @@ public class ProductListingController {
 
     @PostMapping
     public ResponseEntity<ProductListing> createProductListing(@RequestBody CreateProductListingDTO DTO) {
-        return ResponseEntity.ok(productListingOrchestrationService.createProductListing(DTO));
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .body(productListingOrchestrationService.createProductListing(DTO));
     }
 
+    /*
     @PatchMapping("/{id}")
     public ResponseEntity<ProductListing> updateProductListing(@PathVariable Long id, @RequestBody CreateProductListingDTO DTO) {
         return ResponseEntity.ok(productListingService.update(id, DTO));
+    }
+
+     */
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteProductListing(@PathVariable Long id) {
+        productListingOrchestrationService.deleteProductListingById(id);
+        return ResponseEntity.noContent().build();
     }
 
     @GetMapping("/deadline")
