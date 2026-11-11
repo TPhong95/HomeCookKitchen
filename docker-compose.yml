@@ -9,6 +9,7 @@ services:
     ports:
       - "8020"
     environment:
+      SPRING_PROFILES_ACTIVE: prod
       SPRING_CONFIG_IMPORT: "optional:consul:"
       SPRING_CLOUD_CONSUL_HOST: "consul"
       SPRING_CLOUD_CONSUL_CONFIG_FORMAT: YAML
