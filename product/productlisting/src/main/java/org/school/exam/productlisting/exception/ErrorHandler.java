@@ -3,6 +3,7 @@ package org.school.exam.productlisting.exception;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.school.exam.productlisting.exception.BadRequestException.BadRequestException;
+import org.school.exam.productlisting.exception.ConflictException.ConflictException;
 import org.school.exam.productlisting.exception.NotFoundException.NotFoundException;
 import org.school.exam.productlisting.exception.NotFoundException.ProductListingNotFoundException;
 import org.springframework.http.HttpStatus;
@@ -51,6 +52,20 @@ public class ErrorHandler {
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(problem);
     }
     //====== 409 Conflict ======
+    @ExceptionHandler({ConflictException.class})
+    public ResponseEntity<ProblemDetail> handleConflictException(ConflictException e, HttpServletRequest request) {
+        Map<String, Object> fields = new LinkedHashMap<>(e.getFields());
+
+        fields.put("status", 409);
+        fields.put("path", request.getRequestURI());
+        fields.put("exception", e.getClass().getSimpleName());
+
+        log.error("409 Conflict error: {}", e.getMessage(), entries(fields));
+
+        ProblemDetail problem = ProblemDetail.forStatusAndDetail(HttpStatus.CONFLICT, e.getMessage());
+        problem.setTitle("409 Conflict");
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(problem);
+    }
 
     //====== 500 Internal server error ======
 }

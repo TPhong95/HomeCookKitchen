@@ -1,9 +1,7 @@
 package org.school.exam.productlisting;
 
 import lombok.AllArgsConstructor;
-import org.school.exam.productlisting.dto.CreateProductListingDTO;
 import org.school.exam.productlisting.dto.ProductListingDeadlineDTO;
-import org.school.exam.productlisting.exception.BadRequestException.BadRequestException;
 import org.school.exam.productlisting.exception.NotFoundException.ProductListingNotFoundException;
 import org.springframework.stereotype.Service;
 
@@ -60,6 +58,10 @@ public class ProductListingService {
     }
 
      */
+
+    public void delete(ProductListing productListing) {
+        productListingRepo.delete(productListing);
+    }
 
     public List<ProductListingDeadlineDTO> findAllPassedDeadlines() {
         var productListings = productListingRepo.findActiveWithPurchaseDeadlineAfter(LocalDateTime.now());

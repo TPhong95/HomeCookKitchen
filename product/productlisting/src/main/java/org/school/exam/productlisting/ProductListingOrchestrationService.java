@@ -10,6 +10,7 @@ import org.school.exam.productlisting.dto.ChefResponseDTO;
 import org.school.exam.productlisting.dto.CreateProductListingDTO;
 import org.school.exam.productlisting.dto.GetRecipeDTO;
 import org.school.exam.productlisting.exception.BadRequestException.BadRequestException;
+import org.school.exam.productlisting.exception.ConflictException.ConflictException;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -59,6 +60,12 @@ public class ProductListingOrchestrationService {
         );
 
         return productListingService.create(productListing);
+    }
+
+    public void deleteProductListingById(Long id) {
+        ProductListing pl = productListingService.findById(id);
+        if(pl.getQuantityPurchased() > 0) throw new ConflictException("You cannot a delete a listing that has purchases", Map.of());
+        productListingService.delete(pl);
     }
 
     private void validateCreateDTO(CreateProductListingDTO DTO) {

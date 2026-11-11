@@ -50,6 +50,12 @@ public class ProductListingController {
 
      */
 
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteProductListing(@PathVariable Long id) {
+        productListingOrchestrationService.deleteProductListingById(id);
+        return ResponseEntity.noContent().build();
+    }
+
     @GetMapping("/deadline")
     public ResponseEntity<List<ProductListingDeadlineDTO>> getAllPassedDeadlines() {
         return ResponseEntity.ok(productListingService.findAllPassedDeadlines());
