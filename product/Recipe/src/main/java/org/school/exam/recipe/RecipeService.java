@@ -2,6 +2,7 @@ package org.school.exam.recipe;
 
 import lombok.AllArgsConstructor;
 import org.school.exam.recipe.dto.CreateRecipeDTO;
+import org.school.exam.recipe.dto.RecipeActiveDTO;
 import org.school.exam.recipe.exception.BadRequestException.BadRequestException;
 import org.school.exam.recipe.exception.NotFoundException.RecipeNotFoundException;
 import org.springframework.stereotype.Service;
@@ -39,6 +40,7 @@ public class RecipeService {
         return recipeRepo.save(recipe);
     }
 
+/*
     public Recipe updateRecipe(Long id, CreateRecipeDTO DTO){
         Recipe recipe = recipeRepo.findById(id).orElseThrow(
                 () -> new RecipeNotFoundException("No recipe with id " + id + " found", Map.of()));
@@ -68,7 +70,40 @@ public class RecipeService {
         return recipeRepo.save(recipe);
     }
 
+ */
+    public Recipe updateRecipe(Long id, CreateRecipeDTO DTO){
+        Recipe recipe = recipeRepo.findById(id).orElseThrow(
+                () -> new RecipeNotFoundException("No recipe with id " + id + " found", Map.of()));
+        if (DTO.name() == null || DTO.name().isEmpty()){
+            throw new BadRequestException("Name is required", Map.of());
+        }
+        recipe.setActive(false);
+        recipe.setInvalidated(true);
+
+        Recipe newRecipe =
+                new Recipe(
+                        DTO.cookId(), DTO.name(), DTO.active(), DTO.pictureUrl(), DTO.description(),
+                        recipe.getRecipeId(), DTO.foodCategory(), DTO.gluten(), DTO.crustaceans(),
+                        DTO.egg(), DTO.fish(), DTO.peanuts(), DTO.soybeans(), DTO.milk(),
+                        DTO.nuts(), DTO.celery(), DTO.mustard(), DTO.sesame(), DTO.sulfites(),
+                        DTO.lupin(), DTO.molluscs()
+                );
+        return recipeRepo.save(newRecipe);
+    }
+
     public List<Recipe> getRecipesByChef(Long chefId) {
         return recipeRepo.findByCookId(chefId);
     }
+
+    public List<Recipe> getRecipesByChefWhereNotInvalidated(Long chefId) {
+        return recipeRepo.findByCookIdAndInvalidatedFalse(chefId);
+    }
+
+    public Recipe updateRecipeActive(Long id, RecipeActiveDTO DTO){
+        Recipe recipe = recipeRepo.findById(id).orElseThrow(
+                () -> new RecipeNotFoundException("No recipe with id " + id + " found", Map.of()));
+        recipe.setActive(DTO.active());
+        return recipeRepo.save(recipe);
+    }
 }
+

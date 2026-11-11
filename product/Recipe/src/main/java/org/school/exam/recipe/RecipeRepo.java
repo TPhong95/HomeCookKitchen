@@ -8,4 +8,5 @@ import java.util.List;
 @Repository
 public interface RecipeRepo extends JpaRepository<Recipe, Long> {
     List<Recipe> findByCookId(Long cookId);
+    List<Recipe> findByCookIdAndInvalidatedFalse(Long cookId);
 }

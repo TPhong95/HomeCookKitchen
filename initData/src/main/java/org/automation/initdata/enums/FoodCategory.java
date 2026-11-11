@@ -4,4 +4,9 @@ public enum FoodCategory {
     UNDEFINED,
     ASIAN,
     BURGER,
+    PASTA,
+    VEGETARIAN,
+    MEXICAN,
+    SKANDINAVIAN,
+    AFRICAN
 }
