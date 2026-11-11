@@ -1,5 +1,6 @@
 package user.customer;
 
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -26,7 +27,8 @@ public class CustomerController {
 
     @PostMapping()
     public ResponseEntity<Customer> createCustomer(@RequestBody CustomerDTO customer) {
-        return ResponseEntity.ok(customerService.createCustomer(customer));
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .body(customerService.createCustomer(customer));
     }
 
     @PatchMapping("/{id}")
