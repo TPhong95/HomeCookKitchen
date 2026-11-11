@@ -41,6 +41,7 @@ public class ProductListingService {
         return productListingRepo.save(productListing);
     }
 
+    /*
     public ProductListing update(Long id, CreateProductListingDTO DTO) {
         ProductListing productListing = productListingRepo.findById(id).orElse(null);
         if (productListing == null) {
@@ -49,14 +50,16 @@ public class ProductListingService {
         if (DTO == null){
             throw new BadRequestException("Cannot update a product listing without receiving information", Map.of());
         }
-        if (DTO.quantity() != productListing.getQuantity()) {
-        productListing.setQuantity(DTO.quantity());
+        if (DTO.quantityOffered() != productListing.getQuantityOffered()) {
+        productListing.setQuantityOffered(DTO.quantityOffered());
         }
         if (DTO.unitPrice() != productListing.getUnitPrice()) {
         productListing.setUnitPrice(DTO.unitPrice());
         }
         return productListingRepo.save(productListing);
     }
+
+     */
 
     public List<ProductListingDeadlineDTO> findAllPassedDeadlines() {
         var productListings = productListingRepo.findActiveWithPurchaseDeadlineAfter(LocalDateTime.now());

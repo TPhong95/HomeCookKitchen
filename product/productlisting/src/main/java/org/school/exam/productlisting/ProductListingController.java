@@ -2,6 +2,7 @@ package org.school.exam.productlisting;
 
 import org.school.exam.productlisting.dto.CreateProductListingDTO;
 import org.school.exam.productlisting.dto.ProductListingDeadlineDTO;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -37,13 +38,17 @@ public class ProductListingController {
 
     @PostMapping
     public ResponseEntity<ProductListing> createProductListing(@RequestBody CreateProductListingDTO DTO) {
-        return ResponseEntity.ok(productListingOrchestrationService.createProductListing(DTO));
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .body(productListingOrchestrationService.createProductListing(DTO));
     }
 
+    /*
     @PatchMapping("/{id}")
     public ResponseEntity<ProductListing> updateProductListing(@PathVariable Long id, @RequestBody CreateProductListingDTO DTO) {
         return ResponseEntity.ok(productListingService.update(id, DTO));
     }
+
+     */
 
     @GetMapping("/deadline")
     public ResponseEntity<List<ProductListingDeadlineDTO>> getAllPassedDeadlines() {

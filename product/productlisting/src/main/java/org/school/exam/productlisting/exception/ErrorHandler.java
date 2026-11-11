@@ -2,6 +2,7 @@ package org.school.exam.productlisting.exception;
 
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
+import org.school.exam.productlisting.exception.BadRequestException.BadRequestException;
 import org.school.exam.productlisting.exception.NotFoundException.NotFoundException;
 import org.school.exam.productlisting.exception.NotFoundException.ProductListingNotFoundException;
 import org.springframework.http.HttpStatus;
@@ -19,7 +20,20 @@ import static net.logstash.logback.argument.StructuredArguments.entries;
 @Slf4j
 public class ErrorHandler {
     //====== 400 Bad Request ======
+    @ExceptionHandler({BadRequestException.class})
+    public ResponseEntity<ProblemDetail> handleBadRequestException(BadRequestException e, HttpServletRequest request) {
+        Map<String, Object> fields = new LinkedHashMap<>(e.getFields());
 
+        fields.put("status", 400);
+        fields.put("path", request.getRequestURI());
+        fields.put("exception", e.getClass().getSimpleName());
+
+        log.error("400 Bad request error: {}", e.getMessage(), entries(fields));
+
+        ProblemDetail problem = ProblemDetail.forStatusAndDetail(HttpStatus.BAD_REQUEST, e.getMessage());
+        problem.setTitle("400 Bad request");
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(problem);
+    }
 
     //====== 404 Not Found ======
     @ExceptionHandler({ProductListingNotFoundException.class})
