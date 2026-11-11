@@ -1,6 +1,7 @@
 package org.school.exam.recipe;
 
 import org.school.exam.recipe.dto.CreateRecipeDTO;
+import org.school.exam.recipe.dto.RecipeActiveDTO;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -34,5 +35,10 @@ public class RecipeController {
     @PatchMapping("/{id}")
     public ResponseEntity<Recipe> updateRecipe(@PathVariable Long id, @RequestBody CreateRecipeDTO DTO) {
         return ResponseEntity.ok(recipeService.updateRecipe(id, DTO));
+    }
+
+    @PatchMapping("/{id}/active")
+    public ResponseEntity<Recipe> updateRecipeActive(@PathVariable Long id, @RequestBody RecipeActiveDTO DTO) {
+        return ResponseEntity.ok(recipeService.updateRecipeActive(id, DTO));
     }
 }

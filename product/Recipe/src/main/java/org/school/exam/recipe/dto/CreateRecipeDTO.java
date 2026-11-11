@@ -5,6 +5,7 @@ import org.school.exam.recipe.FoodCategory;
 public record CreateRecipeDTO(
         Long cookId,
         String name,
+        boolean invalidated,
         boolean active,
         String pictureUrl,
         String description,

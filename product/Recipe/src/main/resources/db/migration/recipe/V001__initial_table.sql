@@ -2,6 +2,7 @@ CREATE TABLE IF NOT EXISTS recipe(
     recipe_id BIGINT PRIMARY KEY,
     chef_id BIGINT,
     name VARCHAR(255),
+    invalidated BOOLEAN,
     active BOOLEAN,
     picture_url VARCHAR(255),
     description VARCHAR(255),
