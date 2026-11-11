@@ -17,10 +17,19 @@ public class ProductListingService {
 
     public List<ProductListing> findAll() {
         var productListings = productListingRepo.findAll();
-        if (productListings.isEmpty()) {
-            throw new ProductListingNotFoundException("No product listing(s) found", Map.of());
-        }
         return productListings;
+    }
+
+    public List<ProductListing> findAllForCustomer() {
+        return productListingRepo.findActiveForCustomer();
+    }
+
+    public List<ProductListing> findChefActiveListings(Long id) {
+        return productListingRepo.findChefActiveListings(id);
+    }
+
+    public List<ProductListing> findChefHistoricListings(Long id) {
+        return productListingRepo.findChefHistoricListings(id);
     }
 
     public ProductListing findById(Long id) {
@@ -65,9 +74,6 @@ public class ProductListingService {
 
     public List<ProductListingDeadlineDTO> findAllPassedDeadlines() {
         var productListings = productListingRepo.findActiveWithPurchaseDeadlineAfter(LocalDateTime.now());
-        if (productListings.isEmpty()) {
-            throw new ProductListingNotFoundException("No product listing(s) found", Map.of());
-        }
         return productListings.stream()
                 .map(pl -> new ProductListingDeadlineDTO(
                         pl.getProductListingId().longValue(),

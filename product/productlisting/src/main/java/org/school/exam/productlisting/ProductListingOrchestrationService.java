@@ -14,6 +14,7 @@ import org.school.exam.productlisting.exception.ConflictException.ConflictExcept
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
@@ -29,6 +30,18 @@ public class ProductListingOrchestrationService {
         this.productListingService = productListingService;
         this.recipeClient = recipeClient;
         this.chefClient = chefClient;
+    }
+
+    public List<ProductListing> findListingsForCustomer() {
+        return productListingService.findAllForCustomer();
+    }
+
+    public List<ProductListing> getChefActiveListings(Long id) {
+        return productListingService.findChefActiveListings(id);
+    }
+
+    public List<ProductListing> getChefHistoricListings(Long id) {
+        return productListingService.findChefHistoricListings(id);
     }
 
     public ProductListing createProductListing(CreateProductListingDTO DTO) {
@@ -64,7 +77,7 @@ public class ProductListingOrchestrationService {
 
     public void deleteProductListingById(Long id) {
         ProductListing pl = productListingService.findById(id);
-        if(pl.getQuantityPurchased() > 0) throw new ConflictException("You cannot a delete a listing that has purchases", Map.of());
+        if(pl.getQuantityPurchased() > 0) throw new ConflictException("You cannot delete a listing that has purchases", Map.of());
         productListingService.delete(pl);
     }
 

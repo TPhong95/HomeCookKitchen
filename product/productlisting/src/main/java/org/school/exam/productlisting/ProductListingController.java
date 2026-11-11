@@ -20,9 +20,25 @@ public class ProductListingController {
         this.productListingOrchestrationService = productListingOrchestrationService;
     }
 
+    // DEBUG ENDPOINT TO LIST EVERYTHING
     @GetMapping("/all")
     public ResponseEntity<List<ProductListing>> getAllProductListings() {
         return ResponseEntity.ok(productListingService.findAll());
+    }
+
+    @GetMapping("/active")
+    public ResponseEntity<List<ProductListing>> getCustomerListings() {
+        return ResponseEntity.ok(productListingOrchestrationService.findListingsForCustomer());
+    }
+
+    @GetMapping("/chef/{id}/active")
+    public ResponseEntity<List<ProductListing>> getChefActiveListings(@PathVariable Long id) {
+        return ResponseEntity.ok(productListingOrchestrationService.getChefActiveListings(id));
+    }
+
+    @GetMapping("/chef/{id}/historic")
+    public ResponseEntity<List<ProductListing>> getChefHistoricListings(@PathVariable Long id) {
+        return ResponseEntity.ok(productListingOrchestrationService.getChefHistoricListings(id));
     }
 
     @GetMapping("/{id}")
