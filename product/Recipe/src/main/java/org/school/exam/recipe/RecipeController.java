@@ -1,6 +1,7 @@
 package org.school.exam.recipe;
 
 import org.school.exam.recipe.dto.CreateRecipeDTO;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -28,7 +29,8 @@ public class RecipeController {
 
     @PostMapping
     public ResponseEntity<Recipe> createRecipe(@RequestBody CreateRecipeDTO DTO) {
-        return ResponseEntity.ok(recipeService.createRecipe(DTO));
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .body(recipeService.createRecipe(DTO));
     }
 
     @PatchMapping("/{id}")
