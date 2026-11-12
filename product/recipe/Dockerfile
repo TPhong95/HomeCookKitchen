@@ -1,14 +1,14 @@
-#Build step
 FROM maven:3.9.11-eclipse-temurin-21 AS build
 WORKDIR /build
-COPY pom.xml .
-COPY src ./src
+COPY pom.xml ./pom.xml
+COPY product/recipe/pom.xml ./product/recipe/pom.xml
+WORKDIR /build/product/recipe
+RUN mvn dependency:go-offline -B
+COPY product/recipe/src ./src
 RUN mvn clean package -DskipTests
 
-# Run step
 FROM eclipse-temurin:21-jre-alpine
-WORKDIR /usr/src/recipe
-COPY --from=build /build/target/recipe-0.0.1-SNAPSHOT.jar ./app.jar
-EXPOSE 8007
+WORKDIR /app
+COPY --from=build /build/product/recipe/target/*.jar app.jar
+EXPOSE 8008
 ENTRYPOINT ["java", "-jar", "app.jar"]
-# Hardcoded profile - ENTRYPOINT ["java", "-jar", "app.jar", "--spring.profiles.active=docker"]

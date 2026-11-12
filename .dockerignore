@@ -1,0 +1,7 @@
+**/target
+**/.idea
+**/*.iml
+.git
+frontend
+logstash
+consul
