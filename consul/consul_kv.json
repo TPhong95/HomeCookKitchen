@@ -1,0 +1,47 @@
+[
+  {
+    "key": "config/",
+    "flags": 0,
+    "value": ""
+  },
+  {
+    "key": "config/application/",
+    "flags": 0,
+    "value": ""
+  },
+  {
+    "key": "config/application/data",
+    "flags": 0,
+    "value": "c3ByaW5nOgogIGNsb3VkOgogICAgY29uc3VsOgogICAgICBkaXNjb3Zlcnk6CiAgICAgICAgcHJlZmVyLWlwLWFkZHJlc3M6IHRydWUKICAgICAgICBpbnN0YW5jZS1pZDogJHtzcHJpbmcuYXBwbGljYXRpb24ubmFtZX0tJHtyYW5kb20udmFsdWV9CiAgICAgICAgcXVlcnktcGFzc2luZzogdHJ1ZQogIGpwYToKICAgIHNob3ctc3FsOiBmYWxzZQogIHdlYjoKICAgIGVycm9yOgogICAgICBpbmNsdWRlLW1lc3NhZ2U6IGFsd2F5cwogICAgICBpbmNsdWRlLXN0YWNrdHJhY2U6IG5ldmVyCm1hbmFnZW1lbnQ6CiAgZW5kcG9pbnRzOgogICAgd2ViOgogICAgICBleHBvc3VyZToKICAgICAgICBpbmNsdWRlOiBoZWFsdGgsIGluZm8KICBlbmRwb2ludDoKICAgIGhlYWx0aDoKICAgICAgc2hvdy1kZXRhaWxzOiBuZXZlcgo="
+  },
+  {
+    "key": "config/application,dev/",
+    "flags": 0,
+    "value": ""
+  },
+  {
+    "key": "config/application,dev/data",
+    "flags": 0,
+    "value": "c3ByaW5nOgogIGpwYToKICAgIHNob3ctc3FsOiB0cnVlCiAgd2ViOgogICAgZXJyb3I6CiAgICAgIGluY2x1ZGUtc3RhY2t0cmFjZTogYWx3YXlzCm1hbmFnZW1lbnQ6CiAgZW5kcG9pbnRzOgogICAgd2ViOgogICAgICBleHBvc3VyZToKICAgICAgICBpbmNsdWRlOiAiKiIKICBlbmRwb2ludDoKICAgIGhlYWx0aDoKICAgICAgc2hvdy1kZXRhaWxzOiBhbHdheXMK"
+  },
+  {
+    "key": "config/TaskScheduler/",
+    "flags": 0,
+    "value": ""
+  },
+  {
+    "key": "config/TaskScheduler/data",
+    "flags": 0,
+    "value": "c2NoZWR1bGVyOgogIGxpc3RpbmctZGVhZGxpbmU6CiAgICBjcm9uOiAiMCAqLzEgKiAqICogKiIK"
+  },
+  {
+    "key": "config/TaskScheduler,dev/",
+    "flags": 0,
+    "value": ""
+  },
+  {
+    "key": "config/TaskScheduler,dev/data",
+    "flags": 0,
+    "value": "c2NoZWR1bGVyOgogIGxpc3RpbmctZGVhZGxpbmU6CiAgICBjcm9uOiAiMCAqLzEgKiAqICogKiIKbG9nZ2luZzoKICBsZXZlbDoKICAgIG9yZy5hdXRvbWF0aW9uLnRhc2tzc2NoZWR1bGVyOiBERUJVRwo="
+  }
+]

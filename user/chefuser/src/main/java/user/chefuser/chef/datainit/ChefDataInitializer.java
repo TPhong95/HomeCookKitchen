@@ -1,3 +1,4 @@
+/*
 package user.chefuser.chef.datainit;
 
 import org.springframework.boot.CommandLineRunner;
@@ -24,7 +25,7 @@ public class ChefDataInitializer implements CommandLineRunner {
     public void run(String... args) throws Exception {
         if (chefRepo.count() == 0) {
 
-            /* KEY: c = chef, a = address */
+            /* KEY: c = chef, a = address */ /*
 
             CreateChefDto chef1 = new CreateChefDto("Gordon Ramsay", "gordonram@gmail.com", "66616661");
             Chef savedChef1 = chefService.createChef(chef1);
@@ -69,3 +70,4 @@ public class ChefDataInitializer implements CommandLineRunner {
         }
     }
 }
+*/

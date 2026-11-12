@@ -1,8 +1,11 @@
 package org.school.exam.productlisting.client;
 
 import org.school.exam.productlisting.dto.GetRecipeDTO;
+import org.school.exam.productlisting.exception.BadRequestException.BadRequestException;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestClient;
+
+import java.util.Map;
 
 @Service
 public class RecipeClient {
@@ -19,6 +22,9 @@ public class RecipeClient {
                 .get()
                 .uri(callUri)
                 .retrieve()
+                .onStatus(status -> status.value() == 404, (request, response) -> {
+                    throw new BadRequestException("Recipe with id " + recipeId + " not found", Map.of());
+                })
                 .body(GetRecipeDTO.class);
         return DTO;
     }

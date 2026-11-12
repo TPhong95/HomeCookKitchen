@@ -4,7 +4,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import user.customer.exception.BadRequestException.BadRequestException;
 import user.customer.exception.NotFoundException.CustomerNotFoundException;
-import user.customer.exception.DuplicateEmailException;
+import user.customer.exception.DuplicateException.DuplicateEmailException;
 
 import java.util.List;
 import java.util.Map;
@@ -44,23 +44,23 @@ public class CustomerService {
     }
 
     public Customer updateCustomer(Long id, CustomerDTO DTO) {
-        Customer customerToUpdate = findCustomerById(id);
-        if (DTO.name() != null && !DTO.name().isEmpty()) {
-            customerToUpdate.setName(DTO.name());
-        }
-        if (DTO.email() != null && !DTO.email().isEmpty()) {
-            customerToUpdate.setEmail(DTO.email());
-        }
-        validateUniqueEmail(DTO.email());
         if ((DTO.name() == null || DTO.name().isEmpty()) || (DTO.email() == null || DTO.email().isEmpty())) {
             throw new BadRequestException("No information to update customer was provided", Map.of());
         }
+        Customer customerToUpdate = findCustomerById(id);
+
+        if (!DTO.email().equals(customerToUpdate.getEmail())) {
+            validateUniqueEmail(DTO.email());
+        }
+        customerToUpdate.setName(DTO.name());
+        customerToUpdate.setEmail(DTO.email());
+
         return customerRepo.save(customerToUpdate);
     }
 
     public void validateUniqueEmail(String email) {
         if (customerRepo.existsByEmail(email)) {
-            throw new DuplicateEmailException("This email is already in use");
+            throw new DuplicateEmailException("This email is already in use", Map.of());
         }
     }
 }

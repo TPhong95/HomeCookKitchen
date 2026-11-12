@@ -1,3 +1,4 @@
+/*
 package org.school.exam.productlisting.datainit;
 
 import org.school.exam.productlisting.ProductListing;
@@ -46,3 +47,4 @@ public class ProductListingDataInitializer implements CommandLineRunner {
         }
     }
 }
+*/

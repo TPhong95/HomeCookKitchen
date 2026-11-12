@@ -12,6 +12,7 @@ import user.customer.exception.BadRequestException.BadRequestException;
 import user.customer.exception.InternalServerError.InternalServerError;
 import user.customer.exception.NotFoundException.CustomerNotFoundException;
 import user.customer.exception.NotFoundException.NotFoundException;
+import user.customer.exception.DuplicateException.*;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -76,5 +77,22 @@ public class ErrorHandler {
         ProblemDetail problem = ProblemDetail.forStatusAndDetail(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage());
         problem.setTitle("500 Internal server error");
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(problem);
+    //========== 409 CONFLICT ==========
+
+    @ExceptionHandler({
+            DuplicateEmailException.class
+    })
+    public ResponseEntity<ProblemDetail> handleDuplicateEmailException(DuplicateEmailException e, HttpServletRequest request) {
+        Map<String, Object> fields = new LinkedHashMap<>();
+
+        fields.put("status", 409);
+        fields.put("path", request.getRequestURI());
+        fields.put("exception", e.getClass().getSimpleName());
+
+        log.error("409 Conflict error: {}", e.getMessage(), entries(fields));
+
+        ProblemDetail problem = ProblemDetail.forStatusAndDetail(HttpStatus.CONFLICT, e.getMessage());
+        problem.setTitle("409 Conflict");
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(problem);
     }
 }

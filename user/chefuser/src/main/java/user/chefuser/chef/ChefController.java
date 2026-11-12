@@ -1,5 +1,6 @@
 package user.chefuser.chef;
 
+import org.springframework.http.HttpStatus;
 import user.chefuser.chef.dtos.*;
 import user.chefuser.chef.mappers.DtoMapper;
 import org.springframework.http.ResponseEntity;
@@ -28,7 +29,8 @@ public class ChefController {
         Chef savedChef = chefService.createChef(chef);
 
         ChefResponseDto response = dtoMapper.toChefResponseDto(savedChef);
-        return ResponseEntity.ok(response);
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .body(response);
     }
 
     @GetMapping("/{id}")
@@ -109,7 +111,8 @@ public class ChefController {
         List<Address> addresses = chefOrchestrationService.saveAddressToChef(chefId, dto);
         List<AddressResponseDto> response = dtoMapper.toAddressResponseDtoList(addresses, chefId);
 
-        return ResponseEntity.ok(response);
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .body(response);
     }
 
     @PatchMapping("/address/{chefId}/{addressId}")

@@ -1,5 +1,6 @@
 package org.example.purchase.purchase;
 
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -35,7 +36,8 @@ public class PurchaseController {
     @PostMapping()
     public ResponseEntity<Purchase> savePurchase(@RequestBody PurchaseDto purchaseDto) {
         Purchase purchase = purchaseOrchestrationService.createPurchase(purchaseDto);
-        return ResponseEntity.ok(purchase);
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .body(purchase);
     }
 
 }

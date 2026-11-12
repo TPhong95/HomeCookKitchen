@@ -1,3 +1,4 @@
+/*
 package user.customer.datainit;
 
 import org.springframework.boot.CommandLineRunner;
@@ -41,3 +42,4 @@ public class CustomerDataInitializer implements CommandLineRunner {
         }
     }
 }
+*/
