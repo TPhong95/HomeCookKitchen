@@ -5,7 +5,7 @@ services:
     image: taskscheduler-service:0.0.1-SNAPSHOT
     container_name: taskschedule-service
     build:
-      context: ./TaskScheduler
+      context: ./taskscheduler
     ports:
       - "8020"
     environment:
@@ -333,7 +333,7 @@ services:
   recipe-service:
     image: recipe-service:0.0.1-SNAPSHOT
     build:
-      context: ./product/Recipe
+      context: ./product/recipe
     ports:
       - "8008"
     environment:
