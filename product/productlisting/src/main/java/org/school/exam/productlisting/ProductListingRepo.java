@@ -16,9 +16,9 @@ public interface ProductListingRepo extends JpaRepository<ProductListing, Long> 
     @Query("SELECT p FROM ProductListing p WHERE p.active = true")
     List<ProductListing> findActiveForCustomer();
 
-    @Query("SELECT p FROM ProductListing p WHERE p.active = true AND p.chefId = :id ORDER BY p.readyBy ASC")
+    @Query("SELECT p FROM ProductListing p WHERE p.active = true AND p.chefId = :chefId ORDER BY p.readyBy ASC")
     List<ProductListing> findChefActiveListings(@Param("chefId") Long id);
 
-    @Query("SELECT p FROM ProductListing p WHERE p.active = false AND p.chefId = :id ORDER BY p.readyBy DESC")
+    @Query("SELECT p FROM ProductListing p WHERE p.active = false AND p.chefId = :chefId ORDER BY p.readyBy DESC")
     List<ProductListing> findChefHistoricListings(@Param("chefId") Long id);
 }
