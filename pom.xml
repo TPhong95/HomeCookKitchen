@@ -11,7 +11,7 @@
     <modules>
         <module>user/chefuser</module>
         <module>user/customer</module>
-        <module>product/Recipe</module>
+        <module>product/recipe</module>
         <module>product/productlisting</module>
         <module>transactions/purchase</module>
         <module>taskscheduler</module>

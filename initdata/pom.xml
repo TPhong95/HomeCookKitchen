@@ -9,10 +9,10 @@
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>org.automation</groupId>
-    <artifactId>TaskScheduler</artifactId>
+    <artifactId>initdata</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>TaskScheduler</name>
-    <description>TaskScheduler</description>
+    <name>initData</name>
+    <description>initData</description>
     <url/>
     <licenses>
         <license/>
@@ -28,28 +28,13 @@
     </scm>
     <properties>
         <java.version>21</java.version>
-        <spring-cloud.version>2025.1.4</spring-cloud.version>
     </properties>
-    <dependencyManagement>
-        <dependencies>
-            <dependency>
-                <groupId>org.springframework.cloud</groupId>
-                <artifactId>spring-cloud-dependencies</artifactId>
-                <version>${spring-cloud.version}</version>
-                <type>pom</type>
-                <scope>import</scope>
-            </dependency>
-        </dependencies>
-    </dependencyManagement>
     <dependencies>
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-actuator</artifactId>
-        </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-webmvc</artifactId>
         </dependency>
+
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
@@ -57,27 +42,8 @@
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-actuator-test</artifactId>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-webmvc-test</artifactId>
             <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework.cloud</groupId>
-            <artifactId>spring-cloud-starter-consul-discovery</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework.cloud</groupId>
-            <artifactId>spring-cloud-starter-consul-config</artifactId>
-        </dependency>
-        <!-- LOGGING -->
-        <dependency>
-            <groupId>net.logstash.logback</groupId>
-            <artifactId>logstash-logback-encoder</artifactId>
-            <version>9.0</version>
         </dependency>
     </dependencies>
 
@@ -120,28 +86,6 @@
                                 </path>
                             </annotationProcessorPaths>
                         </configuration>
-                    </execution>
-                </executions>
-            </plugin>
-            <!-- Spotless formatter -->
-            <plugin>
-                <groupId>com.diffplug.spotless</groupId>
-                <artifactId>spotless-maven-plugin</artifactId>
-                <version>2.44.0</version>
-                <configuration>
-                    <java>
-                        <eclipse>
-                            <version>4.33.0</version>
-                            <file>${project.basedir}/../eclipse-formatter.xml</file>
-                        </eclipse>
-                        <removeUnusedImports/>
-                    </java>
-                </configuration>
-                <executions>
-                    <execution>
-                        <goals>
-                            <goal>check</goal>
-                        </goals>
                     </execution>
                 </executions>
             </plugin>
