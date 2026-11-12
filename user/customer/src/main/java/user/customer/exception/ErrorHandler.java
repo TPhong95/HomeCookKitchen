@@ -77,6 +77,7 @@ public class ErrorHandler {
         ProblemDetail problem = ProblemDetail.forStatusAndDetail(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage());
         problem.setTitle("500 Internal server error");
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(problem);
+        }
     //========== 409 CONFLICT ==========
 
     @ExceptionHandler({
