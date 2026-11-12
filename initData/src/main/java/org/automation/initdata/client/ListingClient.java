@@ -24,5 +24,12 @@ public class ListingClient {
                 .toBodilessEntity();
     }
 
-
+    public void createUnactiveListing(CreateProductListingDTO listingDTO) {
+        restClient.post()
+                .uri(url + "/initdata")
+                .contentType(MediaType.APPLICATION_JSON)
+                .body(listingDTO)
+                .retrieve()
+                .toBodilessEntity();
+    }
 }

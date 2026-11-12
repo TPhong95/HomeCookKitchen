@@ -75,6 +75,36 @@ public class ProductListingOrchestrationService {
         return productListingService.create(productListing);
     }
 
+    //For initData to create old listings
+    public ProductListing createUnactiveProductListing(CreateProductListingDTO DTO) {
+        GetRecipeDTO recipe = recipeClient.getRecipeById(DTO.recipeId()); //Validates existence of recipe
+        if (!Objects.equals(DTO.chefId(), recipe.cookId())) {
+            throw new BadRequestException("Recipe does not belong to this chef", Map.of());
+        }
+        if (!recipe.active()) {
+            throw new BadRequestException("Recipe is not active", Map.of());
+        }
+
+        ChefResponseDTO chef = chefClient.getChefById(DTO.chefId());
+        ChefAddressDTO address = chef.addresses().stream()
+                .filter(a -> Objects.equals(a.id(), DTO.addressId()))
+                .findFirst()
+                .orElseThrow(() -> new BadRequestException(
+                        "Address not found or not active for this chef", Map.of()));
+
+        String chefCompositeAddress = address.street() + ", " + address.postalCode() + " " + address.city();
+
+        ProductListing productListing = new ProductListing(
+                null, DTO.recipeId(), recipe.recipeName(),
+                recipe.pictureUrl(), recipe.description(),
+                DTO.addressId(), chefCompositeAddress, DTO.chefId(), chef.name(),
+                false, DTO.quantityOffered(), 0, DTO.unitPrice(), LocalDateTime.now(),
+                DTO.purchaseDeadline(), DTO.readyBy()
+        );
+        productListing.setCreatedAtTime(LocalDateTime.parse( "2026-08-01T18:00:00"));
+        return productListingService.create(productListing);
+    }
+
     public void deleteProductListingById(Long id) {
         ProductListing pl = productListingService.findById(id);
         if(pl.getQuantityPurchased() > 0) throw new ConflictException("You cannot delete a listing that has purchases", Map.of());

@@ -36,7 +36,7 @@ public class ProductListingController {
         return ResponseEntity.ok(productListingOrchestrationService.getChefActiveListings(id));
     }
 
-    @GetMapping("/chef/{id}/historic")
+    @GetMapping("/chef/{id}/history")
     public ResponseEntity<List<ProductListing>> getChefHistoricListings(@PathVariable Long id) {
         return ResponseEntity.ok(productListingOrchestrationService.getChefHistoricListings(id));
     }
@@ -58,12 +58,17 @@ public class ProductListingController {
                 .body(productListingOrchestrationService.createProductListing(DTO));
     }
 
+    @PostMapping("/initdata")
+    public ResponseEntity<ProductListing> createUnactiveProductListing(@RequestBody CreateProductListingDTO DTO) {
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .body(productListingOrchestrationService.createUnactiveProductListing(DTO));
+    }
+
     /*
     @PatchMapping("/{id}")
     public ResponseEntity<ProductListing> updateProductListing(@PathVariable Long id, @RequestBody CreateProductListingDTO DTO) {
         return ResponseEntity.ok(productListingService.update(id, DTO));
     }
-
      */
 
     @DeleteMapping("/{id}")
