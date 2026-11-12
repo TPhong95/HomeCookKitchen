@@ -2,10 +2,7 @@ package org.example.purchase.purchase;
 
 import org.example.purchase.clients.ChefClient;
 import org.example.purchase.clients.ProductListingClient;
-import org.example.purchase.dtos.ChefDto;
-import org.example.purchase.dtos.ListingInfoDto;
-import org.example.purchase.dtos.ProductListingDto;
-import org.example.purchase.dtos.RecipeDto;
+import org.example.purchase.dtos.*;
 import org.example.purchase.event.PurchaseEvent;
 import org.example.purchase.event.PurchaseEventDto;
 import org.springframework.stereotype.Service;
@@ -56,6 +53,10 @@ public class PurchaseOrchestrationService {
             purchaseEvent.setQuantity(purchaseEventDto.quantity());
             purchaseEvents.add(purchaseEvent);
             totalPrice += productListingDto.unitPrice() * purchaseEventDto.quantity();
+
+            //HAR IKKE ROLLBACK ENDA
+            UpdatePurchaseProductListingDTO updateDto = new UpdatePurchaseProductListingDTO(purchaseEventDto.quantity());
+            productListingClient.UpdatePurchaseValue(updateDto, purchaseEventDto.productListingId());
         }
         //Setting the values of the Purchase
         purchase.setPurchaseEvent(purchaseEvents);
