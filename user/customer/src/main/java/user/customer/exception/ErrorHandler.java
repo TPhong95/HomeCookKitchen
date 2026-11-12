@@ -9,6 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import user.customer.exception.BadRequestException.BadRequestException;
+import user.customer.exception.InternalServerError.InternalServerError;
 import user.customer.exception.NotFoundException.CustomerNotFoundException;
 import user.customer.exception.NotFoundException.NotFoundException;
 import user.customer.exception.DuplicateException.*;
@@ -63,6 +64,19 @@ public class ErrorHandler {
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(problem);
     }
 
+    // Internal Server Error //
+    @ExceptionHandler({
+            InternalServerError.class
+    })
+    public ResponseEntity<ProblemDetail> handleInternalServerError(InternalServerError e, HttpServletRequest request) {
+        Map<String, Object> fields = new LinkedHashMap<>(e.getFields());
+        fields.put("status", 500);
+        fields.put("path", request.getRequestURI());
+        fields.put("exception", e.getClass().getSimpleName());
+        log.error("500 Internal server error: {}", e.getMessage(), entries(fields));
+        ProblemDetail problem = ProblemDetail.forStatusAndDetail(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage());
+        problem.setTitle("500 Internal server error");
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(problem);
     //========== 409 CONFLICT ==========
 
     @ExceptionHandler({

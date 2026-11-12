@@ -30,3 +30,12 @@ create table if not exists home_vibe(
     CONSTRAINT uq_home_vibe_address UNIQUE (address_id)
     );
 create sequence home_vibe_seq increment by 1 start with 1;
+
+create  table if not exists chef_notification(
+    id BIGINT primary key,
+    chef_id BIGINT,
+    message VARCHAR(200),
+    time TIMESTAMPTZ,
+    is_read BOOLEAN
+);
+create  sequence chef_notification_seq increment by 1 start with 1;
