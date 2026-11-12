@@ -1,6 +1,7 @@
 package org.automation.initdata.client;
 
 import org.automation.initdata.dtos.AddressIdDto;
+import org.automation.initdata.dtos.ChefNotificationCreationDto;
 import org.automation.initdata.dtos.CreateChefDto;
 import org.automation.initdata.dtos.SaveAddressDto;
 import org.springframework.core.ParameterizedTypeReference;
@@ -32,6 +33,15 @@ public class ChefClient {
                 .uri(url + "/address/" + chefId)
                 .contentType(MediaType.APPLICATION_JSON)
                 .body(saveAddressDto)
+                .retrieve()
+                .toBodilessEntity();
+    }
+
+    public void createChefNotification(ChefNotificationCreationDto notificationDto) {
+        restClient.post()
+                .uri(url + "/notification")
+                .contentType(MediaType.APPLICATION_JSON)
+                .body(notificationDto)
                 .retrieve()
                 .toBodilessEntity();
     }

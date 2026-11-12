@@ -2,6 +2,7 @@ package org.automation.initdata.client;
 
 import org.automation.initdata.dtos.CustomerDTO;
 
+import org.automation.initdata.dtos.CustomerNotificationCreationDto;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestClient;
@@ -20,6 +21,15 @@ public class CustomerClient {
                 .uri(url)
                 .contentType(MediaType.APPLICATION_JSON)
                 .body(customerDto)
+                .retrieve()
+                .toBodilessEntity();
+    }
+
+    public void createCustomerNotification(CustomerNotificationCreationDto notificationDto) {
+        restClient.post()
+                .uri(url + "/notification")
+                .contentType(MediaType.APPLICATION_JSON)
+                .body(notificationDto)
                 .retrieve()
                 .toBodilessEntity();
     }

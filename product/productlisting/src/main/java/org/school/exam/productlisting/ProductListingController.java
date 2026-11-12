@@ -71,6 +71,12 @@ public class ProductListingController {
         return ResponseEntity.ok(productListingService.update(id, DTO));
     }
 
+    //INITDATA
+    @PatchMapping("/{id}/initdata")
+    public ResponseEntity<ProductListing> updateOldProductListing(@PathVariable Long id, @RequestBody UpdatePurchaseProductListingDTO DTO) {
+        return ResponseEntity.ok(productListingService.updateOldListing(id, DTO));
+    }
+
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteProductListing(@PathVariable Long id) {

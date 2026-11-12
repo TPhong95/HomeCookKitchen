@@ -40,4 +40,12 @@ public class PurchaseController {
                 .body(purchase);
     }
 
+    //INITDATA
+    @PostMapping("/initdata")
+    public ResponseEntity<Purchase> saveOldPurchase(@RequestBody PurchaseDto purchaseDto) {
+        Purchase purchase = purchaseOrchestrationService.createOldPurchase(purchaseDto);
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .body(purchase);
+    }
+
 }
