@@ -1,9 +1,11 @@
-export async function sendJson<T>(method: "POST" | "PATCH", url: string, body?: unknown): Promise<T> {
+export async function sendJson<T>(method: "POST" | "PATCH" | "DELETE", url: string, body?: unknown): Promise<T> {
   const res = await fetch(url, {
     method,
     headers: {"Content-Type": "application/json"},
     body: body === undefined ? undefined : JSON.stringify(body),
   });
+
+  if (res.status === 204) return undefined as T;
 
   if (!res.ok) {
     const errorBody: { detail?: string } | null = await res.json().catch(() => null);

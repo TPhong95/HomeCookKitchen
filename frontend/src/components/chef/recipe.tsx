@@ -4,14 +4,13 @@ import styles from "./recipe.module.css";
 import {
   type RecipeStruct,
   DishCategory,
-  DishPreference,
   Allergen,
   initialAllergens,
   allergensList
 } from "../shared/recipeinterface.ts";
 
 
-
+/*
 const testRecipes: RecipeStruct[] = [
   {
     id: 1,
@@ -42,17 +41,16 @@ const testRecipes: RecipeStruct[] = [
     }
   }
 ]
-
+*/
 export function Recipe() {
   const name = "Kieran";
 
   const [activeFilter, setActiveFilter] = useState<"ALL" | "ACTIVE" | "INACTIVE">("ACTIVE");
 
-  const [recipes, setRecipes] = useState<RecipeStruct[]>(testRecipes);
+  const [recipes, setRecipes] = useState<RecipeStruct[]>([]);
   const [tempRecipeName, setTempRecipeName] = useState("");
   const [tempDescription, setTempDescription] = useState("");
-  const [tempCategory, setTempCategory] = useState<DishCategory>(DishCategory.BURGERS);
-  const [tempPreference, setTempPreference] = useState<DishPreference>(DishPreference.NONE);
+  const [tempCategory, setTempCategory] = useState<DishCategory>("UNDEFINED");
   const [tempAllergens, setTempAllergens] = useState<Record<Allergen, boolean>>(initialAllergens);
   const [tempImage, setTempImage] = useState("");
 
@@ -71,8 +69,7 @@ export function Recipe() {
   const handleAddRecipeModal = () => {
     setTempRecipeName("");
     setTempDescription("");
-    setTempCategory(DishCategory.BURGERS);
-    setTempPreference(DishPreference.NONE);
+    // setTempCategory(DishCategory.BURGERS);
     setTempAllergens(initialAllergens);
     setTempImage("");
     showRecipeDialogRef.current?.showModal();
@@ -81,36 +78,35 @@ export function Recipe() {
   const handleEditRecipeModal = (recipe: RecipeStruct) => {
     setTempRecipeName(recipe.recipeName);
     setTempDescription(recipe.description);
-    setTempCategory(recipe.category);
-    setTempPreference(recipe.preference);
+    // setTempCategory(recipe.category);
     setTempAllergens(recipe.allergens || initialAllergens);
-    setTempImage(recipe.image || "");
+    // setTempImage(recipe.image || "");
     showRecipeDialogRef.current?.showModal();
   }
 
   const handleSaveRecipe = () => {
     if (!tempRecipeName.trim()) return;
-
+/*
     setRecipes(
       [...recipes,
         {
-          id: Date.now(),
+        //  id: Date.now(),
           recipeName: tempRecipeName,
           description: tempDescription,
           active: true,
-          category: tempCategory,
-          preference: tempPreference,
+        //  category: tempCategory,
+        //  preference: tempPreference,
           allergens: tempAllergens,
-          image: tempImage,
+          pictureUrl: tempImage,
         }
       ]);
-
+*/
     showRecipeDialogRef.current?.close();
   }
 
   const handleCreateListingModal = (recipe: RecipeStruct) => {
     setTempRecipeName(recipe.recipeName);
-    if (recipe.image) setTempRecipePicture(recipe.image);
+    if (recipe.pictureUrl) setTempRecipePicture(recipe.pictureUrl);
     setTempBuyTo("");
     setTempReadyTime("");
     createListingDialogRef.current?.showModal();
@@ -124,7 +120,7 @@ export function Recipe() {
   const handleToggleActive = (id: number) => {
     setRecipes(prevRecipes =>
       prevRecipes.map(recipe =>
-        recipe.id === id ? {...recipe, active: !recipe.active} : recipe
+        recipe.recipeId === id ? {...recipe, active: !recipe.active} : recipe
       )
     );
   };
@@ -193,9 +189,9 @@ export function Recipe() {
 
         <div className={styles["all-recipes-container"]}>
           {filteredRecipes.map((recipe) => (
-            <div className={styles["recipe-item-container"]} key={recipe.id}>
+            <div className={styles["recipe-item-container"]} key={recipe.recipeId}>
               <div className={styles["recipe-picture-container"]}>
-                <img src={recipe.image} alt={recipe.recipeName}/>
+                <img src={recipe.pictureUrl} alt={recipe.recipeName}/>
               </div>
               <div className={styles["recipe-info-container"]}>
                 <div className={styles["name-and-edit-container"]}>
@@ -219,7 +215,7 @@ export function Recipe() {
                   )}
                   <div
                     className={styles["active-inactive-btn"]}
-                    onClick={() => recipe.id !== undefined && handleToggleActive(recipe.id)}
+                    onClick={() => recipe.recipeId !== undefined && handleToggleActive(recipe.recipeId)}
                   >
                     <div className={`${styles["toggle-switch"]} ${recipe.active ? styles["active"] : ""}`}>
                       <div className={styles["toggle-knob"]}></div>
@@ -281,19 +277,6 @@ export function Recipe() {
                 onChange={(e) => setTempCategory(e.target.value as DishCategory)}
               >
                 {Object.values(DishCategory).map((value) => (
-                  <option key={value} value={value}>{value}</option>
-                ))}
-              </select>
-            </div>
-
-            <div className={styles["form-field"]}>
-              <label htmlFor={"preference-input"}>Diet preference:</label>
-              <select
-                id={"preference-input"}
-                value={tempPreference}
-                onChange={(e) => setTempPreference(e.target.value as DishPreference)}
-              >
-                {Object.values(DishPreference).map((value) => (
                   <option key={value} value={value}>{value}</option>
                 ))}
               </select>

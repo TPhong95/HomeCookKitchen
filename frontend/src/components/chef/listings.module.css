@@ -245,3 +245,16 @@
 .save-recipe-box .no-btn:hover {
   background-color: #ff7c7c;
 }
+
+.contact-info {
+  background-color: #ffffff;
+  border-width: 2px;
+  border-style: solid;
+  padding-left: 1rem;
+  padding-top: 0.2rem;
+  padding-bottom: 0.2rem;
+  margin-left: 1rem;
+  margin-right: 1rem;
+  margin-top: 0.5rem;
+  border-radius: 5px;
+}
