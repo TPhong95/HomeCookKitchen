@@ -115,7 +115,21 @@ public class Initializer implements CommandLineRunner {
                 false, true, false, true, false, true, false, false, false, false, false, false, false, true);
         recipeClient.createRecipe(recipe5);
 
-        //LISTING
+        //LISTING UNACTIVE
+
+        LocalDateTime listingTime1 = LocalDateTime.parse("2026-10-01T18:00:00");
+        CreateProductListingDTO oldProductListing1 = new CreateProductListingDTO(1L, 1L, chefClient.getFirstAddressByChefId(1L), 20, 14.99f, listingTime1, listingTime1.plusHours(2));
+        listingClient.createUnactiveListing(oldProductListing1);
+
+        LocalDateTime listingTime2 = LocalDateTime.parse("2026-11-01T18:00:00");
+        CreateProductListingDTO oldProductListing2 = new CreateProductListingDTO(1L, 1L, chefClient.getFirstAddressByChefId(1L), 30, 20.00f, listingTime2, listingTime2.plusHours(2));
+        listingClient.createUnactiveListing(oldProductListing2);
+
+        LocalDateTime listingTime3 = LocalDateTime.parse("2026-11-03T12:00:00");
+        CreateProductListingDTO oldProductListing3 = new CreateProductListingDTO(5L, 1L, chefClient.getFirstAddressByChefId(1L), 15, 4.99f, listingTime3, listingTime3.plusHours(2));
+        listingClient.createUnactiveListing(oldProductListing3);
+
+        //LISTING ACTIVE
 
         CreateProductListingDTO productListing1 = new CreateProductListingDTO(1L, 1L, chefClient.getFirstAddressByChefId(1L), 20, 14.99f, LocalDateTime.now().plusHours(1), LocalDateTime.now().plusHours(2));
         listingClient.createListing(productListing1);

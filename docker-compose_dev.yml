@@ -199,6 +199,12 @@ services:
     restart: no
     networks:
       - m2026
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U username -d chefDB" ]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+      start_period: 10s
 
   chef-service:
     image: chef-service:0.0.1-SNAPSHOT
@@ -217,7 +223,7 @@ services:
       LOGSTASH_DESTINATION: logstash:5000
     depends_on:
       postgres_chef:
-        condition: service_started
+        condition: service_healthy
       consul-importer:
         condition: service_completed_successfully
     networks:
@@ -243,6 +249,12 @@ services:
     restart: no
     networks:
       - m2026
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U username -d customerDB" ]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+      start_period: 10s
 
   customer-service:
     image: customer-service:0.0.1-SNAPSHOT
@@ -261,7 +273,7 @@ services:
       LOGSTASH_DESTINATION: logstash:5000
     depends_on:
       postgres_customer:
-        condition: service_started
+        condition: service_healthy
       consul-importer:
         condition: service_completed_successfully
     networks:
@@ -287,6 +299,12 @@ services:
     restart: no
     networks:
       - m2026
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U username -d purchaseDB" ]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+      start_period: 10s
 
   purchase-service:
     image: purchase-service:0.0.1-SNAPSHOT
@@ -305,9 +323,9 @@ services:
       LOGSTASH_DESTINATION: logstash:5000
     depends_on:
       postgres_purchase:
-        condition: service_started
+        condition: service_healthy
       productlisting-service:
-        condition: service_started
+        condition: service_healthy
       consul-importer:
         condition: service_completed_successfully
     networks:
@@ -334,6 +352,12 @@ services:
     restart: no
     networks:
       - m2026
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U username -d productlistingDB" ]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+      start_period: 10s
 
   productlisting-service:
     image: productlisting-service:0.0.1-SNAPSHOT
@@ -352,11 +376,11 @@ services:
       LOGSTASH_DESTINATION: logstash:5000
     depends_on:
       postgres-productlisting:
-        condition: service_started
+        condition: service_healthy
       recipe-service:
-        condition: service_started
+        condition: service_healthy
       customer-service:
-        condition: service_started
+        condition: service_healthy
       consul-importer:
         condition: service_completed_successfully
     networks:
@@ -381,6 +405,12 @@ services:
     restart: no
     networks:
       - m2026
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U username -d recipeDB" ]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+      start_period: 10s
 
   recipe-service:
     image: recipe-service:0.0.1-SNAPSHOT
@@ -399,9 +429,9 @@ services:
       LOGSTASH_DESTINATION: logstash:5000
     depends_on:
       postgres-recipe:
-        condition: service_started
+        condition: service_healthy
       chef-service:
-        condition: service_started
+        condition: service_healthy
       consul-importer:
         condition: service_completed_successfully
     networks:
