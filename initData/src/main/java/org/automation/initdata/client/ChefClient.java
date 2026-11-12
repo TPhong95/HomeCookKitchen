@@ -1,10 +1,13 @@
 package org.automation.initdata.client;
 
+import org.automation.initdata.dtos.AddressIdDto;
 import org.automation.initdata.dtos.CreateChefDto;
 import org.automation.initdata.dtos.SaveAddressDto;
+import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestClient;
+import java.util.List;
 
 @Service
 public class ChefClient {
@@ -31,5 +34,20 @@ public class ChefClient {
                 .body(saveAddressDto)
                 .retrieve()
                 .toBodilessEntity();
+    }
+
+    public Long getFirstAddressByChefId(Long chefId) {
+        String callUri = url + "/address/active/" + chefId;
+        List<AddressIdDto> addresses = restClient
+                .get()
+                .uri(callUri)
+                .retrieve()
+                .body(new ParameterizedTypeReference<List<AddressIdDto>>() {
+                });
+
+        if (addresses == null || addresses.isEmpty()) {
+            return null;
+        }
+        return addresses.getFirst().id();
     }
 }
