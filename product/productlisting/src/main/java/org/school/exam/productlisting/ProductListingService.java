@@ -68,6 +68,22 @@ public class ProductListingService {
         return productListingRepo.save(productListing);
     }
 
+    //FOR MAKING OLD PURCHASE FROM INITDATA
+    public ProductListing updateOldListing(Long id, UpdatePurchaseProductListingDTO DTO) {
+        ProductListing productListing = productListingRepo.findById(id).orElse(null);
+        if (productListing == null) {
+            throw new ProductListingNotFoundException("No product listing with id " + id + " found", Map.of());
+        }
+        if (DTO == null){
+            throw new BadRequestException("Cannot update a product listing without receiving information", Map.of());
+        }
+        if (productListing.getQuantityOffered() - productListing.getQuantityPurchased() < DTO.quantityWantToPurchase()) {
+            throw new BadRequestException("Cannot update a product listing with insufficient quantity", Map.of());
+        }
+        productListing.setQuantityPurchased(productListing.getQuantityPurchased() + DTO.quantityWantToPurchase());
+        return productListingRepo.save(productListing);
+    }
+
     public void delete(ProductListing productListing) {
         productListingRepo.delete(productListing);
     }

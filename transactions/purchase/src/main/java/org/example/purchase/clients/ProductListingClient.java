@@ -40,6 +40,16 @@ public class ProductListingClient {
                 .toBodilessEntity();
     }
 
+    //INITDATA
+    public void UpdateOldPurchaseValue(UpdatePurchaseProductListingDTO listingDTO, Long productListingId) {
+        restClient.patch()
+                .uri(url + "productListing/" + productListingId + "/initdata")
+                .contentType(MediaType.APPLICATION_JSON)
+                .body(listingDTO)
+                .retrieve()
+                .toBodilessEntity();
+    }
+
     public RecipeDto getRecipeById(int id) {
         String callUrl = this.url + "recipe/" + id;
         RecipeDto recipeDto = restClient

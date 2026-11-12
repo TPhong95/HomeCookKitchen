@@ -24,5 +24,15 @@ public class PurchaseClient {
                 .toBodilessEntity();
     }
 
+    //INITDATA
+    public void createOldPurchase(PurchaseDto purchaseDto) {
+        restClient.post()
+                .uri(url + "/initdata")
+                .contentType(MediaType.APPLICATION_JSON)
+                .body(purchaseDto)
+                .retrieve()
+                .toBodilessEntity();
+    }
+
 
 }
