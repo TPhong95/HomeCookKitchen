@@ -6,3 +6,12 @@ CREATE TABLE IF NOT EXISTS customer (
 );
 
 CREATE SEQUENCE customer_seq INCREMENT BY 1 START WITH 1;
+
+create  table if not exists customer_notification(
+    id BIGINT primary key,
+    customer_id BIGINT,
+    message VARCHAR(100),
+    time TIMESTAMPTZ,
+    is_read BOOLEAN
+);
+create sequence customer_notification_seq increment by 1 start with 1;

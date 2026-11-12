@@ -5,6 +5,7 @@ import user.chefuser.chef.mappers.DtoMapper;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -55,6 +56,39 @@ public class ChefController {
     public ResponseEntity<ChefResponseDto> deactivateChef(@PathVariable Long id) {
         Chef chef = chefOrchestrationService.deactivateChef(id);
         return ResponseEntity.ok(dtoMapper.toChefResponseDto(chef));
+    }
+
+    // Chef Notification //
+
+    @PostMapping("/notification")
+    public ResponseEntity<ChefNotificationResponseDto> createNotification(@RequestBody ChefNotificationCreationDto notificationInputDTO) {
+        ChefNotification savedNotification = chefOrchestrationService.createChefNotification(notificationInputDTO);
+        ChefNotificationResponseDto responseDto = dtoMapper.toChefNotificationResponseDto(savedNotification);
+        return ResponseEntity.ok(responseDto);
+    }
+
+    @GetMapping("/notification/{id}")
+    public ResponseEntity<ChefNotificationResponseDto> getNotificationById(@PathVariable Long id) {
+        ChefNotification result = chefOrchestrationService.getNotificationById(id);
+        ChefNotificationResponseDto DtoMappedResult = dtoMapper.toChefNotificationResponseDto(result);
+        return ResponseEntity.ok(DtoMappedResult);
+    }
+
+    @GetMapping("/notification/chefId/{id}")
+    public ResponseEntity<List<ChefNotificationResponseDto>> getAllNotificationsByChefId(@PathVariable Long id) {
+        List<ChefNotification> result = chefOrchestrationService.getAllNotificationsByChefId(id);
+        List<ChefNotificationResponseDto> DTOMappedResult = new ArrayList<ChefNotificationResponseDto>();
+        result.forEach(notification -> {
+            ChefNotificationResponseDto DtoMappedNotification = dtoMapper.toChefNotificationResponseDto(notification);
+            DTOMappedResult.add(DtoMappedNotification);
+        });
+        return ResponseEntity.ok(DTOMappedResult);
+    }
+
+    @PatchMapping("/notification/{id}")
+    public ResponseEntity<ChefNotificationResponseDto> updateNotificationReadStatusByChefId(@PathVariable Long id) {
+        ChefNotification updatedNotification = chefOrchestrationService.updateNotificationReadStatus(id);
+        return ResponseEntity.ok(dtoMapper.toChefNotificationResponseDto(updatedNotification));
     }
 
     // ADDRESS //

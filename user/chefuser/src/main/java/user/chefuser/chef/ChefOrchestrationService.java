@@ -2,9 +2,11 @@ package user.chefuser.chef;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import user.chefuser.chef.dtos.ChefNotificationCreationDto;
 import user.chefuser.chef.dtos.HomeVibeDto;
 import user.chefuser.chef.dtos.SaveAddressDto;
 import user.chefuser.chef.exception.badrequest.BadRequestException;
+import user.chefuser.chef.exception.internalServerError.InternalServerError;
 
 import java.util.List;
 import java.util.Map;
@@ -14,11 +16,13 @@ public class ChefOrchestrationService {
     private final ChefService chefService;
     private final AddressService addressService;
     private final HomeVibeService homeVibeService;
+    private final ChefNotificationService chefNotificationService;
 
-    public ChefOrchestrationService(ChefService chefService, AddressService addressService, HomeVibeService homeVibeService) {
+    public ChefOrchestrationService(ChefService chefService, AddressService addressService, HomeVibeService homeVibeService, ChefNotificationService chefNotificationService) {
         this.chefService = chefService;
         this.addressService = addressService;
         this.homeVibeService = homeVibeService;
+        this.chefNotificationService = chefNotificationService;
     }
 
     public Address getAddressById(Long addressId) {
@@ -94,6 +98,63 @@ public class ChefOrchestrationService {
 
     private boolean isBlank(String value) {
         return value == null || value.isBlank();
+    }
+
+    // Chef Notification //
+
+    @Transactional
+    public ChefNotification createChefNotification(ChefNotificationCreationDto inputDTO) {
+        if (inputDTO.chefId() == null) throw new BadRequestException("You need a chef id", Map.of());
+        Chef chef = chefService.getChefById(inputDTO.chefId());
+        if (Boolean.FALSE.equals(chef.getActive())){
+            throw new BadRequestException("Chef with id: " + chef.getId() + " is inactive", Map.of());
+        }
+        ChefNotification newNotification = new ChefNotification(
+                inputDTO.chefId(),
+                inputDTO.message()
+        );
+        ChefNotification savedNotification = chefNotificationService.createNotification(newNotification);
+        validateExistingNotification(savedNotification);
+        return savedNotification;
+    }
+
+    public List<ChefNotification> getAllNotificationsByChefId(Long chefId) {
+        if (chefId == null) throw new BadRequestException("You need a chef id", Map.of());
+        chefService.getChefById(chefId);
+        List<ChefNotification> result = chefNotificationService.getNotificationsByChefId(chefId);
+        result.forEach(this::validateExistingNotification);
+        return result;
+    }
+
+    public ChefNotification getNotificationById(Long notificationId) {
+        if (notificationId == null) throw new BadRequestException("You need a notification id", Map.of());
+        ChefNotification result = chefNotificationService.getNotificationById(notificationId);
+        validateExistingNotification(result);
+        return result;
+    }
+
+    @Transactional
+    public ChefNotification updateNotificationReadStatus(Long id){
+        ChefNotification notification = getNotificationById(id);
+        if (!notification.getIsRead()){
+            notification.setIsRead(true);
+        } else {
+            notification.setIsRead(false);
+        }
+        ChefNotification updatedNotification = chefNotificationService.updateNotification(notification);
+        return updatedNotification;
+    }
+
+    private void validateExistingNotification(ChefNotification notification){
+        if (notification.getId() == null || notification.getId() == 0L) {
+            throw new InternalServerError("Notification with chef id: " + notification.getChefId() + " has no id", Map.of());
+        }
+        if (notification.getMessage() == null || notification.getMessage().isEmpty()) {
+            throw new InternalServerError("Notification with id: " + notification.getId() + " has no message", Map.of());
+        }
+        if (notification.getChefId() == null || notification.getChefId() == 0L) {
+            throw new InternalServerError("Notification with id: " + notification.getId() + " has no chef id", Map.of());
+        }
     }
 
 }

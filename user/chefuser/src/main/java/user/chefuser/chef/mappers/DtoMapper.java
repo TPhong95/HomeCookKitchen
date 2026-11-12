@@ -2,6 +2,7 @@ package user.chefuser.chef.mappers;
 
 import user.chefuser.chef.Chef;
 import user.chefuser.chef.Address;
+import user.chefuser.chef.ChefNotification;
 import user.chefuser.chef.HomeVibe;
 import user.chefuser.chef.dtos.*;
 import org.springframework.stereotype.Component;
@@ -80,5 +81,16 @@ public class DtoMapper {
         if (vibe == null) return null;
         return new HomeVibeDto(vibe.getDescription(), vibe.getMusic(),
                 vibe.getPets(), vibe.getOutdoor(), vibe.getFamilyFriendly());
+    }
+
+    // Chef Notification Response DTO //
+    public ChefNotificationResponseDto toChefNotificationResponseDto(ChefNotification notification) {
+        return new ChefNotificationResponseDto(
+                notification.getId(),
+                notification.getChefId(),
+                notification.getMessage(),
+                notification.getTime(),
+                notification.getIsRead()
+        );
     }
 }
