@@ -41,6 +41,7 @@
   margin: 10px;
 }
 
+/*
 .profile-picture-container {
   width: 100px;
   height: 100px;
@@ -56,6 +57,20 @@
   width: 100%;
   height: 100%;
   object-fit: cover;
+}
+ */
+.notification-container {
+  margin-top: 1.5rem;
+  padding: 0 1rem;
+}
+
+.notification-flash {
+  animation: notification-flash 0.5s ease-in-out infinite alternate;
+}
+
+@keyframes notification-flash {
+  from { opacity: 1; }
+  to { opacity: 0.15; }
 }
 
 .logout-container {

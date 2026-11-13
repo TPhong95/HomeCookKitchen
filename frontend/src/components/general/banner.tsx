@@ -1,9 +1,11 @@
 import {NavLink, useNavigate} from "react-router-dom";
 import styles from "./banner.module.css";
 import {useUserContext} from "../context/useUserContext.tsx";
+import {useNotificationContext} from "../context/useNotificationContext.tsx";
 
 export function Banner() {
   const {user, logout} = useUserContext();
+  const {unreadCount, isFlashing} = useNotificationContext();
   const navigate = useNavigate();
   const role = user?.role ?? null;
 
@@ -42,9 +44,18 @@ export function Banner() {
 
   return (
     <div className={`${styles["banner-sidebar"]} ${role === "customer" ? styles.customer : ""}`}>
-      <div className={styles["profile-picture-container"]}>
-        <img src="../../../testdata/profilepic.jpg" alt={"profile picture goes here"}/>
-      </div>
+      {user && (
+        <div className={styles["notification-container"]}>
+          <NavLink
+            to={`/${user.role}/notifications`}
+            className={isFlashing ? styles["notification-flash"] : ""}
+            title={"Notifications"}
+            aria-label={`Notifications (${unreadCount})`}
+          >
+            {unreadCount > 0 ? "📬" : "📭"} ({unreadCount})
+          </NavLink>
+        </div>
+      )}
       <div className={styles["nav-container"]}>
         <ul>
           {navigation.map((nav) => (

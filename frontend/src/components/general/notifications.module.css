@@ -1,0 +1,105 @@
+.notifications-layout {
+  display: flex;
+  min-height: 100vh;
+}
+
+.notifications-wrapper {
+  font-family: "Segoe UI", serif;
+  background-color: #eeffff;
+  flex: 1;
+  border-left: 2px solid #000000;
+}
+
+.notifications-top-banner {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  color: #ffffff;
+  background-color: #0a4c86;
+  padding: 0.5rem 2rem;
+}
+
+.all-notifications-container {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  padding: 2rem;
+}
+
+.notification-item-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1.5rem;
+  background-color: #ffffff;
+  border: 2px solid #0a4c86;
+  border-radius: 8px;
+  padding: 1.2rem;
+}
+
+.notification-info-container {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.notification-message {
+  font-size: 1.1rem;
+  font-weight: bold;
+  color: #1d3b58;
+}
+
+.notification-time {
+  font-size: 0.9rem;
+  color: #1d3b58;
+}
+
+.mark-as-read-btn {
+  background-color: #ffffff;
+  border: 1px solid #0a4c86;
+  color: #1d3b58;
+  padding: 0.4rem 0.8rem;
+  border-radius: 4px;
+  cursor: pointer;
+  font-weight: 500;
+  transition: background-color 0.2s;
+}
+
+.mark-as-read-btn:hover {
+  background-color: #f0fdff;
+}
+
+/* --- Customer overrides --- */
+
+.notifications-wrapper.customer {
+  background-color: #F2EDC2;
+  border-left-color: #346739;
+}
+
+.customer .notifications-top-banner {
+  background-color: #498350;
+}
+
+.customer .notification-item-container {
+  border-color: #346739;
+}
+
+.customer .notification-message {
+  color: #346739;
+}
+
+.customer .notification-time {
+  color: #498350;
+}
+
+.customer .mark-as-read-btn {
+  background-color: #9FCB98;
+  border-color: #346739;
+  color: #346739;
+  font-weight: bold;
+}
+
+.customer .mark-as-read-btn:hover {
+  background-color: #79AE6F;
+  color: #ffffff;
+}
