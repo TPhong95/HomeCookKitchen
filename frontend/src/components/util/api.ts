@@ -5,12 +5,10 @@ export async function sendJson<T>(method: "POST" | "PATCH" | "DELETE", url: stri
     body: body === undefined ? undefined : JSON.stringify(body),
   });
 
-  if (res.status === 204) return undefined as T;
-
   if (!res.ok) {
-    const errorBody: { detail?: string } | null = await res.json().catch(() => null);
-    throw new Error(errorBody?.detail ?? `Request failed: ${res.status}`);
+    const errorBody: { detail?: string, message?: string } | null = await res.json().catch(() => null);
+    throw new Error(errorBody?.detail ?? errorBody?.message ?? `Request failed: ${res.status}`);
   }
-
-  return res.json();
+  const text = await res.text();
+  return (text ? JSON.parse(text) : undefined) as T;
 }
