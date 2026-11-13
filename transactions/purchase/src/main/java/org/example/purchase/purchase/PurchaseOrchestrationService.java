@@ -5,6 +5,7 @@ import org.example.purchase.clients.ProductListingClient;
 import org.example.purchase.dtos.*;
 import org.example.purchase.event.PurchaseEvent;
 import org.example.purchase.event.PurchaseEventDto;
+import org.example.purchase.event.PurchaseEventService;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -15,11 +16,17 @@ public class PurchaseOrchestrationService {
     private final ProductListingClient productListingClient;
     private final ChefClient chefClient;
     private final PurchaseService purchaseService;
+    private final PurchaseEventService purchaseEventService;
 
-    public PurchaseOrchestrationService(ProductListingClient productListingClient, ChefClient chefClient, PurchaseService purchaseService) {
+    public PurchaseOrchestrationService(ProductListingClient productListingClient, ChefClient chefClient, PurchaseService purchaseService, PurchaseEventService purchaseEventService) {
         this.productListingClient = productListingClient;
         this.chefClient = chefClient;
         this.purchaseService = purchaseService;
+        this.purchaseEventService = purchaseEventService;
+    }
+
+    public List<PurchasedListingQuantityDto> getPurchasedQuantitiesByCustomer(Long id) {
+        return purchaseEventService.getPurchasedQuantitiesByCustomer(id);
     }
 
     public Purchase createPurchase(PurchaseDto purchaseDto) {

@@ -79,7 +79,7 @@ export function Recipe() {
     setTempRecipeName(recipe.recipeName);
     setTempDescription(recipe.description);
     // setTempCategory(recipe.category);
-    setTempAllergens(recipe.allergens || initialAllergens);
+    // setTempAllergens(recipe.allergens || initialAllergens);
     // setTempImage(recipe.image || "");
     showRecipeDialogRef.current?.showModal();
   }
