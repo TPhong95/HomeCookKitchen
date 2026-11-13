@@ -59,28 +59,27 @@ export function FrontPage() {
   function handleLoginWithExistingChef() {
     if (selectedChefId === "") return;
     login({id: selectedChefId, role: "chef"});
-    navigate("/user/chef/profile");
+    navigate("/chef/profile");
   }
 
   function handleLoginWithExistingCustomer() {
     if (selectedCustomerId === "") return;
     login({id: selectedCustomerId, role: "customer"});
-    navigate("/user/customer/profile");
+    navigate("/customer/profile");
   }
 
   return (
     <div className={styles["frontpage-wrapper"]}>
       <div className={styles["frontpage-top-banner"]}>
-        <h1>Test landing page</h1>
+        <h1>Welcome to our exam!</h1>
       </div>
       <div className={styles["frontpage-description"]}>
-        <p>The purpose of this page is to allow the user four options:</p>
-        <ol>
-          <li>Log in with an existing chef</li>
-          <li>Log in with an existing customer</li>
-          <li>Creating own user (not yet implemented)</li>
-          <li>Logging in with personal user (not yet implemented)</li>
-        </ol>
+        <p>
+          You can log in as a test user, either as a chef or
+          as a customer. Session cookies are set upon logging in.
+          It might take a couple of seconds to populate the
+          dropdown menus from the backend :)
+        </p>
       </div>
       <div className={styles["existing-user-wrapper"]}>
         <div className={`${styles["existing-user-box"]} ${styles["existing-chef-box"]}`}>

@@ -24,7 +24,7 @@ export interface ChefAddress {
   postalCode: string;
   city: string;
   chefId: number;
-  homeVibe: HomeVibe | null;
+  homeVibe: HomeVibe;
 }
 
 export interface ChefResponse {

@@ -1,5 +1,6 @@
 package org.example.purchase.purchase;
 
+import org.example.purchase.dtos.PurchasedListingQuantityDto;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -33,9 +34,23 @@ public class PurchaseController {
         return ResponseEntity.ok(result);
     }
 
+    @GetMapping("/customer/{customerId}")
+    public ResponseEntity<List<PurchasedListingQuantityDto>> getPurchasesByCustomer(@PathVariable Long customerId) {
+        List<PurchasedListingQuantityDto> result = purchaseOrchestrationService.getPurchasedQuantitiesByCustomer(customerId);
+        return ResponseEntity.ok(result);
+    }
+
     @PostMapping()
     public ResponseEntity<Purchase> savePurchase(@RequestBody PurchaseDto purchaseDto) {
         Purchase purchase = purchaseOrchestrationService.createPurchase(purchaseDto);
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .body(purchase);
+    }
+
+    //INITDATA
+    @PostMapping("/initdata")
+    public ResponseEntity<Purchase> saveOldPurchase(@RequestBody PurchaseDto purchaseDto) {
+        Purchase purchase = purchaseOrchestrationService.createOldPurchase(purchaseDto);
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(purchase);
     }

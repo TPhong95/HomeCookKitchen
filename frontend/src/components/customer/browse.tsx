@@ -1,215 +1,146 @@
-import {useRef, useState} from "react";
-import * as React from "react";
-import {useNavigate} from "react-router-dom";
+import {useEffect, useRef, useState} from "react";
 import styles from './browse.module.css';
 import {Banner} from "../general/banner.tsx";
-import {
-  Allergen,
-  DishPreference,
-  initialAllergens,
-  allergensList,
-  DishCategory
-} from "../shared/recipeinterface.ts";
-import {type BrowseItem} from "../shared/browseinterface.ts";
+import {type RecipeStruct, allergensList, DishCategory} from "../shared/recipeinterface.ts";
+import {type ListingStruct} from "../shared/listinginterface.ts";
+import {type ChefAddress, GENRE_LABELS} from "../shared/chefinterface.ts";
+import {useUserContext} from "../context/useUserContext.tsx";
+import {sendJson} from "../util/api.ts";
+import toast from "react-hot-toast";
 
-
-const testBrowseItems: BrowseItem[] = [
-  {
-    listingId: 1,
-    chefId: 1,
-    chefName: "George",
-    chefStreet: "Ingenmannsland 3",
-    chefPostalCode: "0123",
-    chefCity: "Oslo",
-    recipeName: "Falafel Baguette",
-    description: "It tastes like falafel and baguette at the same time",
-    image: "../../../testdata/falafelbaguette.jpg",
-    category: DishCategory.PASTA,
-    preference: DishPreference.VEGAN,
-    allergens: {
-      [Allergen.GLUTEN]: true,
-    },
-    unitPrice: 50,
-    quantity: 4,
-    quantityPurchased: 3,
-    readyBy: "2026-06-06T14:30",
-    purchaseDeadline: "2026-06-06T12:00",
-  },
-  {
-    listingId: 2,
-    chefId: 2,
-    chefName: "Joanne",
-    chefStreet: "Hvavar Gata 7",
-    chefPostalCode: "0549",
-    chefCity: "Oslo",
-    recipeName: "Lasagne",
-    description: "It tastes like a cross between gravel and dead leaves.",
-    image: "../../../testdata/lasagne.jpg",
-    category: DishCategory.PASTA,
-    preference: DishPreference.NONE,
-    allergens: {
-      [Allergen.MILK]: true,
-      [Allergen.CELERY]: true,
-      [Allergen.GLUTEN]: true,
-    },
-    unitPrice: 180,
-    quantity: 6,
-    quantityPurchased: 4,
-    readyBy: "2026-06-07T17:00",
-    purchaseDeadline: "2026-06-07T15:00",
-  },
-  {
-    listingId: 3,
-    chefId: 1,
-    chefName: "George",
-    chefStreet: "Ingenmannsland 3",
-    chefPostalCode: "0123",
-    chefCity: "Oslo",
-    recipeName: "Chicken Salad",
-    description: "It's chicken... IN A SALAD WOW!! Never been done before",
-    image: "../../../testdata/chickensalad.jpg",
-    category: DishCategory.CURRIES_AND_STEWS,
-    preference: DishPreference.NONE,
-    allergens: {},
-    unitPrice: 40,
-    quantity: 4,
-    quantityPurchased: 4,
-    readyBy: "2026-06-08T16:30",
-    purchaseDeadline: "2026-06-07T16:00",
-  },
-];
+type DetailsStatus = "loading" | "loaded" | "error";
 
 export function BrowseListing() {
-  const navigate = useNavigate();
+  const {user} = useUserContext();
+  // Anyone can browse, only customers can order
+  const customerId = user?.role === "customer" ? user.id : null;
 
-  const [searchQuery, setSearchQuery] = useState("");
-  const [orderQuantity, setOrderQuantity] = useState(0);
+  const [listings, setListings] = useState<ListingStruct[]>([]);
+  const [selectedListing, setSelectedListing] = useState<ListingStruct | null>(null);
+  const [recipe, setRecipe] = useState<RecipeStruct | null>(null);
+  const [address, setAddress] = useState<ChefAddress | null>(null);
+  const [detailsStatus, setDetailsStatus] = useState<DetailsStatus>("loading");
+  const [quantity, setQuantity] = useState(1);
 
-  const [browseItems, /* setBrowseItems */] = useState<BrowseItem[]>(testBrowseItems);
-  const [selectedBrowseItem, setSelectedBrowseItem] = useState<BrowseItem | null>(null);
+  const listingDialogRef = useRef<HTMLDialogElement>(null);
+  const latestDetailsRequestRef = useRef<number | null>(null);
 
-  const [tempPreference, setTempPreference] = useState<DishPreference>(DishPreference.NONE);
-  const [tempCategory, setTempCategory] = useState<DishCategory>(DishCategory.BURGERS);
-  const [tempAllergens, setTempAllergens] = useState<Record<Allergen, boolean>>(initialAllergens);
-  /* create a way for page to remember which allergens were previously selected so user doesn't have
-  to keep re-selecting every time they edit their preferences */
+  useEffect(() => {
+    async function loadListings() {
+      try {
+        const res = await fetch("http://localhost:8100/api/productListing/active");
+        if (!res.ok) {
+          console.log(`Listings request failed: ${res.status}`);
+          return;
+        }
+        const data: ListingStruct[] = await res.json();
+        setListings(data);
+      } catch (error) {
+        console.log(error);
+      }
+    }
 
-  const showFilterDialogRef = useRef<HTMLDialogElement>(null);
-  const seeBrowseItemDialogRef = useRef<HTMLDialogElement>(null);
-  const cartOrBrowseDialogRef = useRef<HTMLDialogElement>(null);
+    loadListings();
+  }, []);
 
-  const handleSearchForListing = (e: React.SyntheticEvent) => {
-    e.preventDefault();
-    console.log("Searching listings:", {
-      query: searchQuery,
-      category: tempCategory,
-      preference: tempPreference,
-      allergens: tempAllergens
-    });
-  }
+  const seatsLeft = (listing: ListingStruct) => listing.quantityOffered - listing.quantityPurchased;
 
-  const handleEditPreferencesModal = () => {
-    showFilterDialogRef.current?.showModal();
-  }
+  const handleMoreInfo = async (listing: ListingStruct) => {
+    setSelectedListing(listing);
+    setRecipe(null);
+    setAddress(null);
+    setDetailsStatus("loading");
+    setQuantity(1);
+    latestDetailsRequestRef.current = listing.productListingId;
+    listingDialogRef.current?.showModal();
 
-  const handleSavePreferences = () => {
-    showFilterDialogRef.current?.close();
-  }
+    try {
+      const [recipeRes, addressRes] = await Promise.all([
+        fetch(`http://localhost:8100/api/recipe/${listing.recipeId}`),
+        fetch(`http://localhost:8100/api/chef/address/${listing.addressId}`),
+      ]);
+      if (!recipeRes.ok) throw new Error(`Recipe request failed: ${recipeRes.status}`);
+      if (!addressRes.ok) throw new Error(`Address request failed: ${addressRes.status}`);
 
-  const handleResetPreferences = () => {
-    setTempPreference(DishPreference.NONE);
-    setTempCategory(DishCategory.BURGERS);
-    setTempAllergens(initialAllergens);
-    showFilterDialogRef.current?.close();
-  }
+      const recipeData: RecipeStruct = await recipeRes.json();
+      const addressData: ChefAddress = await addressRes.json();
 
-  const handleAllergenChange = (allergenKey: Allergen, checked: boolean) => {
-    setTempAllergens(prev => ({
-      ...prev,
-      [allergenKey]: checked
-    }));
+      if (latestDetailsRequestRef.current !== listing.productListingId) return;
+      setRecipe(recipeData);
+      setAddress(addressData);
+      setDetailsStatus("loaded");
+    } catch (error) {
+      if (latestDetailsRequestRef.current !== listing.productListingId) return;
+      setDetailsStatus("error");
+      toast.error(error instanceof Error ? error.message : "Something went wrong");
+    }
   };
 
-  const handleMoreInfo = (browseItem: BrowseItem) => {
-    setSelectedBrowseItem(browseItem);
-    seeBrowseItemDialogRef.current?.showModal();
-  }
+  const handleAddToOrder = async () => {
+    if (!selectedListing || customerId === null) return;
 
-  const handleAddToOrderButton = () => {
-    if (!selectedBrowseItem) return;
+    const productListingId = selectedListing.productListingId;
 
-    console.log("Added to order:", {
-      // FIX backend needs customerId
-      listingId: selectedBrowseItem.listingId,
-      quantity: orderQuantity,
-    });
+    try {
+      await sendJson<unknown>("POST", "http://localhost:8100/api/purchase", {
+        customerId,
+        purchaseEvents: [{productListingId, quantity}],
+      });
 
-    seeBrowseItemDialogRef.current?.close();
-    cartOrBrowseDialogRef.current?.showModal();
+      setListings(prev => prev.map(l =>
+        l.productListingId === productListingId
+          ? {...l, quantityPurchased: l.quantityPurchased + quantity}
+          : l
+      ));
+      toast.success(`Ordered ${quantity} portion(s) of ${selectedListing.recipeName}`);
+      listingDialogRef.current?.close();
+    } catch (error) {
+      toast.error(error instanceof Error ? error.message : "Something went wrong");
+    }
   };
 
-  const handleGoToCart = () => {
-    cartOrBrowseDialogRef.current?.close();
-    navigate("/user/customer/cart");
-  }
-
+  const allergensInRecipe = recipe
+    ? allergensList.filter(allergen => recipe[allergen.id])
+    : [];
 
   return (
     <div className={styles["browse-layout"]}>
       <Banner/>
       <div className={styles["browse-wrapper"]}>
-        <div className={styles["search-bar"]}>
-          <form onSubmit={handleSearchForListing}>
-            <button className={styles["search-icon"]}>🔎</button>
-            <input
-              id={"search-bar"}
-              type={"text"}
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              placeholder={"e.g. Veggie Burger"}
-            />
-            <button
-              type={"button"}
-              className={styles["filter-btn"]}
-              onClick={handleEditPreferencesModal}
-            >
-              Filter
-            </button>
-          </form>
-        </div>
-
         <div className={styles["all-browse-items-container"]}>
-          {browseItems.map((browseItem: BrowseItem) => (
+          {listings.length === 0 && <p>No listings available right now.</p>}
+          {listings.map((listing: ListingStruct) => (
             <div
               className={styles["browse-item-container"]}
-              key={browseItem.listingId}
+              key={listing.productListingId}
             >
               <div className={styles["browse-item-picture-container"]}>
-                <img src={browseItem.image} alt={browseItem.recipeName} />
+                <img src={listing.recipeUrl} alt={listing.recipeName}/>
               </div>
               <div className={styles["browse-item-info-container"]}>
                 <div className={styles["name-and-edit-container"]}>
-                  <div className={styles["browse-item-title"]}>{browseItem.recipeName}</div>
+                  <div className={styles["browse-item-title"]}>{listing.recipeName}</div>
                   <button
                     className={styles["more-info-btn"]}
-                    onClick={() => handleMoreInfo(browseItem)}
+                    onClick={() => handleMoreInfo(listing)}
                   >
                     More info & Order
                   </button>
                 </div>
-                <div className={"chef-name-box"}>Chef: {browseItem.chefName}</div>
+                <div>Chef: {listing.chefName}</div>
                 <div className={styles["browse-item-quantity-text"]}>
-                  Price per portion: <span className={styles["browse-item-quantity-numbers"]}>{browseItem.unitPrice} NOK</span>
+                  Price per portion: <span
+                  className={styles["browse-item-quantity-numbers"]}>{listing.unitPrice} NOK</span>
                 </div>
                 <div className={styles["browse-item-quantity-text"]}>
-                  Seats left: <span className={styles["browse-item-quantity-numbers"]}>{browseItem.quantity - browseItem.quantityPurchased} / {browseItem.quantity}</span>
+                  Seats left: <span
+                  className={styles["browse-item-quantity-numbers"]}>{seatsLeft(listing)} / {listing.quantityOffered}</span>
                 </div>
                 <div className={styles["order-detail-text"]}>
-                  Chef's address: <span
-                  className={styles["order-highlight"]}>{browseItem.chefStreet}, {browseItem.chefPostalCode} {browseItem.chefCity}</span>
+                  Chef's address: <span className={styles["order-highlight"]}>{listing.compositeAddress}</span>
                 </div>
-                <div className={styles["browse-item-ready-by"]}>Ready by: {browseItem.readyBy}</div>
-                <div className={styles["browse-item-description"]}>{browseItem.description}</div>
+                <div className={styles["browse-item-ready-by"]}>Ready by: {listing.readyBy}</div>
+                <div className={styles["browse-item-description"]}>{listing.recipeDescription}</div>
               </div>
             </div>
           ))}
@@ -217,159 +148,101 @@ export function BrowseListing() {
 
         <dialog
           className={styles["see-item-dialog"]}
-          ref={seeBrowseItemDialogRef}
+          ref={listingDialogRef}
         >
-          {selectedBrowseItem && (
+          {selectedListing && (
             <>
               <div className={styles["modal-pic-name-close-container"]}>
                 <div className={styles["browse-item-picture-container"]}>
-                  <img src={selectedBrowseItem.image} alt={selectedBrowseItem.recipeName} />
+                  <img src={selectedListing.recipeUrl} alt={selectedListing.recipeName}/>
                 </div>
                 <div>
-                  <h1>{selectedBrowseItem.recipeName}</h1>
-                  <div className={styles["food-category-container"]}>{selectedBrowseItem.category}</div>
+                  <h1>{selectedListing.recipeName}</h1>
+                  {recipe && (
+                    <div className={styles["food-category-container"]}>
+                      {DishCategory[recipe.foodCategory]}
+                    </div>
+                  )}
                 </div>
                 <div
                   className={styles["close-btn"]}
-                  onClick={() => seeBrowseItemDialogRef.current?.close()}
+                  onClick={() => listingDialogRef.current?.close()}
                 >
                   ❌
                 </div>
               </div>
-              <div className={"chef-dialog-info-box"}>Chef: {selectedBrowseItem.chefName}</div>
-              <div className={styles["allergens-modal-list"]}>
-                {Object.entries(selectedBrowseItem.allergens)
-                  .filter(([_, hasAllergen]) => hasAllergen)
-                  .map(([allergenKey]) => (
-                    <div key={allergenKey}>{allergenKey}</div>
-                  ))}
+
+              <div>Chef: {selectedListing.chefName}</div>
+              <div className={styles["order-detail-text"]}>
+                Address: <span className={styles["order-highlight"]}>{selectedListing.compositeAddress}</span>
               </div>
-              <div className={styles["modal-description"]}>{selectedBrowseItem.description}</div>
+              <div className={styles["modal-description"]}>{selectedListing.recipeDescription}</div>
+
+              {detailsStatus === "loading" && <p>Loading allergens and home vibe…</p>}
+              {detailsStatus === "error" && <p>Could not load allergens and home vibe.</p>}
+              {detailsStatus === "loaded" && address && (
+                <>
+                  <div className={styles["modal-date-descriptions"]}>Allergens:</div>
+                  <div className={styles["allergens-modal-list"]}>
+                    {allergensInRecipe.length === 0
+                      ? <div>None</div>
+                      : allergensInRecipe.map(allergen => (
+                        <div key={allergen.id}>{allergen.label}</div>
+                      ))}
+                  </div>
+
+                  <div className={styles["modal-date-descriptions"]}>Home vibe:</div>
+                  <div className={styles["modal-description"]}>
+                    <p>{address.homeVibe.description}</p>
+                    <div>Music: {GENRE_LABELS[address.homeVibe.music]}</div>
+                    <div>Pets: {address.homeVibe.pets ? "Yes" : "No"}</div>
+                    <div>Outdoor: {address.homeVibe.outdoor ? "Yes" : "No"}</div>
+                    <div>Family friendly: {address.homeVibe.familyFriendly ? "Yes" : "No"}</div>
+                  </div>
+                </>
+              )}
+
               <div className={styles["both-dates-container"]}>
                 <div className={styles["date-container"]}>
                   <div className={styles["modal-date-descriptions"]}>Ready by:</div>
-                  <div className={styles["modal-date-text"]}>{selectedBrowseItem.readyBy}</div>
+                  <div className={styles["modal-date-text"]}>{selectedListing.readyBy}</div>
                 </div>
                 <div>
                   <div className={styles["modal-date-descriptions"]}>Order by:</div>
-                  <div className={styles["modal-date-text"]}>{selectedBrowseItem.purchaseDeadline}</div>
+                  <div className={styles["modal-date-text"]}>{selectedListing.purchaseDeadline}</div>
                 </div>
               </div>
-              <div className={styles["order-quantity-box"]}>
-                <button
-                  className={styles["order-quantity-btn"]}
-                  onClick={() => setOrderQuantity(orderQuantity + 1)}
-                >
-                  +
-                </button>
-                <button
-                  className={styles["order-quantity-btn"]}
-                  onClick={() => setOrderQuantity(orderQuantity - 1)}
-                >
-                  -
-                </button>
-                <div>{orderQuantity}</div>
-              </div>
-              <button
-                className={styles["add-to-order-btn"]}
-                onClick={handleAddToOrderButton}
-              >
-                Add to order
-              </button>
+
+              {customerId === null ? (
+                <p>Log in as a customer on the front page to order.</p>
+              ) : (
+                <>
+                  <div className={styles["order-quantity-box"]}>
+                    <button
+                      className={styles["order-quantity-btn"]}
+                      onClick={() => setQuantity(q => Math.min(seatsLeft(selectedListing), q + 1))}
+                    >
+                      +
+                    </button>
+                    <button
+                      className={styles["order-quantity-btn"]}
+                      onClick={() => setQuantity(q => Math.max(1, q - 1))}
+                    >
+                      -
+                    </button>
+                    <div>{quantity}</div>
+                  </div>
+                  <button
+                    className={styles["add-to-order-btn"]}
+                    onClick={handleAddToOrder}
+                    disabled={seatsLeft(selectedListing) <= 0}
+                  >
+                    {seatsLeft(selectedListing) <= 0 ? "Sold out" : "Add to order"}
+                  </button>
+                </>
+              )}
             </>
           )}
-
-        </dialog>
-
-        <dialog
-          className={styles["cart-or-browse-dialog"]}
-          ref={cartOrBrowseDialogRef}
-        >
-          {selectedBrowseItem && (
-            <>
-              <div className={styles["add-to-cart-txt"]}>{selectedBrowseItem.recipeName} has been added to cart! Keep browsing, or go to cart?</div>
-              <button
-                className={styles["go-to-cart-btn"]}
-                onClick={handleGoToCart}
-              >
-                Go to cart
-              </button>
-              <button
-                className={styles["keep-browsing-btn"]}
-                onClick={() => cartOrBrowseDialogRef.current?.close()}
-              >
-                Continue browsing
-              </button>
-            </>
-          )}
-
-        </dialog>
-
-        <dialog
-          className={styles["filter-dialog"]}
-          ref={showFilterDialogRef}
-        >
-
-          <div className={styles["category-dropdowns"]}>
-            <div className={styles["form-field"]}>
-              <label htmlFor={"category-input"}>Category:</label>
-              <select
-                id={"category-input"}
-                value={tempCategory}
-                onChange={(e) => setTempCategory(e.target.value as DishCategory)}
-              >
-                {Object.values(DishCategory).map((value) => (
-                  <option key={value} value={value}>{value}</option>
-                ))}
-              </select>
-            </div>
-
-            <div className={styles["form-field"]}>
-              <label htmlFor={"preference-input"}>Diet preference:</label>
-              <select
-                id={"preference-input"}
-                value={tempPreference}
-                onChange={(e) => setTempPreference(e.target.value as DishPreference)}
-              >
-                {Object.values(DishPreference).map((value) => (
-                  <option key={value} value={value}>{value}</option>
-                ))}
-              </select>
-            </div>
-          </div>
-
-          <div className={styles["form-field"]}>
-            <div className={styles["allergens-title"]}>Omit allergens:</div>
-            <div className={styles["allergens-checkboxes"]}>
-              {allergensList.map((allergen) => (
-                <div className={styles["allergen-item"]} key={allergen.id}>
-                  <input
-                    id={`${allergen.id}-checkbox`}
-                    type={"checkbox"}
-                    name={`${allergen.id}-checkbox`}
-                    value={allergen.id}
-                    checked={tempAllergens[allergen.id] || false}
-                    onChange={(e) => handleAllergenChange(allergen.id, e.target.checked)}
-                  />
-                  <label htmlFor={`${allergen.id}-checkbox`}>{allergen.label}</label>
-                </div>
-              ))}
-            </div>
-          </div>
-          <div className={styles["save-preferences-box"]}>
-            <button
-              className={styles["yes-btn"]}
-              onClick={handleSavePreferences}
-            >
-              Set preferences
-            </button>
-          </div>
-          <button
-            className={styles["reset-btn"]}
-            onClick={handleResetPreferences}
-          >
-            Clear filter
-          </button>
         </dialog>
       </div>
     </div>

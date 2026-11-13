@@ -2,6 +2,8 @@ package org.school.exam.productlisting;
 
 import lombok.AllArgsConstructor;
 import org.school.exam.productlisting.dto.ProductListingDeadlineDTO;
+import org.school.exam.productlisting.dto.UpdatePurchaseProductListingDTO;
+import org.school.exam.productlisting.exception.BadRequestException.BadRequestException;
 import org.school.exam.productlisting.exception.NotFoundException.ProductListingNotFoundException;
 import org.springframework.stereotype.Service;
 
@@ -48,8 +50,7 @@ public class ProductListingService {
         return productListingRepo.save(productListing);
     }
 
-    /*
-    public ProductListing update(Long id, CreateProductListingDTO DTO) {
+    public ProductListing update(Long id, UpdatePurchaseProductListingDTO DTO) {
         ProductListing productListing = productListingRepo.findById(id).orElse(null);
         if (productListing == null) {
             throw new ProductListingNotFoundException("No product listing with id " + id + " found", Map.of());
@@ -57,16 +58,31 @@ public class ProductListingService {
         if (DTO == null){
             throw new BadRequestException("Cannot update a product listing without receiving information", Map.of());
         }
-        if (DTO.quantityOffered() != productListing.getQuantityOffered()) {
-        productListing.setQuantityOffered(DTO.quantityOffered());
+        if (productListing.getActive() == false) {
+            throw new BadRequestException("Cannot update a product listing without active product", Map.of());
         }
-        if (DTO.unitPrice() != productListing.getUnitPrice()) {
-        productListing.setUnitPrice(DTO.unitPrice());
+        if (productListing.getQuantityOffered() - productListing.getQuantityPurchased() < DTO.quantityWantToPurchase()) {
+            throw new BadRequestException("Cannot update a product listing with insufficient quantity", Map.of());
         }
+        productListing.setQuantityPurchased(productListing.getQuantityPurchased() + DTO.quantityWantToPurchase());
         return productListingRepo.save(productListing);
     }
 
-     */
+    //FOR MAKING OLD PURCHASE FROM INITDATA
+    public ProductListing updateOldListing(Long id, UpdatePurchaseProductListingDTO DTO) {
+        ProductListing productListing = productListingRepo.findById(id).orElse(null);
+        if (productListing == null) {
+            throw new ProductListingNotFoundException("No product listing with id " + id + " found", Map.of());
+        }
+        if (DTO == null){
+            throw new BadRequestException("Cannot update a product listing without receiving information", Map.of());
+        }
+        if (productListing.getQuantityOffered() - productListing.getQuantityPurchased() < DTO.quantityWantToPurchase()) {
+            throw new BadRequestException("Cannot update a product listing with insufficient quantity", Map.of());
+        }
+        productListing.setQuantityPurchased(productListing.getQuantityPurchased() + DTO.quantityWantToPurchase());
+        return productListingRepo.save(productListing);
+    }
 
     public void delete(ProductListing productListing) {
         productListingRepo.delete(productListing);

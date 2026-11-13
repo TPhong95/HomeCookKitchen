@@ -2,15 +2,13 @@ package org.example.purchase.purchase;
 
 import org.example.purchase.clients.ChefClient;
 import org.example.purchase.clients.ProductListingClient;
-import org.example.purchase.dtos.ChefDto;
-import org.example.purchase.dtos.ListingInfoDto;
-import org.example.purchase.dtos.ProductListingDto;
-import org.example.purchase.dtos.RecipeDto;
+import org.example.purchase.dtos.*;
 import org.example.purchase.event.PurchaseEvent;
 import org.example.purchase.event.PurchaseEventDto;
 
 import org.example.purchase.kafka.PurchaseNotificationProducer;
 
+import org.example.purchase.event.PurchaseEventService;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -29,6 +27,17 @@ public class PurchaseOrchestrationService {
         this.chefClient = chefClient;
         this.purchaseService = purchaseService;
         this.notificationProducer = notificationProducer;
+    private final PurchaseEventService purchaseEventService;
+
+    public PurchaseOrchestrationService(ProductListingClient productListingClient, ChefClient chefClient, PurchaseService purchaseService, PurchaseEventService purchaseEventService) {
+        this.productListingClient = productListingClient;
+        this.chefClient = chefClient;
+        this.purchaseService = purchaseService;
+        this.purchaseEventService = purchaseEventService;
+    }
+
+    public List<PurchasedListingQuantityDto> getPurchasedQuantitiesByCustomer(Long id) {
+        return purchaseEventService.getPurchasedQuantitiesByCustomer(id);
     }
 
     public Purchase createPurchase(PurchaseDto purchaseDto) {
@@ -62,6 +71,56 @@ public class PurchaseOrchestrationService {
             purchaseEvent.setQuantity(purchaseEventDto.quantity());
             purchaseEvents.add(purchaseEvent);
             totalPrice += productListingDto.unitPrice() * purchaseEventDto.quantity();
+
+            //HAR IKKE ROLLBACK ENDA
+            UpdatePurchaseProductListingDTO updateDto = new UpdatePurchaseProductListingDTO(purchaseEventDto.quantity());
+            productListingClient.UpdatePurchaseValue(updateDto, purchaseEventDto.productListingId());
+        }
+        //Setting the values of the Purchase
+        purchase.setPurchaseEvent(purchaseEvents);
+        purchase.setTotalPrice(totalPrice);
+        purchase.setCustomerId(purchaseDto.customerId());
+
+        Purchase savedPurchase = purchaseService.create(purchase);
+        return savedPurchase;
+    }
+
+    //INITDATA
+    public Purchase createOldPurchase(PurchaseDto purchaseDto) {
+        Purchase purchase = new Purchase();
+        List<PurchaseEventDto> purchaseEventsDto = purchaseDto.purchaseEvents();
+        List<PurchaseEvent> purchaseEvents = new ArrayList<>();
+
+        //For calculating totalPrice
+        float totalPrice = 0;
+
+        //For each purchaseEventsDto in purchaseEventDto loop
+        for (PurchaseEventDto purchaseEventDto : purchaseEventsDto) {
+            ProductListingDto productListingDto = productListingClient.getProductListingInfoById(purchaseEventDto.productListingId());
+            RecipeDto recipeDto = productListingClient.getRecipeById(productListingDto.recipeId());
+            //FIX WHEN CHEF MICROSERVICE IS UP
+            ChefDto chefDto = chefClient.getChefInfoById(productListingDto.chefId());
+
+            //Info about the dish listing
+            ListingInfoDto listingInfoDto = new ListingInfoDto(
+                    productListingDto.chefId(),
+                    chefDto.name(),
+                    purchaseEventDto.productListingId(),
+                    recipeDto.recipeName(),
+                    productListingDto.unitPrice()
+            );
+
+            //Creating a purchase event and setting values
+            PurchaseEvent purchaseEvent = new PurchaseEvent();
+            purchaseEvent.setListingInfoDto(listingInfoDto);
+            purchaseEvent.setPurchase(purchase);
+            purchaseEvent.setQuantity(purchaseEventDto.quantity());
+            purchaseEvents.add(purchaseEvent);
+            totalPrice += productListingDto.unitPrice() * purchaseEventDto.quantity();
+
+            //HAR IKKE ROLLBACK ENDA
+            UpdatePurchaseProductListingDTO updateDto = new UpdatePurchaseProductListingDTO(purchaseEventDto.quantity());
+            productListingClient.UpdateOldPurchaseValue(updateDto, purchaseEventDto.productListingId());
         }
         //Setting the values of the Purchase
         purchase.setPurchaseEvent(purchaseEvents);

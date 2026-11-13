@@ -1,39 +1,35 @@
 export const DishCategory = {
-  BURGERS: "Burgers",
+  UNDEFINED: "Undefined",
+  ASIAN: "Asian",
+  BURGER: "Burger",
   PASTA: "Pasta",
-  CURRIES_AND_STEWS: "Curries and Stews",
-} as const;
-
-export type DishCategory = typeof DishCategory [keyof typeof DishCategory];
-
-export const DishPreference = {
-  VEGAN: "Vegan",
   VEGETARIAN: "Vegetarian",
-  PESCETARIAN: "Pescetarian",
-  NONE: "None",
+  MEXICAN: "Mexican",
+  SKANDINAVIAN: "Skandinavian",
+  AFRICAN: "African"
 } as const;
 
-export type DishPreference = typeof DishPreference [keyof typeof DishPreference];
+export type DishCategory = keyof typeof DishCategory;
 
-/* Enum type system, used to define exact keys allowed for allergens */
-export enum Allergen {
-  GLUTEN = "gluten",
-  CRUSTACEANS = "crustaceans",
-  EGGS = "eggs",
-  FISH = "fish",
-  PEANUTS = "peanuts",
-  SOYBEANS = "soybeans",
-  MILK = "milk",
-  NUTS = "nuts",
-  CELERY = "celery",
-  MUSTARD = "mustard",
-  SESAME = "sesame",
-  SULFITES = "sulfites",
-  LUPIN = "lupin",
-  MOLLUSCS = "molluscs",
-}
+export const Allergen = {
+  GLUTEN: "gluten",
+  CRUSTACEANS: "crustaceans",
+  EGGS: "egg",
+  FISH: "fish",
+  PEANUTS: "peanuts",
+  SOYBEANS: "soybeans",
+  MILK: "milk",
+  NUTS: "nuts",
+  CELERY: "celery",
+  MUSTARD: "mustard",
+  SESAME: "sesame",
+  SULFITES: "sulfites",
+  LUPIN: "lupin",
+  MOLLUSCS: "molluscs",
+} as const;
 
-/* Key-value lookup map, helps instantiate checkboxes to false in components */
+export type Allergen = typeof Allergen[keyof typeof Allergen];
+
 export const initialAllergens: Record<Allergen, boolean> = {
   [Allergen.GLUTEN]: false,
   [Allergen.CRUSTACEANS]: false,
@@ -51,7 +47,6 @@ export const initialAllergens: Record<Allergen, boolean> = {
   [Allergen.MOLLUSCS]: false,
 };
 
-/* Provides an ordered list with display labels for UI */
 export const allergensList: { id: Allergen; label: string }[] = [
   {id: Allergen.GLUTEN, label: "Gluten"},
   {id: Allergen.CRUSTACEANS, label: "Crustaceans"},
@@ -69,13 +64,14 @@ export const allergensList: { id: Allergen; label: string }[] = [
   {id: Allergen.MOLLUSCS, label: "Molluscs"},
 ];
 
-export interface RecipeStruct {
-  id?: number;
+export type RecipeStruct = {
+  recipeId: number;
+  cookId: number;
   recipeName: string;
-  description: string;
+  invalidated: boolean;
   active: boolean;
-  category: DishCategory;
-  preference: DishPreference;
-  image?: string;
-  allergens: Record<Allergen, boolean> // Record allows tidy representation of key value pairs for allergen and state
-}
+  pictureUrl: string;
+  description: string;
+  instanceOf: number;
+  foodCategory: DishCategory;
+} & Record<Allergen, boolean>;

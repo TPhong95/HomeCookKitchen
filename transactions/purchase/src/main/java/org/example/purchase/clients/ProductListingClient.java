@@ -2,6 +2,8 @@ package org.example.purchase.clients;
 
 import org.example.purchase.dtos.ProductListingDto;
 import org.example.purchase.dtos.RecipeDto;
+import org.example.purchase.dtos.UpdatePurchaseProductListingDTO;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestClient;
 
@@ -27,6 +29,25 @@ public class ProductListingClient {
                 .retrieve()
                 .body(ProductListingDto.class);
         return productListing;
+    }
+
+    public void UpdatePurchaseValue(UpdatePurchaseProductListingDTO listingDTO, Long productListingId) {
+        restClient.patch()
+                .uri(url + "productListing/" + productListingId)
+                .contentType(MediaType.APPLICATION_JSON)
+                .body(listingDTO)
+                .retrieve()
+                .toBodilessEntity();
+    }
+
+    //INITDATA
+    public void UpdateOldPurchaseValue(UpdatePurchaseProductListingDTO listingDTO, Long productListingId) {
+        restClient.patch()
+                .uri(url + "productListing/" + productListingId + "/initdata")
+                .contentType(MediaType.APPLICATION_JSON)
+                .body(listingDTO)
+                .retrieve()
+                .toBodilessEntity();
     }
 
     public RecipeDto getRecipeById(int id) {

@@ -9,23 +9,23 @@ export function Banner() {
 
   const chefNavigation = [
     { link: "/", text: "Home" },
-    { link: "/user/chef/profile", text: "Profile" },
-    { link: "/user/chef/listings", text: "Listings" },
-    { link: "/user/chef/recipe", text: "Recipes" },
-    { link: "/user/chef/history", text: "History" },
+    { link: "/chef/profile", text: "Profile" },
+    { link: "/chef/listings", text: "Listings" },
+    { link: "/chef/recipe", text: "Recipes" },
+    { link: "/chef/history", text: "History" },
   ]
 
   const customerNavigation = [
     { link: "/", text: "Home" },
-    { link: "/user/customer/profile", text: "Profile" },
-    { link: "/user/customer/browse", text: "Browse" },
-    { link: "/user/customer/orders", text: "Orders" },
-    { link: "/user/customer/history", text: "History" },
+    { link: "/customer/profile", text: "Profile" },
+    { link: "/customer/browse", text: "Browse" },
+    { link: "/customer/upcoming", text: "Upcoming" },
+    { link: "/customer/history", text: "History" },
   ]
 
-  // [NEW] Shown when nobody is logged in
   const loggedOutNavigation = [
     { link: "/", text: "Home" },
+    { link: "/customer/browse", text: "Browse" },
   ]
 
   const navigation =

@@ -1,0 +1,187 @@
+.orders-layout {
+  display: flex;
+  min-height: 100vh;
+}
+
+.orders-wrapper {
+  font-family: "Segoe UI", serif;
+  background-color: #F2EDC2;
+  flex: 1;
+  border-left-style: solid;
+  border-left-width: 2px;
+  border-left-color: #2a320e;
+}
+
+.orders-top-banner {
+  display: flex;
+  justify-content: space-between;
+  color: #ffffff;
+  background-color: #346739;
+  padding: 0.5rem 2rem;
+}
+
+.orders-top-banner h1 {
+  font-size: 2rem;
+}
+
+.all-orders-container {
+  padding: 2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.order-item-container {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 1.5rem;
+  background-color: #ffffff;
+  border: 2px solid #346739;
+  border-radius: 8px;
+  padding: 1.2rem;
+}
+
+.order-picture-container img {
+  width: 120px;
+  height: 120px;
+  border-radius: 5px;
+  object-fit: cover;
+  border: 1px solid #346739;
+  display: block;
+}
+
+.order-info-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  flex: 1;
+  gap: 0.3rem;
+}
+
+.order-title {
+  font-size: 1.3rem;
+  font-weight: bold;
+  color: #346739;
+  margin-bottom: 0.2rem;
+}
+
+.order-detail-text {
+  font-size: 0.95rem;
+  color: #498350;
+  font-weight: 600;
+}
+
+.order-highlight {
+  color: #346739;
+  font-weight: bold;
+}
+
+.order-item-container {
+  transition: transform 0.1s ease, box-shadow 0.1s ease;
+}
+
+.order-item-container:hover {
+  box-shadow: 0 6px 12px rgba(52, 103, 57, 0.15);
+}
+
+.see-item-dialog {
+  background-color: #F2EDC2;
+  border-radius: 8px;
+  padding: 2rem;
+  width: 550px;
+  max-width: 90vw;
+  border: 2px solid #346739;
+  box-shadow: 0 8px 16px rgba(52, 103, 57, 0.2);
+}
+
+.modal-pic-name-close-container {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+  border-bottom: 2px solid #346739;
+  padding-bottom: 1rem;
+}
+
+.modal-pic-name-close-container > div:nth-child(2) {
+  flex: 1;
+}
+
+.modal-pic-name-close-container h1 {
+  font-size: 1.4rem;
+  color: #346739;
+  margin: 0 0 0.3rem 0;
+}
+
+.food-category-container {
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: #498350;
+  background-color: #9FCB98;
+  padding: 0.2rem 0.6rem;
+  border-radius: 4px;
+  display: inline-block;
+}
+
+.close-btn {
+  font-size: 1.2rem;
+  cursor: pointer;
+  padding: 0.4rem;
+  border-radius: 4px;
+  transition: background-color 0.2s;
+}
+
+.close-btn:hover {
+  background-color: #9FCB98;
+}
+
+.allergens-modal-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+}
+
+.allergens-modal-list > div {
+  background-color: #ffffff;
+  border: 1px solid #346739;
+  color: #346739;
+  padding: 0.3rem 0.6rem;
+  border-radius: 4px;
+  font-size: 0.85rem;
+  font-weight: 500;
+}
+
+.modal-description {
+  background-color: #ffffff;
+  border: 1px solid #346739;
+  padding: 0.8rem;
+  border-radius: 4px;
+  color: #346739;
+  margin-bottom: 1rem;
+  font-size: 0.95rem;
+}
+
+.name-and-info-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+}
+
+.more-info-btn {
+  background-color: #9FCB98;
+  border: 1px solid #346739;
+  color: #346739;
+  padding: 0.4rem 0.8rem;
+  border-radius: 4px;
+  cursor: pointer;
+  font-weight: bold;
+  transition: background-color 0.2s;
+}
+
+.more-info-btn:hover {
+  background-color: #79AE6F;
+  color: #ffffff;
+}

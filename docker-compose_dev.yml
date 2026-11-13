@@ -44,7 +44,8 @@ services:
     image: taskscheduler-service:0.0.1-SNAPSHOT
     container_name: taskscheduler-service
     build:
-      context: ./taskscheduler
+      context: .
+      dockerfile: taskscheduler/Dockerfile
     ports:
       - "8020"
     environment:
@@ -155,7 +156,8 @@ services:
     image: gateway:0.0.1-SNAPSHOT
     container_name: gateway
     build:
-      context: ./gateway
+      context: .
+      dockerfile: gateway/Dockerfile
     environment:
       SPRING_PROFILES_ACTIVE: dev
       SPRING_CONFIG_IMPORT: "optional:consul:"
@@ -209,7 +211,8 @@ services:
   chef-service:
     image: chef-service:0.0.1-SNAPSHOT
     build:
-      context: ./user/chefuser
+      context: .
+      dockerfile: user/chefuser/Dockerfile
     ports:
       - "8002"
     environment:
@@ -261,7 +264,8 @@ services:
   customer-service:
     image: customer-service:0.0.1-SNAPSHOT
     build:
-      context: ./user/customer
+      context: .
+      dockerfile: user/customer/Dockerfile
     ports:
       - "8003"
     environment:
@@ -313,7 +317,8 @@ services:
   purchase-service:
     image: purchase-service:0.0.1-SNAPSHOT
     build:
-      context: ./transactions/purchase
+      context: .
+      dockerfile: transactions/purchase/Dockerfile
     ports:
       - "8011"
     environment:
@@ -368,7 +373,8 @@ services:
   productlisting-service:
     image: productlisting-service:0.0.1-SNAPSHOT
     build:
-      context: ./product/productlisting
+      context: .
+      dockerfile: product/productlisting/Dockerfile
     ports:
       - "8006"
     environment:
@@ -421,7 +427,8 @@ services:
   recipe-service:
     image: recipe-service:0.0.1-SNAPSHOT
     build:
-      context: ./product/recipe
+      context: .
+      dockerfile: product/recipe/Dockerfile
     ports:
       - "8008"
     environment:
@@ -450,7 +457,10 @@ services:
       start_period: 20s
 
   initdata:
-    build: ./initdata
+    image: initdata:0.0.1-SNAPSHOT
+    build:
+      context: .
+      dockerfile: initdata/Dockerfile
     depends_on:
       chef-service:
         condition: service_healthy

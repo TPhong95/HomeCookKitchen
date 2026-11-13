@@ -2,6 +2,7 @@ package org.school.exam.productlisting;
 
 import org.school.exam.productlisting.dto.CreateProductListingDTO;
 import org.school.exam.productlisting.dto.ProductListingDeadlineDTO;
+import org.school.exam.productlisting.dto.UpdatePurchaseProductListingDTO;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -64,12 +65,18 @@ public class ProductListingController {
                 .body(productListingOrchestrationService.createUnactiveProductListing(DTO));
     }
 
-    /*
+
     @PatchMapping("/{id}")
-    public ResponseEntity<ProductListing> updateProductListing(@PathVariable Long id, @RequestBody CreateProductListingDTO DTO) {
+    public ResponseEntity<ProductListing> updateProductListing(@PathVariable Long id, @RequestBody UpdatePurchaseProductListingDTO DTO) {
         return ResponseEntity.ok(productListingService.update(id, DTO));
     }
-     */
+
+    //INITDATA
+    @PatchMapping("/{id}/initdata")
+    public ResponseEntity<ProductListing> updateOldProductListing(@PathVariable Long id, @RequestBody UpdatePurchaseProductListingDTO DTO) {
+        return ResponseEntity.ok(productListingService.updateOldListing(id, DTO));
+    }
+
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteProductListing(@PathVariable Long id) {
