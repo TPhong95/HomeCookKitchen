@@ -5,6 +5,6 @@ import org.example.purchase.event.PurchaseEventDto;
 import java.util.List;
 
 public record PurchaseDto(
-        int customerId,
+        Long customerId,
         List<PurchaseEventDto> purchaseEvents
 ) { }

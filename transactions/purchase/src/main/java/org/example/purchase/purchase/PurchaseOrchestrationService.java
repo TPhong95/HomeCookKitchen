@@ -35,6 +35,8 @@ public class PurchaseOrchestrationService {
         return purchaseEventService.getPurchasedQuantitiesByCustomer(id);
     }
 
+
+
     public Purchase createPurchase(PurchaseDto purchaseDto) {
         Purchase purchase = new Purchase();
         List<PurchaseEventDto> purchaseEventsDto = purchaseDto.purchaseEvents();
