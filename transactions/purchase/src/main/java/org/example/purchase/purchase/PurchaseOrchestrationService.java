@@ -20,19 +20,14 @@ public class PurchaseOrchestrationService {
     private final ChefClient chefClient;
     private final PurchaseService purchaseService;
     private final PurchaseNotificationProducer notificationProducer;
+    private final PurchaseEventService purchaseEventService;
 
-    public PurchaseOrchestrationService(ProductListingClient productListingClient, ChefClient chefClient,
-                                        PurchaseService purchaseService, PurchaseNotificationProducer notificationProducer) {
+
+    public PurchaseOrchestrationService(ProductListingClient productListingClient, ChefClient chefClient, PurchaseService purchaseService, PurchaseNotificationProducer notificationProducer, PurchaseEventService purchaseEventService) {
         this.productListingClient = productListingClient;
         this.chefClient = chefClient;
         this.purchaseService = purchaseService;
         this.notificationProducer = notificationProducer;
-    private final PurchaseEventService purchaseEventService;
-
-    public PurchaseOrchestrationService(ProductListingClient productListingClient, ChefClient chefClient, PurchaseService purchaseService, PurchaseEventService purchaseEventService) {
-        this.productListingClient = productListingClient;
-        this.chefClient = chefClient;
-        this.purchaseService = purchaseService;
         this.purchaseEventService = purchaseEventService;
     }
 
