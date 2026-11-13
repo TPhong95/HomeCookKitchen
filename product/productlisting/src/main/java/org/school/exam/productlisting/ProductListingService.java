@@ -94,7 +94,14 @@ public class ProductListingService {
                 .map(pl -> new ProductListingDeadlineDTO(
                         pl.getProductListingId().longValue(),
                         pl.getActive(),
-                        pl.getPurchaseDeadline()))
+                        pl.getPurchaseDeadline(),
+                        pl.getRecipeName(),
+                        pl.getCompositeAddress(),
+                        pl.getChefId(),
+                        pl.getChefName(),
+                        pl.getReadyBy(),
+                        pl.getQuantityOffered(),
+                        pl.getQuantityPurchased()))
                 .toList();
     }
 
@@ -106,6 +113,16 @@ public class ProductListingService {
         productListing.setActive(false);
         productListingRepo.save(productListing);
 
-        return new ProductListingDeadlineDTO(productListing.getProductListingId().longValue(), productListing.getActive(), productListing.getPurchaseDeadline());
+        return new ProductListingDeadlineDTO(
+                productListing.getProductListingId().longValue(),
+                productListing.getActive(),
+                productListing.getPurchaseDeadline(),
+                productListing.getRecipeName(),
+                productListing.getCompositeAddress(),
+                productListing.getChefId(),
+                productListing.getChefName(),
+                productListing.getReadyBy(),
+                productListing.getQuantityOffered(),
+                productListing.getQuantityPurchased());
     }
 }

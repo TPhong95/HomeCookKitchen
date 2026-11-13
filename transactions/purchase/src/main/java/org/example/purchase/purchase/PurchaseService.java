@@ -1,6 +1,7 @@
 package org.example.purchase.purchase;
 
 
+import org.example.purchase.dtos.PurchasedListingDto;
 import org.example.purchase.exception.NotFoundException.PurchaseNotFoundException;
 import org.springframework.stereotype.Service;
 import java.util.List;
@@ -21,6 +22,10 @@ public class PurchaseService {
 
     public Purchase getPurchaseById(int id) {
         return purchaseRepo.findById(id).orElseThrow(() -> new PurchaseNotFoundException("Purchase with id: " + id + " not found", Map.of()));
+    }
+
+    public List<PurchasedListingDto> getQuantitiesByProductListingId(Long productListingId) {
+        return purchaseRepo.findQuantitiesByProductListingId(productListingId);
     }
 
     public List<Purchase> getAllPurchases() {

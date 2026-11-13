@@ -16,7 +16,7 @@ public class PurchaseEvent {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "purchase_event_seq")
     @SequenceGenerator(name = "purchase_event_seq", sequenceName = "purchase_event_seq", allocationSize = 1)
-    private int id;
+    private Long id;
 
     @Embedded
     private ListingInfoDto listingInfoDto;
@@ -26,5 +26,5 @@ public class PurchaseEvent {
     @JsonIgnore
     private Purchase purchase;
 
-    private int quantity;
+    private Long quantity;
 }

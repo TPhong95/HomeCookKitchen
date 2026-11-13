@@ -1,5 +1,6 @@
 package org.example.purchase.purchase;
 
+import org.example.purchase.dtos.PurchasedListingDto;
 import org.example.purchase.dtos.PurchasedListingQuantityDto;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -45,6 +46,11 @@ public class PurchaseController {
         Purchase purchase = purchaseOrchestrationService.createPurchase(purchaseDto);
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(purchase);
+    }
+
+    @GetMapping("/{productListingId}/taskscheduler")
+    public ResponseEntity<List<PurchasedListingDto>> getByProductListingId(@PathVariable Long productListingId) {
+        return ResponseEntity.ok(purchaseService.getQuantitiesByProductListingId(productListingId));
     }
 
     //INITDATA

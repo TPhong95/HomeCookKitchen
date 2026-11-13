@@ -9,6 +9,13 @@ spring:
       port: 8500
       config:
         format: YAML
+  kafka:
+    bootstrap-servers: kafka:9093
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.springframework.kafka.support.serializer.JacksonJsonSerializer
+      properties:
+        "[spring.json.add.type.headers]": false
 server:
   port: 8020
 management:

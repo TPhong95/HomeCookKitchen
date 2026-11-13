@@ -6,7 +6,7 @@ public record CreateProductListingDTO(
         Long recipeId,
         Long chefId,
         Long addressId,
-        int quantityOffered,
+        Long quantityOffered,
         float unitPrice,
         LocalDateTime purchaseDeadline,
         LocalDateTime readyBy
