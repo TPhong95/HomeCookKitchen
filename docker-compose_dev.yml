@@ -116,7 +116,7 @@ services:
       KAFKA_CLUSTERS_0_BOOTSTRAPSERVERS: 'kafka:9093'
     networks:
       - m2026
-    #(Add volumes to persist config later)
+    #(Add volumes to persist config made through web GUI)
 
   consul-register-kafbat:
     image: curlimages/curl:8.8.0
@@ -229,6 +229,8 @@ services:
         condition: service_healthy
       consul-importer:
         condition: service_completed_successfully
+      kafka:
+        condition: service_healthy
     networks:
       - m2026
     healthcheck:
@@ -280,6 +282,8 @@ services:
         condition: service_healthy
       consul-importer:
         condition: service_completed_successfully
+      kafka:
+        condition: service_healthy
     networks:
       - m2026
     healthcheck:
@@ -333,6 +337,8 @@ services:
         condition: service_healthy
       consul-importer:
         condition: service_completed_successfully
+      kafka:
+        condition: service_healthy
     networks:
       - m2026
     healthcheck:

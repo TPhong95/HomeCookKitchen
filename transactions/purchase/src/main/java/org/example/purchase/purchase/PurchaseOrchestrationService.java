@@ -5,6 +5,9 @@ import org.example.purchase.clients.ProductListingClient;
 import org.example.purchase.dtos.*;
 import org.example.purchase.event.PurchaseEvent;
 import org.example.purchase.event.PurchaseEventDto;
+
+import org.example.purchase.kafka.PurchaseNotificationProducer;
+
 import org.example.purchase.event.PurchaseEventService;
 import org.springframework.stereotype.Service;
 
@@ -16,6 +19,14 @@ public class PurchaseOrchestrationService {
     private final ProductListingClient productListingClient;
     private final ChefClient chefClient;
     private final PurchaseService purchaseService;
+    private final PurchaseNotificationProducer notificationProducer;
+
+    public PurchaseOrchestrationService(ProductListingClient productListingClient, ChefClient chefClient,
+                                        PurchaseService purchaseService, PurchaseNotificationProducer notificationProducer) {
+        this.productListingClient = productListingClient;
+        this.chefClient = chefClient;
+        this.purchaseService = purchaseService;
+        this.notificationProducer = notificationProducer;
     private final PurchaseEventService purchaseEventService;
 
     public PurchaseOrchestrationService(ProductListingClient productListingClient, ChefClient chefClient, PurchaseService purchaseService, PurchaseEventService purchaseEventService) {
@@ -117,6 +128,30 @@ public class PurchaseOrchestrationService {
         purchase.setCustomerId(purchaseDto.customerId());
 
         Purchase savedPurchase = purchaseService.create(purchase);
+        sendNotifications(savedPurchase);
         return savedPurchase;
+    }
+
+    private void sendNotifications(Purchase purchase) {
+        // one message per listing, to each relevant chef
+        for (PurchaseEvent event : purchase.getPurchaseEvent()) {
+            ListingInfoDto infoDto = event.getListingInfoDto();
+            notificationProducer.notifyChef(
+                    infoDto.cookId(),
+                    "New purchase #" + purchase.getId() + ": " + event.getQuantity() + " units of " + infoDto.recipeName()
+            );
+        }
+
+        // One message to the customer with a confirming message containing all the dishes he/she bought
+        List<String> lines = purchase.getPurchaseEvent().stream()
+                .map(event -> {
+                    ListingInfoDto infoDto = event.getListingInfoDto();
+                    float linePrice = infoDto.unitPrice() * event.getQuantity();
+                    return infoDto.recipeName() + " x " + event.getQuantity() + " = " + linePrice;
+                }).toList();
+
+        String customerMessage = "New purchase #" + purchase.getId() + " went through: \n"
+                + String.join("\n", lines) + "\n"
+                + "Total price = " + purchase.getTotalPrice() + ",-";
     }
 }
