@@ -19,11 +19,10 @@ export function Banner() {
     { link: "/", text: "Home" },
     { link: "/customer/profile", text: "Profile" },
     { link: "/customer/browse", text: "Browse" },
-    { link: "/customer/orders", text: "Orders" },
+    { link: "/customer/upcoming", text: "Upcoming" },
     { link: "/customer/history", text: "History" },
   ]
 
-  // [NEW] Shown when nobody is logged in
   const loggedOutNavigation = [
     { link: "/", text: "Home" },
     { link: "/customer/browse", text: "Browse" },
