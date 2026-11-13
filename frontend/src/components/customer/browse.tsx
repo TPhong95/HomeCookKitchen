@@ -3,30 +3,22 @@ import styles from './browse.module.css';
 import {Banner} from "../general/banner.tsx";
 import {type RecipeStruct, allergensList, DishCategory} from "../shared/recipeinterface.ts";
 import {type ListingStruct} from "../shared/listinginterface.ts";
-import {type HomeVibe, GENRE_LABELS} from "../shared/chefinterface.ts";
+import {type ChefAddress, GENRE_LABELS} from "../shared/chefinterface.ts";
 import {useUserContext} from "../context/useUserContext.tsx";
 import {sendJson} from "../util/api.ts";
 import toast from "react-hot-toast";
-
-interface Address {
-  id: number;
-  street: string;
-  postalCode: string;
-  city: string;
-  active: boolean;
-  homeVibe: HomeVibe;
-}
 
 type DetailsStatus = "loading" | "loaded" | "error";
 
 export function BrowseListing() {
   const {user} = useUserContext();
+  // Anyone can browse, only customers can order
   const customerId = user?.role === "customer" ? user.id : null;
 
   const [listings, setListings] = useState<ListingStruct[]>([]);
   const [selectedListing, setSelectedListing] = useState<ListingStruct | null>(null);
   const [recipe, setRecipe] = useState<RecipeStruct | null>(null);
-  const [address, setAddress] = useState<Address | null>(null);
+  const [address, setAddress] = useState<ChefAddress | null>(null);
   const [detailsStatus, setDetailsStatus] = useState<DetailsStatus>("loading");
   const [quantity, setQuantity] = useState(1);
 
@@ -71,7 +63,7 @@ export function BrowseListing() {
       if (!addressRes.ok) throw new Error(`Address request failed: ${addressRes.status}`);
 
       const recipeData: RecipeStruct = await recipeRes.json();
-      const addressData: Address = await addressRes.json();
+      const addressData: ChefAddress = await addressRes.json();
 
       if (latestDetailsRequestRef.current !== listing.productListingId) return;
       setRecipe(recipeData);

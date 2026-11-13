@@ -1,7 +1,7 @@
 import {useState} from "react";
 import styles from './orders.module.css';
 import {Banner} from "../general/banner.tsx";
-import {type ActiveOrder} from "../shared/orderinterface.ts";
+import {type ActiveOrder} from "../shared/purchaseinterface.ts";
 
 const testOrders: ActiveOrder[] = [
   {
@@ -34,7 +34,7 @@ const testOrders: ActiveOrder[] = [
   },
 ];
 
-export function Orders() {
+export function Purchases() {
   const [orders] = useState<ActiveOrder[]>(testOrders);
 
   return (
