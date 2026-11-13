@@ -104,7 +104,7 @@ services:
     image: docker.io/kafbat/kafka-ui:v1.5.0
     container_name: kafbat-ui
     ports:
-      - "8080:8080"
+      - "8090:8080"
     depends_on:
       kafka:
         condition: service_healthy
