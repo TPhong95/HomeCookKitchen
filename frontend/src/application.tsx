@@ -9,6 +9,7 @@ import {CustomerProfile} from "./components/customer/customerprofile.tsx";
 import {BrowseListing} from "./components/customer/browse.tsx";
 import {Purchases} from "./components/customer/purchases.tsx";
 import {CustomerHistory} from "./components/customer/history.tsx";
+import {Notifications} from "./components/general/notifications.tsx"
 
 export function Application() {
   return (
@@ -27,10 +28,12 @@ export function Application() {
         <Route path={"/chef/recipe"} element={<Recipe/>}/>
         <Route path={"/chef/listings"} element={<Listings/>}/>
         <Route path={"/chef/history"} element={<History/>}/>
+        <Route path={"/chef/notifications"} element={<Notifications role={"chef"}/>} />
         <Route path={"/customer/profile"} element={<CustomerProfile/>}/>
         <Route path={"/customer/browse"} element={<BrowseListing/>}/>
         <Route path={"/customer/upcoming"} element={<Purchases/>}/>
         <Route path={"/customer/history"} element={<CustomerHistory/>}/>
+        <Route path={"/customer/notifications"} element={<Notifications role={"customer"}/>} />
       </Routes>
     </>
   )
