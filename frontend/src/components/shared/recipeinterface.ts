@@ -11,11 +11,10 @@ export const DishCategory = {
 
 export type DishCategory = keyof typeof DishCategory;
 
-/* Enum type system, used to define exact keys allowed for allergens */
 export const Allergen = {
   GLUTEN: "gluten",
   CRUSTACEANS: "crustaceans",
-  EGGS: "eggs",
+  EGGS: "egg",
   FISH: "fish",
   PEANUTS: "peanuts",
   SOYBEANS: "soybeans",
@@ -65,7 +64,7 @@ export const allergensList: { id: Allergen; label: string }[] = [
   {id: Allergen.MOLLUSCS, label: "Molluscs"},
 ];
 
-export interface RecipeStruct {
+export type RecipeStruct = {
   recipeId: number;
   cookId: number;
   recipeName: string;
@@ -75,5 +74,4 @@ export interface RecipeStruct {
   description: string;
   instanceOf: number;
   foodCategory: DishCategory;
-  allergens: Record<Allergen, boolean> // Record allows tidy representation of key value pairs for allergen and state
-}
+} & Record<Allergen, boolean>;

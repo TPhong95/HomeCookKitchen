@@ -23,14 +23,14 @@ export function Application() {
       />
       <Routes>
         <Route path={"/"} element={<FrontPage/>}/>
-        <Route path={"/user/chef/profile"} element={<ChefProfile/>}/>
-        <Route path={"/user/chef/recipe"} element={<Recipe/>}/>
-        <Route path={"/user/chef/listings"} element={<Listings/>}/>
-        <Route path={"/user/chef/history"} element={<History/>}/>
-        <Route path={"/user/customer/profile"} element={<CustomerProfile/>}/>
-        <Route path={"/user/customer/browse"} element={<BrowseListing/>}/>
-        <Route path={"/user/customer/orders"} element={<Orders/>}/>
-        <Route path={"/user/customer/history"} element={<CustomerHistory/>}/>
+        <Route path={"/chef/profile"} element={<ChefProfile/>}/>
+        <Route path={"/chef/recipe"} element={<Recipe/>}/>
+        <Route path={"/chef/listings"} element={<Listings/>}/>
+        <Route path={"/chef/history"} element={<History/>}/>
+        <Route path={"/customer/profile"} element={<CustomerProfile/>}/>
+        <Route path={"/customer/browse"} element={<BrowseListing/>}/>
+        <Route path={"/customer/orders"} element={<Orders/>}/>
+        <Route path={"/customer/history"} element={<CustomerHistory/>}/>
       </Routes>
     </>
   )

@@ -2,6 +2,15 @@ body {
   background-color: #f8ffdf;
 }
 
+h1 {
+  font-size: 3rem;
+  text-align: center;
+}
+
+p {
+  font-size: 1.5rem;
+}
+
 .frontpage-wrapper {
   font-family: "Segoe UI", serif;
   min-height: 100vh;
