@@ -119,79 +119,73 @@ public class Initializer implements CommandLineRunner {
 
         //DEADLINE LOCALDATE TIME
         LocalDateTime listingTime1 = LocalDateTime.parse("2026-10-01T18:00:00");
-        CreateProductListingDTO oldProductListing1 = new CreateProductListingDTO(1L, 1L, chefClient.getFirstAddressByChefId(1L), 20, 14.99f, listingTime1, listingTime1.plusHours(2));
+        CreateProductListingDTO oldProductListing1 = new CreateProductListingDTO(1L, 1L, chefClient.getFirstAddressByChefId(1L), 20L, 14.99f, listingTime1, listingTime1.plusHours(2));
         listingClient.createUnactiveListing(oldProductListing1);
 
         LocalDateTime listingTime2 = LocalDateTime.parse("2026-11-01T18:00:00");
-        CreateProductListingDTO oldProductListing2 = new CreateProductListingDTO(1L, 1L, chefClient.getFirstAddressByChefId(1L), 30, 20.00f, listingTime2, listingTime2.plusHours(2));
+        CreateProductListingDTO oldProductListing2 = new CreateProductListingDTO(1L, 1L, chefClient.getFirstAddressByChefId(1L), 30L, 20.00f, listingTime2, listingTime2.plusHours(2));
         listingClient.createUnactiveListing(oldProductListing2);
 
         LocalDateTime listingTime3 = LocalDateTime.parse("2026-11-03T12:00:00");
-        CreateProductListingDTO oldProductListing3 = new CreateProductListingDTO(5L, 1L, chefClient.getFirstAddressByChefId(1L), 15, 4.99f, listingTime3, listingTime3.plusHours(2));
+        CreateProductListingDTO oldProductListing3 = new CreateProductListingDTO(5L, 1L, chefClient.getFirstAddressByChefId(1L), 15L, 4.99f, listingTime3, listingTime3.plusHours(2));
         listingClient.createUnactiveListing(oldProductListing3);
 
         //LISTING ACTIVE
 
-        CreateProductListingDTO productListing1 = new CreateProductListingDTO(1L, 1L, chefClient.getFirstAddressByChefId(1L), 20, 14.99f, LocalDateTime.now().plusHours(1), LocalDateTime.now().plusHours(2));
+        CreateProductListingDTO productListing1 = new CreateProductListingDTO(1L, 1L, chefClient.getFirstAddressByChefId(1L), 20L, 14.99f, LocalDateTime.now().plusHours(1), LocalDateTime.now().plusHours(2));
         listingClient.createListing(productListing1);
 
-        CreateProductListingDTO productListing2 = new CreateProductListingDTO(2L, 2L, chefClient.getFirstAddressByChefId(2L), 30, 20.00f, LocalDateTime.now().plusHours(1), LocalDateTime.now().plusHours(2));
+        CreateProductListingDTO productListing2 = new CreateProductListingDTO(2L, 2L, chefClient.getFirstAddressByChefId(2L), 30L, 20.00f, LocalDateTime.now().plusHours(1), LocalDateTime.now().plusHours(2));
         listingClient.createListing(productListing2);
 
-        CreateProductListingDTO productListing3 = new CreateProductListingDTO(3L, 3L, chefClient.getFirstAddressByChefId(3L), 15, 4.99f, LocalDateTime.now().plusMinutes(4), LocalDateTime.now().plusHours(2));
+        CreateProductListingDTO productListing3 = new CreateProductListingDTO(3L, 3L, chefClient.getFirstAddressByChefId(3L), 15L, 4.99f, LocalDateTime.now().plusMinutes(4), LocalDateTime.now().plusHours(2));
         listingClient.createListing(productListing3);
 
-        CreateProductListingDTO productListing4 = new CreateProductListingDTO(4L, 4L, chefClient.getFirstAddressByChefId(4L), 22, 24.99f, LocalDateTime.now().plusHours(1), LocalDateTime.now().plusHours(2));
+        CreateProductListingDTO productListing4 = new CreateProductListingDTO(4L, 4L, chefClient.getFirstAddressByChefId(4L), 22L, 24.99f, LocalDateTime.now().plusHours(1), LocalDateTime.now().plusHours(2));
         listingClient.createListing(productListing4);
 
-        CreateProductListingDTO productListing5 = new CreateProductListingDTO(5L, 1L, chefClient.getFirstAddressByChefId(1L), 33, 12.99f, LocalDateTime.now().plusHours(1), LocalDateTime.now().plusHours(2));
+        CreateProductListingDTO productListing5 = new CreateProductListingDTO(5L, 1L, chefClient.getFirstAddressByChefId(1L), 33L, 12.99f, LocalDateTime.now().plusHours(1), LocalDateTime.now().plusHours(2));
         listingClient.createListing(productListing5);
+
+        CreateProductListingDTO productListing6 = new CreateProductListingDTO(1L, 1L, chefClient.getFirstAddressByChefId(1L), 33L, 12.99f, LocalDateTime.now().plusMinutes(4), LocalDateTime.now().plusHours(2));
+        listingClient.createListing(productListing6);
 
         // PURCHASE OLD UNACTIVE
 
         List<PurchaseEventDto> oldPurchaseList1 = new ArrayList<>();
-        oldPurchaseList1.add(new PurchaseEventDto(1L, 3));
-        PurchaseDto oldPurchase1 = new PurchaseDto(1, oldPurchaseList1);
+        oldPurchaseList1.add(new PurchaseEventDto(1L, 3L));
+        PurchaseDto oldPurchase1 = new PurchaseDto(1L, oldPurchaseList1);
         purchaseClient.createOldPurchase(oldPurchase1);
 
         List<PurchaseEventDto> oldPurchaseList2 = new ArrayList<>();
-        oldPurchaseList2.add(new PurchaseEventDto(2L, 2));
-        PurchaseDto oldPurchase2 = new PurchaseDto(1, oldPurchaseList2);
+        oldPurchaseList2.add(new PurchaseEventDto(2L, 2L));
+        PurchaseDto oldPurchase2 = new PurchaseDto(1L, oldPurchaseList2);
         purchaseClient.createOldPurchase(oldPurchase2);
 
         List<PurchaseEventDto> oldPurchaseList3 = new ArrayList<>();
-        oldPurchaseList3.add(new PurchaseEventDto(1L, 1));
-        PurchaseDto oldPurchase3 = new PurchaseDto(2, oldPurchaseList3);
+        oldPurchaseList3.add(new PurchaseEventDto(1L, 1L));
+        PurchaseDto oldPurchase3 = new PurchaseDto(2L, oldPurchaseList3);
         purchaseClient.createOldPurchase(oldPurchase3);
 
         // PURCHASE NEW ACTIVE
 
         List<PurchaseEventDto> purchaseList1 = new ArrayList<>();
-        purchaseList1.add(new PurchaseEventDto(4L, 3));
-        purchaseList1.add(new PurchaseEventDto(5L, 4));
-        PurchaseDto purchase1 = new PurchaseDto(1, purchaseList1);
+        purchaseList1.add(new PurchaseEventDto(4L, 3L));
+        purchaseList1.add(new PurchaseEventDto(5L, 4L));
+        PurchaseDto purchase1 = new PurchaseDto(1L, purchaseList1);
         purchaseClient.createPurchase(purchase1);
 
         List<PurchaseEventDto> purchaseList2 = new ArrayList<>();
-        purchaseList2.add(new PurchaseEventDto(6L, 2));
-        purchaseList2.add(new PurchaseEventDto(7L, 1));
-        PurchaseDto purchase2 = new PurchaseDto(2, purchaseList2);
+        purchaseList2.add(new PurchaseEventDto(6L, 2L));
+        purchaseList2.add(new PurchaseEventDto(7L, 1L));
+        PurchaseDto purchase2 = new PurchaseDto(2L, purchaseList2);
         purchaseClient.createPurchase(purchase2);
 
         List<PurchaseEventDto> purchaseList3 = new ArrayList<>();
-        purchaseList3.add(new PurchaseEventDto(8L, 1));
-        purchaseList3.add(new PurchaseEventDto(4L, 2));
-        PurchaseDto purchase3 = new PurchaseDto(3, purchaseList3);
+        purchaseList3.add(new PurchaseEventDto(8L, 1L));
+        purchaseList3.add(new PurchaseEventDto(4L, 2L));
+        PurchaseDto purchase3 = new PurchaseDto(3L, purchaseList3);
         purchaseClient.createPurchase(purchase3);
-
-        ChefNotificationCreationDto chefNotifDto = new ChefNotificationCreationDto(1L, "Hello World!");
-        chefClient.createChefNotification(chefNotifDto);
-
-        ChefNotificationCreationDto chefNotifDto2 = new ChefNotificationCreationDto(1L, "This is a chef message!");
-        chefClient.createChefNotification(chefNotifDto2);
-
-        ChefNotificationCreationDto chefNotifDto3 = new ChefNotificationCreationDto(2L, "Let's a go!");
-        chefClient.createChefNotification(chefNotifDto3);
 
         CustomerNotificationCreationDto custNotifDto1 = new CustomerNotificationCreationDto(1L, "Hello World!");
         customerClient.createCustomerNotification(custNotifDto1);

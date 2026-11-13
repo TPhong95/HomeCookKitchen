@@ -50,7 +50,7 @@ public class ProductListingClient {
                 .toBodilessEntity();
     }
 
-    public RecipeDto getRecipeById(int id) {
+    public RecipeDto getRecipeById(Long id) {
         String callUrl = this.url + "recipe/" + id;
         RecipeDto recipeDto = restClient
                 .get()

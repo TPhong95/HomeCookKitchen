@@ -68,7 +68,7 @@ public class ProductListingOrchestrationService {
                 null, DTO.recipeId(), recipe.recipeName(),
                 recipe.pictureUrl(), recipe.description(),
                 DTO.addressId(), chefCompositeAddress, DTO.chefId(), chef.name(),
-                true, DTO.quantityOffered(), 0, DTO.unitPrice(), LocalDateTime.now(),
+                true, DTO.quantityOffered(), 0L, DTO.unitPrice(), LocalDateTime.now(),
                 DTO.purchaseDeadline(), DTO.readyBy()
         );
 
@@ -98,7 +98,7 @@ public class ProductListingOrchestrationService {
                 null, DTO.recipeId(), recipe.recipeName(),
                 recipe.pictureUrl(), recipe.description(),
                 DTO.addressId(), chefCompositeAddress, DTO.chefId(), chef.name(),
-                false, DTO.quantityOffered(), 0, DTO.unitPrice(), LocalDateTime.now(),
+                false, DTO.quantityOffered(), 0L, DTO.unitPrice(), LocalDateTime.now(),
                 DTO.purchaseDeadline(), DTO.readyBy()
         );
         productListing.setCreatedAtTime(LocalDateTime.parse( "2026-08-01T18:00:00"));

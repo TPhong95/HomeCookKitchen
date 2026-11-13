@@ -28,8 +28,8 @@ public class ProductListing {
     private Long chefId;
     private String chefName;
     private Boolean active;
-    private int quantityOffered;
-    private int quantityPurchased;
+    private Long quantityOffered;
+    private Long quantityPurchased;
     private float unitPrice;
     private LocalDateTime createdAtTime;
     private LocalDateTime purchaseDeadline;
@@ -38,7 +38,7 @@ public class ProductListing {
     public ProductListing(Long productListingId, Long recipeId, String recipeName,
                           String recipeUrl, String recipeDescription, Long addressId,
                           String compositeAddress, Long chefId, String chefName,
-                          Boolean active, int quantityOffered, int quantityPurchased,
+                          Boolean active, Long quantityOffered, Long quantityPurchased,
                           float unitPrice, LocalDateTime createdAtTime, LocalDateTime purchaseDeadline,
                           LocalDateTime readyBy) {
         this.productListingId = productListingId;

@@ -16,8 +16,8 @@ public class Purchase {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "purchase_seq")
     @SequenceGenerator(name = "purchase_seq", sequenceName = "purchase_seq", allocationSize = 1)
-    private int id;
-    private int customerId;
+    private Long id;
+    private Long customerId;
     private float totalPrice;
 
     @OneToMany(mappedBy = "purchase", cascade = CascadeType.ALL, orphanRemoval = true)
