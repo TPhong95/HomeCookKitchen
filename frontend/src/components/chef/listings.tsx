@@ -67,8 +67,8 @@ export function Listings() {
       try {
         const res = await fetch(`http://localhost:8100/api/recipe/chef/${chefId}`);
         if(!res.ok) throw new Error("Failed to fetch recipes");
-        const data: RecipeStruct[] = await res.json();
-        setRecipes(data);
+        const data: unknown = await res.json();
+        setRecipes(Array.isArray(data) ? data as RecipeStruct[] : []);
       } catch (error) {
         toast.error(error instanceof Error ? error.message : "Something went wrong");
       }
@@ -210,7 +210,9 @@ export function Listings() {
                   onChange={(e) => setSelectedRecipeId(e.target.value ? Number(e.target.value) : "")}
                 >
                   <option value={""}>-- Select a recipe --</option>
-                  {recipes.map((recipe) => (
+                  {recipes
+                    .filter(recipe => recipe.active)
+                    .map((recipe) => (
                     <option key={recipe.recipeId} value={recipe.recipeId}>
                       {recipe.recipeName}
                     </option>
