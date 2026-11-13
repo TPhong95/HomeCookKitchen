@@ -43,14 +43,7 @@
   border: 2px solid #346739;
   border-radius: 8px;
   padding: 1.2rem;
-  cursor: pointer;
   box-shadow: 0 4px 8px rgba(52, 103, 57, 0.1);
-  transition: transform 0.1s ease, box-shadow 0.1s ease;
-}
-
-.history-item-container:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 6px 12px rgba(52, 103, 57, 0.15);
 }
 
 .history-picture-container img {
@@ -203,4 +196,27 @@
   color: #346739;
   margin-bottom: 1rem;
   font-size: 0.95rem;
+}
+
+.name-and-info-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+}
+
+.more-info-btn {
+  background-color: #9FCB98;
+  border: 1px solid #346739;
+  color: #346739;
+  padding: 0.4rem 0.8rem;
+  border-radius: 4px;
+  cursor: pointer;
+  font-weight: bold;
+  transition: background-color 0.2s;
+}
+
+.more-info-btn:hover {
+  background-color: #79AE6F;
+  color: #ffffff;
 }

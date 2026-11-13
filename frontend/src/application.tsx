@@ -29,7 +29,7 @@ export function Application() {
         <Route path={"/chef/history"} element={<History/>}/>
         <Route path={"/customer/profile"} element={<CustomerProfile/>}/>
         <Route path={"/customer/browse"} element={<BrowseListing/>}/>
-        <Route path={"/customer/orders"} element={<Purchases/>}/>
+        <Route path={"/customer/upcoming"} element={<Purchases/>}/>
         <Route path={"/customer/history"} element={<CustomerHistory/>}/>
       </Routes>
     </>

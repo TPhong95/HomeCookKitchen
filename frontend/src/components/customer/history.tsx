@@ -2,10 +2,10 @@ import {useEffect, useRef, useState} from "react";
 import styles from './history.module.css';
 import {Banner} from "../general/banner.tsx";
 import {type RecipeStruct, allergensList, DishCategory} from "../shared/recipeinterface.ts";
-import {type ListingStruct} from "../shared/listinginterface.ts";
 import {type ChefAddress, GENRE_LABELS} from "../shared/chefinterface.ts";
-import {type OrderItem, type PurchasedListingQuantityDto} from "../shared/purchaseinterface.ts";
+import {type OrderItem} from "../shared/purchaseinterface.ts";
 import {useUserContext} from "../context/useUserContext.tsx";
+import {loadCustomerOrders, readyByTime} from "../util/purchases.ts";
 import toast from "react-hot-toast";
 
 type DetailsStatus = "loading" | "loaded" | "error";
@@ -28,39 +28,13 @@ export function CustomerHistory() {
 
     async function loadHistory(id: number) {
       try {
-        const res = await fetch(`http://localhost:8100/api/purchase/customer/${id}`);
-        if (!res.ok) {
-          console.log(`Purchase request failed: ${res.status}`);
-          return;
-        }
-        const purchased: PurchasedListingQuantityDto[] = await res.json();
-
-        // Fetch every purchased listing in parallel. allSettled, so one missing listing
-        // (e.g. deleted by the chef) doesn't hide all the others
-        const results = await Promise.allSettled(purchased.map(async (p): Promise<OrderItem> => {
-          const listingRes = await fetch(`http://localhost:8100/api/productListing/${p.productListingId}`);
-          if (!listingRes.ok) throw new Error(`Listing ${p.productListingId} failed: ${listingRes.status}`);
-          const listing: ListingStruct = await listingRes.json();
-          return {listing, quantity: p.quantity};
-        }));
-
-        results
-          .filter(r => r.status === "rejected")
-          .forEach(r => console.log(r.reason));
-
-        const items = results
-          .filter((r): r is PromiseFulfilledResult<OrderItem> => r.status === "fulfilled")
-          .map(r => r.value);
-
+        const allOrders = await loadCustomerOrders(id);
         const now = Date.now();
-        const pastItems = items
-          .filter(item => new Date(item.listing.readyBy).getTime() < now)
-          .sort((a, b) => new Date(b.listing.readyBy).getTime() - new Date(a.listing.readyBy).getTime());
-
-        setHistoryItems(pastItems);
+        setHistoryItems(allOrders
+          .filter(order => readyByTime(order) < now)
+          .sort((a, b) => readyByTime(b) - readyByTime(a)));
       } catch (error) {
-        // Only reached on network errors, e.g. the gateway is down
-        console.log(error);
+        toast.error(error instanceof Error ? error.message : "Something went wrong");
       }
     }
 
@@ -69,8 +43,6 @@ export function CustomerHistory() {
 
   const handleOpenItemModal = async (item: OrderItem) => {
     const listing = item.listing;
-
-    // Clear the previous item's details before opening, so nothing stale is shown while loading
     setSelectedItem(item);
     setRecipe(null);
     setAddress(null);
@@ -122,13 +94,20 @@ export function CustomerHistory() {
                 <div
                   className={styles["history-item-container"]}
                   key={item.listing.productListingId}
-                  onClick={() => handleOpenItemModal(item)}
                 >
                   <div className={styles["history-picture-container"]}>
                     <img src={item.listing.recipeUrl} alt={item.listing.recipeName}/>
                   </div>
                   <div className={styles["history-info-main"]}>
-                    <div className={styles["history-item-title"]}>{item.listing.recipeName}</div>
+                    <div className={styles["name-and-info-container"]}>
+                      <div className={styles["history-item-title"]}>{item.listing.recipeName}</div>
+                      <button
+                        className={styles["more-info-btn"]}
+                        onClick={() => handleOpenItemModal(item)}
+                      >
+                        More info
+                      </button>
+                    </div>
                     <div className={styles["history-item-chef"]}>
                       Chef: <span className={styles["chef-name"]}>{item.listing.chefName}</span>
                     </div>
