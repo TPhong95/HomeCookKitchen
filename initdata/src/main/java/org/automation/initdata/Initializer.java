@@ -187,15 +187,6 @@ public class Initializer implements CommandLineRunner {
         PurchaseDto purchase3 = new PurchaseDto(3L, purchaseList3);
         purchaseClient.createPurchase(purchase3);
 
-        ChefNotificationCreationDto chefNotifDto = new ChefNotificationCreationDto(1L, "Hello World!");
-        chefClient.createChefNotification(chefNotifDto);
-
-        ChefNotificationCreationDto chefNotifDto2 = new ChefNotificationCreationDto(1L, "This is a chef message!");
-        chefClient.createChefNotification(chefNotifDto2);
-
-        ChefNotificationCreationDto chefNotifDto3 = new ChefNotificationCreationDto(2L, "Let's a go!");
-        chefClient.createChefNotification(chefNotifDto3);
-
         CustomerNotificationCreationDto custNotifDto1 = new CustomerNotificationCreationDto(1L, "Hello World!");
         customerClient.createCustomerNotification(custNotifDto1);
 
