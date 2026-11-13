@@ -23,6 +23,17 @@ spring:
       port: 8500
       config:
         format: YAML
+  kafka:
+    bootstrap-servers: kafka:9093
+    consumer:
+      group-id: customer
+      auto-offset-reset: earliest
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.springframework.kafka.support.serializer.ErrorHandlingDeserializer
+      properties:
+        "[spring.deserializer.value.delegate.class]": org.springframework.kafka.support.serializer.JacksonJsonDeserializer
+        "[spring.json.value.default.type]": user.customer.dto.CustomerNotificationCreationDto
+        "[spring.json.trusted.packages]": user.customer.dto
 server:
   port: 8003
 management:

@@ -226,6 +226,8 @@ services:
         condition: service_healthy
       consul-importer:
         condition: service_completed_successfully
+      kafka:
+        condition: service_healthy
     networks:
       - m2026
     healthcheck:
@@ -276,6 +278,8 @@ services:
         condition: service_healthy
       consul-importer:
         condition: service_completed_successfully
+      kafka:
+        condition: service_healthy
     networks:
       - m2026
     healthcheck:
@@ -328,6 +332,8 @@ services:
         condition: service_healthy
       consul-importer:
         condition: service_completed_successfully
+      kafka:
+        condition: service_healthy
     networks:
       - m2026
     healthcheck:

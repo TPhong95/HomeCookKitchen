@@ -23,6 +23,17 @@ spring:
       port: 8500
       config:
         format: YAML
+  kafka:
+    bootstrap-servers: kafka:9093
+    consumer:
+      group-id: chefuser
+      auto-offset-reset: earliest
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.springframework.kafka.support.serializer.ErrorHandlingDeserializer
+      properties:
+        "[spring.deserializer.value.delegate.class]": org.springframework.kafka.support.serializer.JacksonJsonDeserializer
+        "[spring.json.value.default.type]": user.chefuser.chef.dtos.ChefNotificationCreationDto
+        "[spring.json.trusted.packages]": user.chefuser.chef.dtos
 server:
   port: 8002
 management:

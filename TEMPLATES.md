@@ -333,7 +333,7 @@ public class CustomerNotificationListener {
 ```
 ## 4 - addition in `docker-compose.yml` files
 Make `producer`'s and `listener`'s wait on Kafka service to be healthy before starting, 
-so they don't try to connect before the broker i up.
+so they don't try to connect before the broker I up.
 ```
     depends_on:
       kafka:
@@ -342,7 +342,7 @@ so they don't try to connect before the broker i up.
 ```
 
 ## 5 - Manual testing and pitfalls
-- **Test it:** `POST /api/purchase` → open Kafbat UI at `http://localhost:8080` and check that both topics have messages → `GET /api/chef/notification/chefId/{id}` and `GET /api/customer/notification/customerId/{id}`.
+- **Test it:** `POST /api/purchase` → open KafBat UI at `http://localhost:8080` and check that both topics have messages → `GET /api/chef/notification/chefId/{id}` and `GET /api/customer/notification/customerId/{id}`.
 - **Message length:** `customer_notification.message` is `VARCHAR(100)`. A purchase with several dishes can easily exceed that, and the insert will fail in the listener. Increase it to 255 in the new migration, or validate the length.
 - **Errors in the listener:** if `createChefNotification` throws (for example `ChefNotFoundException` after point 6), Spring Kafka's default error handler retries a few times, then logs the error and skips the message. That's fine for now. The next step would be a dead-letter topic, which is a good thing to mention in the exam.
 - **Running outside Docker:** if you start a service from IntelliJ instead of in a container, use `localhost:9092` (the `HOST` listener) instead of `kafka:9093`.
