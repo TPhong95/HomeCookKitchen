@@ -1,6 +1,7 @@
 package org.school.exam.recipe;
 
 import lombok.AllArgsConstructor;
+import org.school.exam.recipe.client.ChefClient;
 import org.school.exam.recipe.dto.CreateRecipeDTO;
 import org.school.exam.recipe.dto.RecipeActiveDTO;
 import org.school.exam.recipe.exception.BadRequestException.BadRequestException;
@@ -14,6 +15,7 @@ import java.util.Map;
 @AllArgsConstructor
 public class RecipeService {
     private final RecipeRepo recipeRepo;
+    private final ChefClient chefClient;
 
     public Recipe getRecipeById(Long id){
         Recipe recipe = recipeRepo.findById(id).orElse(null);
@@ -29,6 +31,7 @@ public class RecipeService {
         } else if (DTO.name() == null || DTO.name().isEmpty()){
             throw new BadRequestException("Name is required", Map.of());
         }
+        chefClient.getChefById(DTO.cookId());
         Recipe recipe =
                 new Recipe(
                         DTO.cookId(), DTO.name(), DTO.active(), DTO.pictureUrl(), DTO.description(),
