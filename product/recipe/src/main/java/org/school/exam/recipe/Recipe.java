@@ -19,7 +19,7 @@ public class Recipe {
     private Long recipeId;
 
     @Column(name = "chef_id")
-    private Long cookId;
+    private Long chefId;
 
     @Column(name = "name")
     private String recipeName;
@@ -46,13 +46,13 @@ public class Recipe {
     private boolean lupin;
     private boolean molluscs;
 
-    public Recipe(Long cookId, String recipeName, boolean active, String pictureUrl, String description,
+    public Recipe(Long chefId, String recipeName, boolean active, String pictureUrl, String description,
                   Long instanceOf, FoodCategory foodCategory, boolean gluten,
                   boolean crustaceans, boolean egg, boolean fish, boolean peanuts,
                   boolean soybeans, boolean milk, boolean nuts, boolean celery,
                   boolean mustard, boolean sesame, boolean sulfites, boolean lupin, boolean molluscs)
     {
-        this.cookId = cookId;
+        this.chefId = chefId;
         this.recipeName = recipeName;
         this.invalidated = false;
         this.active = active;
