@@ -1,6 +1,7 @@
 package org.example.purchase.purchase;
 
 import org.example.purchase.clients.ChefClient;
+import org.example.purchase.clients.CustomerClient;
 import org.example.purchase.clients.ProductListingClient;
 import org.example.purchase.dtos.*;
 import org.example.purchase.event.PurchaseEvent;
@@ -21,14 +22,16 @@ public class PurchaseOrchestrationService {
     private final PurchaseService purchaseService;
     private final PurchaseNotificationProducer notificationProducer;
     private final PurchaseEventService purchaseEventService;
+    private final CustomerClient customerClient;
 
 
-    public PurchaseOrchestrationService(ProductListingClient productListingClient, ChefClient chefClient, PurchaseService purchaseService, PurchaseNotificationProducer notificationProducer, PurchaseEventService purchaseEventService) {
+    public PurchaseOrchestrationService(ProductListingClient productListingClient, ChefClient chefClient, PurchaseService purchaseService, PurchaseNotificationProducer notificationProducer, PurchaseEventService purchaseEventService, CustomerClient customerClient) {
         this.productListingClient = productListingClient;
         this.chefClient = chefClient;
         this.purchaseService = purchaseService;
         this.notificationProducer = notificationProducer;
         this.purchaseEventService = purchaseEventService;
+        this.customerClient = customerClient;
     }
 
     public List<PurchasedListingQuantityDto> getPurchasedQuantitiesByCustomer(Long id) {
@@ -133,24 +136,27 @@ public class PurchaseOrchestrationService {
         // one message per listing, to each relevant chef
         for (PurchaseEvent event : purchase.getPurchaseEvent()) {
             ListingInfoDto infoDto = event.getListingInfoDto();
+            CustomerDto customer = customerClient.getCustomerInfoById(purchase.getCustomerId());
+            String chefMessage = "A new purchase has been done on " + event.getListingInfoDto().recipeName() + " for " + event.getQuantity() + " seats. From " + customer.name() + ".";
             notificationProducer.notifyChef(
                     infoDto.cookId(),
-                    "New purchase #" + purchase.getId() + ": " + event.getQuantity() + " units of " + infoDto.recipeName()
+                    chefMessage
             );
         }
 
         // One message to the customer with a confirming message containing all the dishes he/she bought
+        /*
         List<String> lines = purchase.getPurchaseEvent().stream()
                 .map(event -> {
                     ListingInfoDto infoDto = event.getListingInfoDto();
                     float linePrice = infoDto.unitPrice() * event.getQuantity();
                     return infoDto.recipeName() + " x " + event.getQuantity() + " = " + linePrice;
                 }).toList();
+         */
 
-        String customerMessage = "New purchase #" + purchase.getId() + " went through: \n"
-                + String.join("\n", lines) + "\n"
-                + "Total price = " + purchase.getTotalPrice() + ",-";
-
+        PurchaseEvent purchaseEvent = purchase.getPurchaseEvent().get(0);
+        ListingInfoDto listingInfoDto = purchaseEvent.getListingInfoDto();
+        String customerMessage = "You have purchased " + listingInfoDto.recipeName() + " with " + purchaseEvent.getQuantity() + " seats.";
         notificationProducer.notifyCustomer(purchase.getCustomerId(), customerMessage);
     }
 }
