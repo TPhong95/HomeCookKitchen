@@ -9,7 +9,7 @@
         <relativePath>../../pom.xml</relativePath>
     </parent>
     <groupId>org.school.Exam</groupId>
-    <artifactId>Recipe</artifactId>
+    <artifactId>recipe</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <name>Recipe</name>
     <description>Recipe</description>

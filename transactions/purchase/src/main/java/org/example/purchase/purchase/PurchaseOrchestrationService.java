@@ -150,5 +150,7 @@ public class PurchaseOrchestrationService {
         String customerMessage = "New purchase #" + purchase.getId() + " went through: \n"
                 + String.join("\n", lines) + "\n"
                 + "Total price = " + purchase.getTotalPrice() + ",-";
+
+        notificationProducer.notifyCustomer(purchase.getCustomerId(), customerMessage);
     }
 }
