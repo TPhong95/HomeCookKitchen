@@ -3,12 +3,8 @@ import {Banner} from "./banner.tsx";
 import {type Role} from "../context/UserContext.tsx";
 import {useUserContext} from "../context/useUserContext.tsx";
 import {useNotificationContext} from "../context/useNotificationContext.tsx";
+import {formatDateTime} from "../util/time.ts";
 import toast from "react-hot-toast";
-
-// "2026-11-13T18:08:29.205981" -> "2026-11-13 18:08"
-function formatTime(time: string): string {
-  return time.slice(0, 16).replace("T", " ");
-}
 
 export function Notifications({role}: { role: Role }) {
   const {user} = useUserContext();
@@ -43,7 +39,7 @@ export function Notifications({role}: { role: Role }) {
                 >
                   <div className={styles["notification-info-container"]}>
                     <div className={styles["notification-message"]}>{notification.message}</div>
-                    <div className={styles["notification-time"]}>{formatTime(notification.time)}</div>
+                    <div className={styles["notification-time"]}>{formatDateTime(notification.time)}</div>
                   </div>
                   <button
                     className={styles["mark-as-read-btn"]}

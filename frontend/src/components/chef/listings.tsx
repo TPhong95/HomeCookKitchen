@@ -7,8 +7,7 @@ import {useUserContext} from "../context/useUserContext.tsx";
 import toast from "react-hot-toast";
 import type {ChefAddress, ChefResponse} from "../shared/chefinterface.ts";
 import {sendJson} from "../util/api.ts";
-
-
+import {formatDateTime} from "../util/time.ts";
 
 export function Listings() {
   const {user} = useUserContext();
@@ -187,8 +186,8 @@ export function Listings() {
                 <div className={styles["listing-quantity-text"]}>
                   Seats left: <span className={styles["listing-quantity-numbers"]}>{listing.quantityOffered - listing.quantityPurchased} / {listing.quantityOffered}</span>
                 </div>
-                <div className={styles["listing-price-container"]}>Ready by: {listing.readyBy}</div>
-                <div className={styles["listing-purchase-deadline"]}>Purchase deadline: {listing.purchaseDeadline}</div>
+                <div className={styles["listing-price-container"]}>Ready by: {formatDateTime(listing.readyBy)}</div>
+                <div className={styles["listing-purchase-deadline"]}>Purchase deadline: {formatDateTime(listing.purchaseDeadline)}</div>
                 <div className={styles["listing-price-container"]}>Served at: {listing.compositeAddress}</div>
               </div>
             </div>
@@ -258,26 +257,30 @@ export function Listings() {
                 </div>
                 <h1>{tempRecipeName}</h1>
               </div>
-              <div className={styles["portion-control-container"]}>
-                <label htmlFor={"number-of-portions"}>Number of portions:</label>
-                <input
-                  id={"number-of-portions"}
-                  type={"text"}
-                  value={tempPortions}
-                  onChange={(e) => setTempPortions(e.target.value)}
-                />
-                <label htmlFor={"price-per-portion"}>Price per portion:</label>
-                <input
-                  id={"price-per-portion"}
-                  type={"text"}
-                  value={tempPricePerPortion}
-                  onChange={(e) => setTempPricePerPortion(e.target.value)}
-                />
-                <div className={styles["listing-total-preview"]}>
-                  Total potential revenue: <strong>{calculatedTotal.toFixed(2)}NOK</strong>
+              <div className={styles["form-row"]}>
+                <div>
+                  <label htmlFor={"number-of-portions"}>Number of portions:</label>
+                  <input
+                    id={"number-of-portions"}
+                    type={"text"}
+                    value={tempPortions}
+                    onChange={(e) => setTempPortions(e.target.value)}
+                  />
+                </div>
+                <div>
+                  <label htmlFor={"price-per-portion"}>Price per portion:</label>
+                  <input
+                    id={"price-per-portion"}
+                    type={"text"}
+                    value={tempPricePerPortion}
+                    onChange={(e) => setTempPricePerPortion(e.target.value)}
+                  />
                 </div>
               </div>
-              <div className={styles["buy-window-container"]}>
+              <div className={styles["listing-total-preview"]}>
+                Total potential revenue: <strong>{calculatedTotal.toFixed(2)}NOK</strong>
+              </div>
+              <div className={styles["form-row"]}>
                 <div>
                   <label htmlFor={"buy-to-window"}>Purchase Deadline</label>
                   <input
@@ -287,15 +290,15 @@ export function Listings() {
                     onChange={(e) => setTempBuyTo(e.target.value)}
                   />
                 </div>
-              </div>
-              <div className={styles["ready-by-container"]}>
-                <label htmlFor={"ready-by"}>Expected time of completion:</label>
-                <input
-                  id={"ready-by"}
-                  type={"datetime-local"}
-                  value={tempReadyTime}
-                  onChange={(e) => setTempReadyTime(e.target.value)}
-                />
+                <div>
+                  <label htmlFor={"ready-by"}>Expected time of completion:</label>
+                  <input
+                    id={"ready-by"}
+                    type={"datetime-local"}
+                    value={tempReadyTime}
+                    onChange={(e) => setTempReadyTime(e.target.value)}
+                  />
+                </div>
               </div>
 
               <p className={styles["create-listing-question"]}>Create listing?</p>

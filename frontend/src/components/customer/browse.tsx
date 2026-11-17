@@ -6,6 +6,7 @@ import {type ListingStruct} from "../shared/listinginterface.ts";
 import {type ChefAddress, GENRE_LABELS} from "../shared/chefinterface.ts";
 import {useUserContext} from "../context/useUserContext.tsx";
 import {sendJson} from "../util/api.ts";
+import {formatDateTime} from "../util/time.ts";
 import toast from "react-hot-toast";
 
 type DetailsStatus = "loading" | "loaded" | "error";
@@ -139,7 +140,7 @@ export function BrowseListing() {
                 <div className={styles["order-detail-text"]}>
                   Chef's address: <span className={styles["order-highlight"]}>{listing.compositeAddress}</span>
                 </div>
-                <div className={styles["browse-item-ready-by"]}>Ready by: {listing.readyBy}</div>
+                <div className={styles["browse-item-ready-by"]}>Ready by: {formatDateTime(listing.readyBy)}</div>
                 <div className={styles["browse-item-description"]}>{listing.recipeDescription}</div>
               </div>
             </div>
@@ -205,11 +206,11 @@ export function BrowseListing() {
               <div className={styles["both-dates-container"]}>
                 <div className={styles["date-container"]}>
                   <div className={styles["modal-date-descriptions"]}>Ready by:</div>
-                  <div className={styles["modal-date-text"]}>{selectedListing.readyBy}</div>
+                  <div className={styles["modal-date-text"]}>{formatDateTime(selectedListing.readyBy)}</div>
                 </div>
                 <div>
                   <div className={styles["modal-date-descriptions"]}>Order by:</div>
-                  <div className={styles["modal-date-text"]}>{selectedListing.purchaseDeadline}</div>
+                  <div className={styles["modal-date-text"]}>{formatDateTime(selectedListing.purchaseDeadline)}</div>
                 </div>
               </div>
 

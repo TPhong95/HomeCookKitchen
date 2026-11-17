@@ -6,6 +6,7 @@ import {type ChefAddress, GENRE_LABELS} from "../shared/chefinterface.ts";
 import {type OrderItem} from "../shared/purchaseinterface.ts";
 import {useUserContext} from "../context/useUserContext.tsx";
 import {loadCustomerOrders, readyByTime} from "../util/purchases.ts";
+import {formatDateTime} from "../util/time.ts";
 import toast from "react-hot-toast";
 
 type DetailsStatus = "loading" | "loaded" | "error";
@@ -122,7 +123,7 @@ export function Purchases() {
                       </span>
                     </div>
                     <div className={styles["order-detail-text"]}>
-                      Food is served at: <span className={styles["order-highlight"]}>{order.listing.readyBy}</span>
+                      Food is served at: <span className={styles["order-highlight"]}>{formatDateTime(order.listing.readyBy)}</span>
                     </div>
                     <div className={styles["order-detail-text"]}>
                       Chef's address: <span className={styles["order-highlight"]}>{order.listing.compositeAddress}</span>
@@ -191,7 +192,7 @@ export function Purchases() {
               )}
 
               <div>
-                <strong>Served at:</strong> {selectedOrder.listing.readyBy} · <strong>Seats:</strong> {selectedOrder.quantity}
+                <strong>Served at:</strong> {formatDateTime(selectedOrder.listing.readyBy)} · <strong>Seats:</strong> {selectedOrder.quantity}
                 · <strong>Total:</strong> {(selectedOrder.listing.unitPrice * selectedOrder.quantity).toFixed(2)} NOK
               </div>
             </>
