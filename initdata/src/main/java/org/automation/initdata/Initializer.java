@@ -152,6 +152,12 @@ public class Initializer implements CommandLineRunner {
         CreateProductListingDTO productListing6 = new CreateProductListingDTO(1L, 1L, chefClient.getFirstAddressByChefId(1L), 33L, 12.99f, LocalDateTime.now().plusMinutes(4), LocalDateTime.now().plusHours(2));
         listingClient.createListing(productListing6);
 
+        try{
+            Thread.sleep(10000);
+        } catch (InterruptedException e){
+            Thread.currentThread().interrupt();
+        }
+
         // PURCHASE OLD UNACTIVE
 
         List<PurchaseEventDto> oldPurchaseList1 = new ArrayList<>();
