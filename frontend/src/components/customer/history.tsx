@@ -6,6 +6,7 @@ import {type ChefAddress, GENRE_LABELS} from "../shared/chefinterface.ts";
 import {type OrderItem} from "../shared/purchaseinterface.ts";
 import {useUserContext} from "../context/useUserContext.tsx";
 import {loadCustomerOrders, readyByTime} from "../util/purchases.ts";
+import {formatDateTime} from "../util/time.ts";
 import toast from "react-hot-toast";
 
 type DetailsStatus = "loading" | "loaded" | "error";
@@ -114,7 +115,7 @@ export function CustomerHistory() {
                     <div className={styles["order-detail-text"]}>
                       Chef's address: <span className={styles["order-highlight"]}>{item.listing.compositeAddress}</span>
                     </div>
-                    <div className={styles["history-ready-by"]}>Eaten at: {item.listing.readyBy}</div>
+                    <div className={styles["history-ready-by"]}>Eaten at: {formatDateTime(item.listing.readyBy)}</div>
                   </div>
                   <div className={styles["history-info-side"]}>
                     <div className={styles["history-qty-text"]}>Number of guests: {item.quantity}</div>
@@ -185,7 +186,7 @@ export function CustomerHistory() {
               )}
 
               <div>
-                <strong>Eaten at:</strong> {selectedItem.listing.readyBy} · <strong>Guests:</strong> {selectedItem.quantity}
+                <strong>Eaten at:</strong> {formatDateTime(selectedItem.listing.readyBy)} · <strong>Guests:</strong> {selectedItem.quantity}
                 · <strong>Paid:</strong> {(selectedItem.listing.unitPrice * selectedItem.quantity).toFixed(2)} NOK
               </div>
             </>

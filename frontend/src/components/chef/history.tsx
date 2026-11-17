@@ -4,6 +4,7 @@ import {type ListingStruct} from "../shared/listinginterface.ts";
 import {type ChefResponse} from "../shared/chefinterface.ts";
 import {useEffect, useState} from "react";
 import {useUserContext} from "../context/useUserContext.tsx";
+import {formatDateTime} from "../util/time.ts";
 import toast from "react-hot-toast";
 
 export function History() {
@@ -86,7 +87,7 @@ export function History() {
                         className={styles["listing-quantity-numbers"]}>{listing.quantityPurchased} / {listing.quantityOffered} portions</span>
                       </div>
                       <div className={styles["listing-price-container"]}>
-                        Hosted: {listing.readyBy} at {listing.compositeAddress}
+                        Hosted: {formatDateTime(listing.readyBy)} at {listing.compositeAddress}
                       </div>
                     </div>
                   </div>

@@ -122,10 +122,24 @@
   background-color: #eeffff;
   border-radius: 8px;
   padding: 2rem;
-  width: 500px;
+  width: 650px;
   max-width: 90vw;
   border: 2px solid #0a4c86;
   box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
+  margin-top: 5rem;
+  max-height: calc(100vh - 6rem);
+  overflow-y: auto;
+  box-sizing: border-box;
+}
+
+.form-row {
+  display: flex;
+  gap: 1rem;
+  align-items: flex-end;
+}
+
+.form-row > div {
+  flex: 1;
 }
 
 .create-listing-dialog h2 {
