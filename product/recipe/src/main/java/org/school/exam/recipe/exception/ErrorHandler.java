@@ -23,7 +23,7 @@ public class ErrorHandler {
             BadRequestException.class
     }
     )
-    public ResponseEntity<ProblemDetail> handleBadRequestException(BadRequestException e, HttpServletRequest request) {
+    public ProblemDetail handleBadRequestException(BadRequestException e, HttpServletRequest request) {
         Map<String, Object> fields = new LinkedHashMap<>(e.getFields());
 
         fields.put("status", 400);
@@ -33,14 +33,14 @@ public class ErrorHandler {
         log.error("400 Bad Request error: {}", e.getMessage(), entries(fields));
 
         ProblemDetail problem = ProblemDetail.forStatusAndDetail(HttpStatus.BAD_REQUEST, e.getMessage());
-        problem.setTitle("400 Bad request");
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(problem);
+        fields.forEach(problem::setProperty);
+        return problem;
     }
 
 
     //====== 404 Not Found ======
     @ExceptionHandler({RecipeNotFoundException.class})
-    public ResponseEntity<ProblemDetail> handleNotFoundException(NotFoundException e, HttpServletRequest request) {
+    public ProblemDetail handleNotFoundException(NotFoundException e, HttpServletRequest request) {
         Map<String, Object> fields = new LinkedHashMap<>(e.getFields());
 
         fields.put("status", 404);
@@ -50,8 +50,8 @@ public class ErrorHandler {
         log.error("404 Not Found error: {}", e.getMessage(), entries(fields));
 
         ProblemDetail problem = ProblemDetail.forStatusAndDetail(HttpStatus.NOT_FOUND, e.getMessage());
-        problem.setTitle("404 Not found");
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(problem);
+        fields.forEach(problem::setProperty);
+        return problem;
     }
     //====== 409 Conflict ======
 

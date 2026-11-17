@@ -22,7 +22,7 @@ import static net.logstash.logback.argument.StructuredArguments.entries;
 public class ErrorHandler {
     //====== 400 Bad Request ======
     @ExceptionHandler({BadRequestException.class})
-    public ResponseEntity<ProblemDetail> handleBadRequestException(BadRequestException e, HttpServletRequest request) {
+    public ProblemDetail handleBadRequestException(BadRequestException e, HttpServletRequest request) {
         Map<String, Object> fields = new LinkedHashMap<>(e.getFields());
 
         fields.put("status", 400);
@@ -33,12 +33,13 @@ public class ErrorHandler {
 
         ProblemDetail problem = ProblemDetail.forStatusAndDetail(HttpStatus.BAD_REQUEST, e.getMessage());
         problem.setTitle("400 Bad request");
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(problem);
+        fields.forEach(problem::setProperty);
+        return problem;
     }
 
     //====== 404 Not Found ======
     @ExceptionHandler({ProductListingNotFoundException.class})
-    public ResponseEntity<ProblemDetail> handleNotFoundException(NotFoundException e, HttpServletRequest request) {
+    public ProblemDetail handleNotFoundException(NotFoundException e, HttpServletRequest request) {
         Map<String, Object> fields = new LinkedHashMap<>(e.getFields());
 
         fields.put("status", 404);
@@ -49,11 +50,12 @@ public class ErrorHandler {
 
         ProblemDetail problem = ProblemDetail.forStatusAndDetail(HttpStatus.NOT_FOUND, e.getMessage());
         problem.setTitle("404 Not found");
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(problem);
+        fields.forEach(problem::setProperty);
+        return problem;
     }
     //====== 409 Conflict ======
     @ExceptionHandler({ConflictException.class})
-    public ResponseEntity<ProblemDetail> handleConflictException(ConflictException e, HttpServletRequest request) {
+    public ProblemDetail handleConflictException(ConflictException e, HttpServletRequest request) {
         Map<String, Object> fields = new LinkedHashMap<>(e.getFields());
 
         fields.put("status", 409);
@@ -64,7 +66,8 @@ public class ErrorHandler {
 
         ProblemDetail problem = ProblemDetail.forStatusAndDetail(HttpStatus.CONFLICT, e.getMessage());
         problem.setTitle("409 Conflict");
-        return ResponseEntity.status(HttpStatus.CONFLICT).body(problem);
+        fields.forEach(problem::setProperty);
+        return problem;
     }
 
     //====== 500 Internal server error ======
