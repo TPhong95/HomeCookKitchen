@@ -21,6 +21,7 @@ public class ChefNotification {
     private Long id;
     @Column(name = "chef_id")
     private Long chefId;
+    @Column(columnDefinition = "TEXT")
     private String message;
     private LocalDateTime time;
     @Column(name = "is_read")

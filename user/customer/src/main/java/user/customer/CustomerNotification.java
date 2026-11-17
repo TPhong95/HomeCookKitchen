@@ -21,6 +21,7 @@ public class CustomerNotification {
     private Long id;
     @Column(name = "customer_id")
     private Long customerId;
+    @Column(columnDefinition = "TEXT")
     private String message;
     private LocalDateTime time;
     @Column(name = "is_read")

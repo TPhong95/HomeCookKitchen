@@ -24,6 +24,8 @@ public class PurchaseOrchestrationService {
     private final PurchaseEventService purchaseEventService;
     private final CustomerClient customerClient;
 
+    private static final String CRLF = " \r\n ";
+
 
     public PurchaseOrchestrationService(ProductListingClient productListingClient, ChefClient chefClient, PurchaseService purchaseService, PurchaseNotificationProducer notificationProducer, PurchaseEventService purchaseEventService, CustomerClient customerClient) {
         this.productListingClient = productListingClient;
@@ -82,6 +84,7 @@ public class PurchaseOrchestrationService {
         purchase.setCustomerId(purchaseDto.customerId());
 
         Purchase savedPurchase = purchaseService.create(purchase);
+        sendNotifications(savedPurchase);
         return savedPurchase;
     }
 
@@ -137,7 +140,7 @@ public class PurchaseOrchestrationService {
         for (PurchaseEvent event : purchase.getPurchaseEvent()) {
             ListingInfoDto infoDto = event.getListingInfoDto();
             CustomerDto customer = customerClient.getCustomerInfoById(purchase.getCustomerId());
-            String chefMessage = "A new purchase has been done on " + event.getListingInfoDto().recipeName() + " for " + event.getQuantity() + " seats. From " + customer.name() + ".";
+            String chefMessage = "A new purchase has been made: " + event.getListingInfoDto().recipeName() + " for " + event.getQuantity() + " seats. From " + customer.name() + ".";
             notificationProducer.notifyChef(
                     infoDto.cookId(),
                     chefMessage
@@ -145,18 +148,24 @@ public class PurchaseOrchestrationService {
         }
 
         // One message to the customer with a confirming message containing all the dishes he/she bought
-        /*
         List<String> lines = purchase.getPurchaseEvent().stream()
                 .map(event -> {
                     ListingInfoDto infoDto = event.getListingInfoDto();
                     float linePrice = infoDto.unitPrice() * event.getQuantity();
-                    return infoDto.recipeName() + " x " + event.getQuantity() + " = " + linePrice;
-                }).toList();
-         */
+                    String chefName = infoDto.chefName();
+                    return infoDto.recipeName() + " x " + event.getQuantity() + " seat(s) = " + linePrice + " from " + chefName;
+                })
+                .toList();
 
-        PurchaseEvent purchaseEvent = purchase.getPurchaseEvent().get(0);
-        ListingInfoDto listingInfoDto = purchaseEvent.getListingInfoDto();
-        String customerMessage = "You have purchased " + listingInfoDto.recipeName() + " with " + purchaseEvent.getQuantity() + " seats.";
-        notificationProducer.notifyCustomer(purchase.getCustomerId(), customerMessage);
+        String customerMessage = "Purchase #" + purchase.getId() + CRLF
+                + "Went through." + CRLF
+                + "Containing:" + CRLF
+                + String.join(CRLF, lines) + CRLF
+                + "Sum total: " + purchase.getTotalPrice();
+
+        notificationProducer.notifyCustomer(
+                purchase.getCustomerId(),
+                customerMessage
+        );
     }
 }
