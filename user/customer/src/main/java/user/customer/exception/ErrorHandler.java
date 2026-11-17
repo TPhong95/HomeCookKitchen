@@ -31,7 +31,7 @@ public class ErrorHandler {
             BadRequestException.class
     }
     )
-    public ResponseEntity<ProblemDetail> handleBadRequestException(BadRequestException e, HttpServletRequest request) {
+    public ProblemDetail handleBadRequestException(BadRequestException e, HttpServletRequest request) {
         Map<String, Object> fields = new LinkedHashMap<>(e.getFields());
 
         fields.put("status", 400);
@@ -42,7 +42,8 @@ public class ErrorHandler {
 
         ProblemDetail problem = ProblemDetail.forStatusAndDetail(HttpStatus.BAD_REQUEST, e.getMessage());
         problem.setTitle("400 Bad request");
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(problem);
+        fields.forEach(problem::setProperty);
+        return problem;
     }
 
     //========== 404 NOT FOUND ==========
@@ -50,7 +51,7 @@ public class ErrorHandler {
     @ExceptionHandler({
             CustomerNotFoundException.class
     })
-    public ResponseEntity<ProblemDetail> handleNotFoundException(NotFoundException e, HttpServletRequest request) {
+    public ProblemDetail handleNotFoundException(NotFoundException e, HttpServletRequest request) {
         Map<String, Object> fields = new LinkedHashMap<>(e.getFields());
 
         fields.put("status", 404);
@@ -61,14 +62,15 @@ public class ErrorHandler {
 
         ProblemDetail problem = ProblemDetail.forStatusAndDetail(HttpStatus.NOT_FOUND, e.getMessage());
         problem.setTitle("404 Not found");
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(problem);
+        fields.forEach(problem::setProperty);
+        return problem;
     }
 
     // Internal Server Error //
     @ExceptionHandler({
             InternalServerError.class
     })
-    public ResponseEntity<ProblemDetail> handleInternalServerError(InternalServerError e, HttpServletRequest request) {
+    public ProblemDetail handleInternalServerError(InternalServerError e, HttpServletRequest request) {
         Map<String, Object> fields = new LinkedHashMap<>(e.getFields());
         fields.put("status", 500);
         fields.put("path", request.getRequestURI());
@@ -76,14 +78,15 @@ public class ErrorHandler {
         log.error("500 Internal server error: {}", e.getMessage(), entries(fields));
         ProblemDetail problem = ProblemDetail.forStatusAndDetail(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage());
         problem.setTitle("500 Internal server error");
-        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(problem);
+        fields.forEach(problem::setProperty);
+        return problem;
         }
     //========== 409 CONFLICT ==========
 
     @ExceptionHandler({
             DuplicateEmailException.class
     })
-    public ResponseEntity<ProblemDetail> handleDuplicateEmailException(DuplicateEmailException e, HttpServletRequest request) {
+    public ProblemDetail handleDuplicateEmailException(DuplicateEmailException e, HttpServletRequest request) {
         Map<String, Object> fields = new LinkedHashMap<>();
 
         fields.put("status", 409);
@@ -94,6 +97,7 @@ public class ErrorHandler {
 
         ProblemDetail problem = ProblemDetail.forStatusAndDetail(HttpStatus.CONFLICT, e.getMessage());
         problem.setTitle("409 Conflict");
-        return ResponseEntity.status(HttpStatus.CONFLICT).body(problem);
+        fields.forEach(problem::setProperty);
+        return problem;
     }
 }

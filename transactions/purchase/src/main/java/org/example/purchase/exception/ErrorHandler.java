@@ -25,7 +25,7 @@ public class ErrorHandler {
             PurchaseNotFoundException.class
 
     })
-    public ResponseEntity<ProblemDetail> handleNotFoundException(NotFoundException e, HttpServletRequest request) {
+    public ProblemDetail handleNotFoundException(NotFoundException e, HttpServletRequest request) {
         Map<String, Object> fields = new LinkedHashMap<>(e.getFields());
 
         fields.put("status", 404);
@@ -36,7 +36,8 @@ public class ErrorHandler {
 
         ProblemDetail problem = ProblemDetail.forStatusAndDetail(HttpStatus.NOT_FOUND, e.getMessage());
         problem.setTitle("404 Not found");
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(problem);
+        fields.forEach(problem::setProperty);
+        return problem;
     }
 
 }
