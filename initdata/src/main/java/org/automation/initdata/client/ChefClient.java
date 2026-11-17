@@ -1,9 +1,6 @@
 package org.automation.initdata.client;
 
-import org.automation.initdata.dtos.AddressIdDto;
-import org.automation.initdata.dtos.ChefNotificationCreationDto;
-import org.automation.initdata.dtos.CreateChefDto;
-import org.automation.initdata.dtos.SaveAddressDto;
+import org.automation.initdata.dtos.*;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
@@ -17,6 +14,15 @@ public class ChefClient {
 
     public ChefClient() {
         this.restClient = RestClient.create();
+    }
+
+    public List<ChefResponseDto> getAllChef() {
+        String callUrl = this.url;
+        return restClient
+                .get()
+                .uri(callUrl)
+                .retrieve()
+                .body(new ParameterizedTypeReference<List<ChefResponseDto>>() {});
     }
 
     public void createChef(CreateChefDto createChefDto) {

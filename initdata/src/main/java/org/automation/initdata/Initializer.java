@@ -32,6 +32,8 @@ public class Initializer implements CommandLineRunner {
     @Override
     public void run(String... args) {
 
+        if (!chefClient.getAllChef().isEmpty()) {return;}
+
         //CHEF
         CreateChefDto chef1 = new CreateChefDto("Gordon Ramsay", "gordonram@gmail.com", "66616661");
         chefClient.createChef(chef1);
