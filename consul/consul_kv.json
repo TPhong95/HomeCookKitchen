@@ -32,7 +32,7 @@
   {
     "key": "config/TaskScheduler/data",
     "flags": 0,
-    "value": "c2NoZWR1bGVyOgogIGxpc3RpbmctZGVhZGxpbmU6CiAgICBjcm9uOiAiMCAqLzEgKiAqICogKiIK"
+    "value": "c2NoZWR1bGVyOgogIGxpc3RpbmctZGVhZGxpbmU6CiAgICBjcm9uOiAiKi8zMCAqICogKiAqICoiCg=="
   },
   {
     "key": "config/TaskScheduler,dev/",

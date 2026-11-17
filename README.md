@@ -1,3 +1,39 @@
+# HomeCookKitchen
+
+## Overview
+
+HomeCookKitchen is a platform where home chefs can sell meals from their own homes. A chef registers one or more addresses, each with a "home vibe" (music, pets, outdoor seating, family friendly), creates recipes, and publishes product listings with a limited number of portions, a price, a time and an order deadline. Customers browse the listings and purchase portions.
+
+The system is built as microservices with Spring Boot and runs entirely in Docker:
+PS JEG TRENGER HJELP MED Å JUSTERE DEN UNDER HER
+
+
+| Service                  | Responsibility                                                        |
+|--------------------------|-----------------------------------------------------------------------|
+| `chef-service`           | Chefs, addresses, home vibes                  |
+| `customer-service`       | Customers                                   |
+| `recipe-service`         | Recipes                                                               |
+| `productlisting-service` | Product listings (portions, price, time and deadline)                 |
+| `purchase-service`       | Purchases of portions                                                 |
+| `taskscheduler-service`  | Scheduled job that checks listing deadlines                           |
+| `gateway`                | Single entry point, routing and load balancing                        |
+| `initdata`               | Creates test data on startup                                          |
+| `frontend`               | React web client                                                      |
+
+The services communicate synchronously over REST through the gateway, and asynchronously through Kafka events (e.g. purchase to costumer/cook). Consul is used for service discovery, health checks and central configuration.
+
+TRENGER HJELP MED Å JUSTERE DENNE
+### Microservice requirements
+
+| #  | Requirement           | How it is met                                                                                                             | See                             |
+|----|-----------------------|---------------------------------------------------------------------------------------------------------------------------|---------------------------------|
+| 7  | Gateway               | Spring Cloud Gateway on port 8100 routes `/api/**` to the services                                                        | [Access points](#access-points) |
+| 8  | Load balancing        | Gateway routes use `lb://` and Spring Cloud LoadBalancer (round-robin) over Consul instances                              | [Scaling](#scaling)             |
+| 9  | Health check          | All services register in Consul with a check on `/actuator/health`; only healthy instances get traffic (`query-passing`)  | [Verify](#verify)               |
+| 10 | Docker Compose        | The whole system starts with `docker compose up`                                                                          | [Build and run](#build-and-run) |
+| 11 | Central configuration | Consul KV, loaded from `consul/consul_kv.json`, with `prod` and `dev` profiles                                            | [Configuration](#configuration) |
+| 12 | Multiple instances    | Unique `instance-id` per instance; scaling with `--scale`                                                                 | [Scaling](#scaling)             |
+
 ## Prerequisites
 
 The only requirement is Docker Desktop.
@@ -18,7 +54,8 @@ docker compose -f docker-compose_dev.yml up -d --build
 ```
 
 Startup takes about 1.5–2 minutes after the images are built.
-Test data is created by the `initdata` service, which uses a `CommandLineRunner` to call the services through the gateway once they are all healthy.
+Test data is created by the `initdata` service. Docker Compose starts it once all services and the gateway are healthy, and it uses a `CommandLineRunner` to create the data by calling the services through the gateway.
+Test data therefore requires the full system to be started. 
 
 ### Verify
 
@@ -30,6 +67,7 @@ All services should be `healthy`, and `initdata` should show `Exited (0)` when t
 Registered services and their health checks can be seen in Consul at http://localhost:8500.
 
 The frontend runs as a Docker container and starts together with the rest of the project. Open http://localhost:5173 in the browser.
+Our frontend contains mock users for the examiner to test the functionality of the page. We have not implemented JWT credentials and have decided to store user credentials through React context. When you pick a chef or customer, their id and respective role is stored in the browser's sessionStorage. When closing a tab, opening a new tab, or clicking "Log out", the sessionStorage gets cleared.
 
 ## Stop
 
@@ -53,8 +91,6 @@ docker compose up -d --no-deps --scale customer-service=3 customer-service
 docker compose up -d --no-deps --scale customer-service=1 customer-service
 ```
 
-`--no-deps` and the service name at the end make sure only the scaled service is affected.
-
 `chef-service`, `customer-service`, `recipe-service`, `productlisting-service` and `purchase-service` can run in multiple instances behind the gateway.
 
 `taskscheduler-service` runs as a single instance on purpose. It runs one scheduled job, and multiple instances would run the same job at the same time, causing duplicate calls (and duplicate notifications).
@@ -68,7 +104,7 @@ The gateway, frontend, Consul, Kafka and databases run as single instances (fixe
 | Gateway             | http://localhost:8100 |
 | Frontend            | http://localhost:5173 |
 | Consul UI           | http://localhost:8500 |
-| Kafka               | http://localhost:9092 |
+| Kafka               | localhost:9092 |
 | Kafka UI (dev)      | http://localhost:8090 |
 | Kibana (dev)        | http://localhost:5601 |
 | Elasticsearch (dev) | http://localhost:9200 |
@@ -100,11 +136,39 @@ User: `username` / Password: `password`
 
 ## Configuration
 
-Central configuration is in `consul/consul_kv.json` and is loaded into Consul KV on startup by `consul-importer`.
-After editing it, rebuild the importer:
+Configuration is controlled centrally through Consul KV. The source is `consul/consul_kv.json`, which `consul-importer` loads into Consul on startup. The values can be seen (and edited live) in the Consul UI under **Key/Value** at http://localhost:8500.
+
+![Consul KV overview](screenshots/consulUi.png)
+
+After editing `consul_kv.json`, rebuild the importer:
+
 
 ```bash
 docker compose build consul-importer
 ```
 
-Hvis formateringen fortsatt blir feil, kan du åpne filen README_startup.md jeg sendte og kopiere innholdet derfra. Den har riktig markdown.
+### Profiles
+
+Each compose file sets a Spring profile (`SPRING_PROFILES_ACTIVE`): `prod` in `docker-compose.yml` and `dev` in `docker-compose_dev.yml`. The profile decides which keys the services read from Consul:
+
+| Key                             | Applies to                          |
+|---------------------------------|-------------------------------------|
+| `config/application/data`       | all services (default / prod)       |
+| `config/application,dev/data`   | all services in dev (overrides)     |
+| `config/TaskScheduler/data`     | TaskScheduler (default / prod)      |
+| `config/TaskScheduler,dev/data` | TaskScheduler in dev (overrides)    |
+
+| Setting                         | prod         | dev        |
+|---------------------------------|--------------|------------|
+| SQL logging (`show-sql`)        | off          | on         |
+| Stack trace in error responses  | never        | always     |
+| Actuator endpoints              | health, info | all        |
+| Health details                  | status only  | status + component details      |
+| TaskScheduler logging           | INFO         | DEBUG      |
+| Listing deadline check interval | every 30 s   | every 1 min |
+
+The deadline check interval shows how the same code behaves differently depending on configuration from Consul.
+
+Shared settings for all services, such as a unique `instance-id` (needed to run multiple instances) and `query-passing` (only healthy instances receive traffic), are also defined centrally.
+
+Consul runs in dev mode (`agent -dev`), so the KV store is kept in memory. Changes made in the UI are lost on restart; permanent changes belong in `consul_kv.json`.
