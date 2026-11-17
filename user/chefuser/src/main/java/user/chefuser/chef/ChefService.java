@@ -5,6 +5,7 @@ import user.chefuser.chef.dtos.UpdateChefDto;
 import user.chefuser.chef.exception.badrequest.BadRequestException;
 import user.chefuser.chef.exception.NotFoundException.ChefNotFoundException;
 import org.springframework.stereotype.Service;
+import user.chefuser.chef.exception.DuplicateException.DuplicateEmailException;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
@@ -32,6 +33,7 @@ public class ChefService {
     @Transactional
     public Chef createChef(CreateChefDto dto) {
         validateChefInput(dto.name(), dto.email(), dto.phoneNumber());
+        validateUniqueEmail(dto.email());
 
         Chef chef = new Chef();
         chef.setName(dto.name());
@@ -59,6 +61,10 @@ public class ChefService {
         }
 
         validateChefInput(dto.name(), dto.email(), dto.phoneNumber());
+
+        if (!dto.email().equals(chef.getEmail())) {
+            validateUniqueEmail(dto.email());
+        }
 
         chef.setName(dto.name());
         chef.setEmail(dto.email());
@@ -90,6 +96,12 @@ public class ChefService {
 
         if(checkValidEmail(email) != true) throw new BadRequestException("Invalid email format", Map.of());
         if(checkValidPhone(phone) != true) throw new BadRequestException("Must be Norwegian 8 digit phone number", Map.of());
+    }
+
+    private void validateUniqueEmail(String email) {
+        if (chefRepo.existsByEmail(email)) {
+            throw new DuplicateEmailException("This email is already in use", Map.of());
+        }
     }
 
     private boolean checkValidEmail(String email) {

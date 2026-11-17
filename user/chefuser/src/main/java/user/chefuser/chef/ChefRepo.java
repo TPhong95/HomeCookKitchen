@@ -8,4 +8,5 @@ import java.util.List;
 @Repository
 public interface ChefRepo extends JpaRepository<Chef, Long> {
     List<Chef> findByActiveTrue();
+    boolean existsByEmail(String email);
 }

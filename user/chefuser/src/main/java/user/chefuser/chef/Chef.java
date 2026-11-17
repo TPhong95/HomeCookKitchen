@@ -20,7 +20,10 @@ public class Chef {
     private Long id;
 
     private String name;
+
+    @Column(unique = true)
     private String email;
+
     private String phoneNumber;
     private Boolean active = true;
 
