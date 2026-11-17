@@ -76,9 +76,10 @@ export function FrontPage() {
       <div className={styles["frontpage-description"]}>
         <p>
           You can log in as a test user, either as a chef or
-          as a customer. Session cookies are set upon logging in.
-          It might take a couple of seconds to populate the
-          dropdown menus from the backend :)
+          as a customer. Your login is stored in this tab's
+          session storage and is cleared when you log out or
+          close the tab. It might take a couple of seconds to
+          populate the dropdown menus from the backend :)
         </p>
       </div>
       <div className={styles["existing-user-wrapper"]}>
