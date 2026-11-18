@@ -1,5 +1,6 @@
 package org.automation.initdata;
 
+import lombok.extern.slf4j.Slf4j;
 import org.automation.initdata.client.*;
 import org.automation.initdata.dtos.*;
 import org.automation.initdata.enums.Genre;
@@ -11,7 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static org.automation.initdata.enums.FoodCategory.*;
-
+@Slf4j
 @Component
 public class Initializer implements CommandLineRunner {
 
@@ -74,6 +75,8 @@ public class Initializer implements CommandLineRunner {
         CreateChefDto chef6 = new CreateChefDto("Markus Nilsen", "markus@nilsen.no", "32112332");
         chefClient.createChef(chef6);
 
+        log.info("Chef data has been created");
+
         //CUSTOMER
 
         CustomerDTO customer1 = new CustomerDTO("John", "John@gmail.com");
@@ -90,6 +93,8 @@ public class Initializer implements CommandLineRunner {
 
         CustomerDTO customer5 = new CustomerDTO("Gramps", "Gramps@gmail.com");
         customerClient.createCustomer(customer5);
+
+        log.info("Customer data has been created");
 
         //RECIPE
         String pictureUrl1 = "https://www.thespruceeats.com/thmb/XRUmww4wwE88XXKd4-6HnFYm6ME=/750x0/filters:no_upscale():max_bytes(150000):strip_icc():focal(3119x0:3121x2):format(webp)/easy-and-hearty-vegetable-soup-99538-hero-01-1d3b936ff03144af95ddca7640259c11.jpg";
@@ -116,6 +121,8 @@ public class Initializer implements CommandLineRunner {
         CreateRecipeDTO recipe5 = new CreateRecipeDTO(1L, "Salad", true, pictureUrl5, "Healthy kind", 0L, VEGETARIAN,
                 false, true, false, true, false, true, false, false, false, false, false, false, false, true);
         recipeClient.createRecipe(recipe5);
+
+        log.info("Recipe data has been created");
 
         //LISTING UNACTIVE
 
@@ -151,6 +158,8 @@ public class Initializer implements CommandLineRunner {
 
         CreateProductListingDTO productListing6 = new CreateProductListingDTO(1L, 1L, chefClient.getFirstAddressByChefId(1L), 33L, 12.99f, LocalDateTime.now().plusMinutes(4), LocalDateTime.now().plusHours(2));
         listingClient.createListing(productListing6);
+
+        log.info("Productlisting data has been created");
 
         try{
             Thread.sleep(10000);
@@ -194,6 +203,8 @@ public class Initializer implements CommandLineRunner {
         purchaseList3.add(new PurchaseEventDto(4L, 2L));
         PurchaseDto purchase3 = new PurchaseDto(3L, purchaseList3);
         purchaseClient.createPurchase(purchase3);
+
+        log.info("Purchase data has been created");
 
     }
 
