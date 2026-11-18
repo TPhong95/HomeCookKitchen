@@ -2,27 +2,29 @@
 
 ## Overview
 
-HomeCookKitchen is a platform where home chefs can sell meals from their own homes. A chef registers one or more addresses, each with a "home vibe" (music, pets, outdoor seating, family friendly), creates recipes, and publishes product listings with a limited number of portions, a price, a time and an order deadline. Customers browse the listings and purchase portions.
+We are developing a social platform where home chefs can sell homemade meals to customers in their area. The idea came from a market analysis showing that food listings on Facebook Marketplace are grouped under kitchen appliances, which makes homemade food hard to find and compare. Our platform separates food into its own space and focuses on community rather than being a traditional e-commerce store.\
+\
+Instead of competing mainly on price, chefs can stand out through their food, their story, and their home setting. Each chef profile includes a “home vibe” that describes the atmosphere at the address, such as music, pets, outdoor seating, or whether the home is family friendly. Purchases are supported, but the emphasis is on the social experience.\
+\
+The current implementation includes the core functionality. Chefs can create recipe listings, and customers can browse and purchase from them. A background microservice checks for listings that have passed their deadline and closes them. Chefs and customers are notified when a purchase is made, or when a listing with a purchase reaches its deadline. A frontend with minimal endpoints supports a working demo.\
+\
+Due to time constraints, several social features are not yet implemented. These include favoriting chefs and customers, messaging, and discovering new chefs through random nearby listings from chefs the customer has not previously purchased from. These are planned for future development.
 
-The system is built as microservices with Spring Boot and runs entirely in Docker:
-PS JEG TRENGER HJELP MED Å JUSTERE DEN UNDER HER
-
-
-| Service                  | Responsibility                                                        |
-|--------------------------|-----------------------------------------------------------------------|
-| `chef-service`           | Chefs, addresses, home vibes                  |
-| `customer-service`       | Customers                                   |
-| `recipe-service`         | Recipes                                                               |
-| `productlisting-service` | Product listings (portions, price, time and deadline)                 |
-| `purchase-service`       | Purchases of portions                                                 |
-| `taskscheduler-service`  | Scheduled job that checks listing deadlines                           |
-| `gateway`                | Single entry point, routing and load balancing                        |
-| `initdata`               | Creates test data on startup                                          |
-| `frontend`               | React web client                                                      |
+| Service                  | Responsibility                                         |
+|--------------------------|--------------------------------------------------------|
+| `chef-service`           | Chefs, addresses, home vibes      , chef notifications |
+| `customer-service`       | Customers   , customer notification                    |
+| `recipe-service`         | Recipes                                                |
+| `productlisting-service` | Product listings (portions, price, time and deadline)  |
+| `purchase-service`       | Purchases of portions                                  |
+| `taskscheduler-service`  | Scheduled job that checks listing deadlines            |
+| `gateway`                | Single entry point, routing and load balancing         |
+| `initdata`               | Creates test data on startup                           |
+| `frontend`               | React web client                                       |
 
 The services communicate synchronously over REST through the gateway, and asynchronously through Kafka events (e.g. purchase to costumer/cook). Consul is used for service discovery, health checks and central configuration.
-
-TRENGER HJELP MED Å JUSTERE DENNE
+![HomeCookKitchenArchitecture.png](screenshots/HomeCookKitchenArchitecture.png)
+Zoomable picture is in the screenshot folder in root folder. "HomeCookKitchenArchitecture.png"
 ### Microservice requirements
 
 | #  | Requirement           | How it is met                                                                                                             | See                             |
@@ -172,3 +174,21 @@ The deadline check interval shows how the same code behaves differently dependin
 Shared settings for all services, such as a unique `instance-id` (needed to run multiple instances) and `query-passing` (only healthy instances receive traffic), are also defined centrally.
 
 Consul runs in dev mode (`agent -dev`), so the KV store is kept in memory. Changes made in the UI are lost on restart; permanent changes belong in `consul_kv.json`.
+
+### Contribution:
+
+| Candidate      | Main responsibility                                              |
+|----------------|------------------------------------------------------------------|
+| Candidate   41 | Chef mircoservice, docker compose, profiles, consuler/gateway    |
+| Candidate   37 | Customer microservice, Frontend,                                 |
+| Candidate   16 | Recipes microservice, ProductListing microservice, kafka service |
+| Candidate   39 | Purchase microservice, initdata, taskscheduler                   |
+
+![assignmentboard.png](screenshots/assignmentboard.png)
+The assignment board we used. (Trello)
+
+Even if we had different main responsibility every candidate had a hand in several different services. Since we used an assignment board we knew what features was
+important to get done. With this the candidate picked a task with a service where another candidate wasn't currently working on which helped us avoid merge conflicts. 
+This structure of work helped us all to understand more about each other services and let us easily add new features to the different services as needed. \
+\
+A more in-depth explanation on what the candidates specifically contributed will be in the individual reflections as each candidate has had a hand in several places and it would be a lot to describe what everyone contributed with.
