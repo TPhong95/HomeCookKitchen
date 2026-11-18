@@ -21,7 +21,7 @@
         <module>product/recipe</module>
         <module>product/productlisting</module>
         <module>transactions/purchase</module>
-        <module>TaskScheduler</module>
+        <module>taskscheduler</module>
         <module>gateway</module>
         <module>initdata</module>
     </modules>
