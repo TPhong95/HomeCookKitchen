@@ -26,7 +26,7 @@ The services communicate synchronously over REST through the gateway, and asynch
 ![HomeCookKitchenArchitecture.png](screenshots/HomeCookKitchenArchitecture.png)
 Zoomable picture is in the screenshot folder in root folder. "HomeCookKitchenArchitecture.png"
 
-## Prerequisites
+## Prerequisites before build and run
 
 The only requirement is Docker Desktop.
 
@@ -180,20 +180,19 @@ A more in-depth explanation on what the candidates specifically contributed will
 
 ### Microservice requirements
 
-| #  | Requirement                                                         | How it is met                                                                                                             | See                             |
-|----|---------------------------------------------------------------------|---------------------------------------------------------------------------------------------------------------------------|---------------------------------|
-| 1  | Communication between services that fulfill different functionality |                                                         |  |
-| 2  | Syncronous communication                                            |                                                       |  |
-| 3  | Asynchronous communication                                          |                                                        |  |
-| 4  | Each Service has clear structure and functionality                  |                                                         |  |
-| 5  | The architecture of the project is consistent with the documentation. (All services aredescribed in the architecture, they can be found in the project, their functionality, structure, interactions are documented                                             |                                                        |  |
-| 6  | The project can be deployed as a group of Docker containers.                                                            |                                                        |  |
-| 7  | Gateway                                                             | Spring Cloud Gateway on port 8100 routes `/api/**` to the services                                                        | [Access points](#access-points) |
-| 8  | Load balancing                                                      | Gateway routes use `lb://` and Spring Cloud LoadBalancer (round-robin) over Consul instances                              | [Scaling](#scaling)             |
-| 9  | Health check                                                        | All services register in Consul with a check on `/actuator/health`; only healthy instances get traffic (`query-passing`)  | [Verify](#verify)               |
-| 10 | Docker Compose                                                      | The whole system starts with `docker compose up`                                                                          | [Build and run](#build-and-run) |
-| 11 | Central configuration                                               | Consul KV, loaded from `consul/consul_kv.json`, with `prod` and `dev` profiles                                            | [Configuration](#configuration) |
-| 12 | Multiple instances                                                  | Unique `instance-id` per instance; scaling with `--scale`                                                                 | [Scaling](#scaling)             |
+| #    | Requirement                                                                                                               | How it is met                                                                                                                                        | See                             |
+|------|---------------------------------------------------------------------------------------------------------------------------|------------------------------------------------------------------------------------------------------------------------------------------------------|---------------------------------|
+| 1    | Communication between services that fulfill different functionality                                                       | The project itself consist of different microservices that talk to each other.                                                                       |  |
+| 2    | Synchronous communication                                                                                                 | In most of the microservices there's a directory with the name client which has code to communicate with other services with HTTP calls.             |  |
+| 3    | Asynchronous communication                                                                                                | There's a kafka producer in purchase and taskscheduler microservices which sends kafka messages to the consumers in chef and customer microservices. |  |
+| 4, 5 | Each Service has clear structure and functionality.<br/>The architecture of the project is consistent with the documentation. | The HomeCookKitchenArchitecture.png show a clear structure on which service talk with which and what data it handles.                                |  |
+| 6    | The project can be deployed as a group of Docker containers.                                                              | The whole system starts with `docker compose up`. Every container is put under a docker network.                                                     |[Build and run](#build-and-run)  |
+| 7    | Gateway                                                                                                                   | Spring Cloud Gateway on port 8100 routes `/api/**` to the services.                                                                                  | [Access points](#access-points) |
+| 8    | Load balancing                                                                                                            | Gateway routes use `lb://` and Spring Cloud LoadBalancer (round-robin) over Consul instances                                                         | [Scaling](#scaling)             |
+| 9    | Health check                                                                                                              | All services register in Consul with a check on `/actuator/health`; only healthy instances get traffic (`query-passing`)                             | [Verify](#verify)               |
+| 10   | Docker Compose                                                                                                            | The whole system starts with `docker compose up`                                                                                                     | [Build and run](#build-and-run) |
+| 11   | Central configuration                                                                                                     | Consul KV, loaded from `consul/consul_kv.json`, with `prod` and `dev` profiles                                                                       | [Configuration](#configuration) |
+| 12   | Multiple instances                                                                                                        | Unique `instance-id` per instance; scaling with `--scale`                                                                                            | [Scaling](#scaling)             |
 
 
 
