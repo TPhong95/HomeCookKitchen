@@ -175,6 +175,77 @@ Shared settings for all services, such as a unique `instance-id` (needed to run 
 
 Consul runs in dev mode (`agent -dev`), so the KV store is kept in memory. Changes made in the UI are lost on restart; permanent changes belong in `consul_kv.json`.
 
+
+# List of user stories
+
+#### User stories require that the containers are running and that you are logged in as a chef or customer respectively.
+
+### A chef can create a listing
+
+From arbeidskrav priority user story: 1. Post dish
+
+
+As a chef, I want to create a listing so that people can attend my dinners. I'm logged in as a chef. I go to the left sidebar, click "Listings", then "+ Create Listing", and pick the recipe I want to make, as well as the address where I plan to serve it. I decide number of portions/seats, and how much I will be selling them for. I get information about what my maximum revenue could be. I set the deadline for customers to purchase by, as well as when I expect dinner to be served.
+
+Acceptance criteria:
+
+- The chef gets visual feedback when they have created a new listing
+
+- The chef gets a dropdown menu with all their active recipes
+
+- The chef gets a dropdown menu with all their active addresses
+
+- The purchase deadline must be set to a future date and time; a deadline in the past is rejected
+
+- There is meaningful visual feedback if a field is filled in wrong
+
+- The chef gets a visual confirmation, and the listing immediately becomes visible in the Browse section (left sidebar) after a listing is created.
+
+
+
+### A customer can browse dishes
+
+From arbeidskrav priority user story: 2. Browse dishes
+
+I am logged in as a customer and want to find a dinner to attend. I go to the left sidebar and click "Browse", which shows all active listings. For each listing I can see the name of the dish, which chef is serving it, the price per portion, how many seats are left, the chef's address, when the food is ready and a short description. To learn more, I click "More info & Order", which opens a detailed view where I can also see the food category, which allergens the dish contains, the chef's home vibe and the deadline for ordering.
+
+Acceptance criteria:
+
+- Only listings that are still within the order-by deadline are displayed.
+- The name of the dish is prominently displayed as a title.
+- The chef's name, address, price per portion, seats left, ready-by time and description are visible directly in the Browse list.
+- The food category, allergens, home vibe and order-by deadline are displayed when "More info & Order" is clicked.
+
+### A customer can make a purchase
+
+From arbeidskrav priority user story: 3. Make purchase
+
+I am logged in as a customer and have found a dinner I want to attend in "Browse". In the detailed view ("More info & Order"), I choose how many seats I want for me and my friends with the + and - buttons, where each seat includes one portion. I click "Add to order", which places the order immediately. I get a visual confirmation that the order went through, as well as a notification in the notification section (the mail icon in the left sidebar) showing what my order costs.
+
+Acceptance criteria:
+
+- I can choose the number of seats with the + and - buttons before ordering.
+- The order is placed immediately when I click "Add to order".
+- When I order, I get a visual confirmation that the order went through, as well as a notification showing the cost.
+
+
+### A chef receives orders
+
+From arbeidskrav priority user story: 4. Receive order
+
+Now that you have placed an order as a customer, you can see it from the chef's side. Log out and log in as the chef who owns the listing you ordered from. The test data also contains existing orders for Gordon Ramsay, so this works without placing an order first.
+
+As a chef, I want to be notified when customers order from my listings, so that I know how many portions to prepare and for which customers. The mail icon in the left sidebar shows how many unread notifications I have. When I click it, I see a notification for each order, showing the dish, the number of seats, which customer ordered and when. I can mark each notification as read.
+
+Acceptance criteria:
+
+- The chef receives a notification when a customer orders from one of their listings.
+- The notification shows the dish, the number of seats and which customer ordered.
+- The mail icon shows the number of unread notifications.
+- The chef can mark a notification as read.
+
+The four user stories above are the priority stories from the arbeidskrav, adapted to how the project works today. All user stories can be found in [userstories.md](userstories.md).
+
 ### Contribution:
 
 | Candidate      | Main responsibility                                              |
