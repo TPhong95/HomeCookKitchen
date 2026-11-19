@@ -10,6 +10,8 @@ The current implementation includes the core functionality. Chefs can create rec
 \
 Due to time constraints, several social features are not yet implemented. These include favoriting chefs and customers, messaging, and discovering new chefs through random nearby listings from chefs the customer has not previously purchased from. These are planned for future development.
 
+### Services:
+
 | Service                  | Responsibility                                         |
 |--------------------------|--------------------------------------------------------|
 | `chef-service`           | Chefs, addresses, home vibes      , chef notifications |
@@ -21,6 +23,17 @@ Due to time constraints, several social features are not yet implemented. These 
 | `gateway`                | Single entry point, routing and load balancing         |
 | `initdata`               | Creates test data on startup                           |
 | `frontend`               | React web client                                       |
+
+### Infrastructure components:
+
+| Component              | Responsibility                                                |
+|------------------------|---------------------------------------------------------------|
+| `consul`               | Service discovery, health checks and central configuration (KV store) |
+| `consul-importer`      | Loads `consul_kv.json` into Consul on startup                 |
+| `kafka`                | Message broker for asynchronous events (notifications)        | 
+|  `postgres`                      |    One PostgreSQL database per service                        |
+| ELK (dev only)         | Centralized logging (Elasticsearch, Logstash, Kibana)         |
+| `kafbat-ui` (dev only) | Web UI for inspecting Kafka topics and messages               |
 
 The services communicate synchronously over REST through the gateway, and asynchronously through Kafka events (e.g. purchase to costumer/cook). Consul is used for service discovery, health checks and central configuration.
 ![HomeCookKitchenArchitecture.png](screenshots/HomeCookKitchenArchitecture.png)
