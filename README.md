@@ -25,16 +25,6 @@ Due to time constraints, several social features are not yet implemented. These 
 The services communicate synchronously over REST through the gateway, and asynchronously through Kafka events (e.g. purchase to costumer/cook). Consul is used for service discovery, health checks and central configuration.
 ![HomeCookKitchenArchitecture.png](screenshots/HomeCookKitchenArchitecture.png)
 Zoomable picture is in the screenshot folder in root folder. "HomeCookKitchenArchitecture.png"
-### Microservice requirements
-
-| #  | Requirement           | How it is met                                                                                                             | See                             |
-|----|-----------------------|---------------------------------------------------------------------------------------------------------------------------|---------------------------------|
-| 7  | Gateway               | Spring Cloud Gateway on port 8100 routes `/api/**` to the services                                                        | [Access points](#access-points) |
-| 8  | Load balancing        | Gateway routes use `lb://` and Spring Cloud LoadBalancer (round-robin) over Consul instances                              | [Scaling](#scaling)             |
-| 9  | Health check          | All services register in Consul with a check on `/actuator/health`; only healthy instances get traffic (`query-passing`)  | [Verify](#verify)               |
-| 10 | Docker Compose        | The whole system starts with `docker compose up`                                                                          | [Build and run](#build-and-run) |
-| 11 | Central configuration | Consul KV, loaded from `consul/consul_kv.json`, with `prod` and `dev` profiles                                            | [Configuration](#configuration) |
-| 12 | Multiple instances    | Unique `instance-id` per instance; scaling with `--scale`                                                                 | [Scaling](#scaling)             |
 
 ## Prerequisites
 
@@ -98,82 +88,6 @@ docker compose up -d --no-deps --scale customer-service=1 customer-service
 `taskscheduler-service` runs as a single instance on purpose. It runs one scheduled job, and multiple instances would run the same job at the same time, causing duplicate calls (and duplicate notifications).
 
 The gateway, frontend, Consul, Kafka and databases run as single instances (fixed host ports / container names).
-
-## Access points
-
-| Component           | URL / Port            |
-|---------------------|-----------------------|
-| Gateway             | http://localhost:8100 |
-| Frontend            | http://localhost:5173 |
-| Consul UI           | http://localhost:8500 |
-| Kafka               | localhost:9092 |
-| Kafka UI (dev)      | http://localhost:8090 |
-| Kibana (dev)        | http://localhost:5601 |
-| Elasticsearch (dev) | http://localhost:9200 |
-
-### Services
-
-All services are accessed through the gateway. Host ports are assigned by Docker.
-
-| Service                | Container port | Gateway route            |
-|------------------------|----------------|--------------------------|
-| chef-service           | 8002           | `/api/chef/**`           |
-| customer-service       | 8003           | `/api/customer/**`       |
-| productlisting-service | 8006           | `/api/productListing/**` |
-| recipe-service         | 8008           | `/api/recipe/**`         |
-| purchase-service       | 8011           | `/api/purchase/**`       |
-| taskscheduler-service  | 8020           | no route (internal)      |
-
-### Databases
-
-User: `username` / Password: `password`
-
-| Database         | Port |
-|------------------|------|
-| chefDB           | 5432 |
-| customerDB       | 5433 |
-| productlistingDB | 5434 |
-| purchaseDB       | 5435 |
-| recipeDB         | 5436 |
-
-## Configuration
-
-Configuration is controlled centrally through Consul KV. The source is `consul/consul_kv.json`, which `consul-importer` loads into Consul on startup. The values can be seen (and edited live) in the Consul UI under **Key/Value** at http://localhost:8500.
-
-![Consul KV overview](screenshots/consulUi.png)
-
-After editing `consul_kv.json`, rebuild the importer:
-
-
-```bash
-docker compose build consul-importer
-```
-
-### Profiles
-
-Each compose file sets a Spring profile (`SPRING_PROFILES_ACTIVE`): `prod` in `docker-compose.yml` and `dev` in `docker-compose_dev.yml`. The profile decides which keys the services read from Consul:
-
-| Key                             | Applies to                          |
-|---------------------------------|-------------------------------------|
-| `config/application/data`       | all services (default / prod)       |
-| `config/application,dev/data`   | all services in dev (overrides)     |
-| `config/TaskScheduler/data`     | TaskScheduler (default / prod)      |
-| `config/TaskScheduler,dev/data` | TaskScheduler in dev (overrides)    |
-
-| Setting                         | prod         | dev        |
-|---------------------------------|--------------|------------|
-| SQL logging (`show-sql`)        | off          | on         |
-| Stack trace in error responses  | never        | always     |
-| Actuator endpoints              | health, info | all        |
-| Health details                  | status only  | status + component details      |
-| TaskScheduler logging           | INFO         | DEBUG      |
-| Listing deadline check interval | every 30 s   | every 1 min |
-
-The deadline check interval shows how the same code behaves differently depending on configuration from Consul.
-
-Shared settings for all services, such as a unique `instance-id` (needed to run multiple instances) and `query-passing` (only healthy instances receive traffic), are also defined centrally.
-
-Consul runs in dev mode (`agent -dev`), so the KV store is kept in memory. Changes made in the UI are lost on restart; permanent changes belong in `consul_kv.json`.
 
 
 # List of user stories
@@ -259,7 +173,103 @@ The four user stories above are the priority stories from the arbeidskrav, adapt
 The assignment board we used. (Trello)
 
 Even if we had different main responsibility every candidate had a hand in several different services. Since we used an assignment board we knew what features was
-important to get done. With this the candidate picked a task with a service where another candidate wasn't currently working on which helped us avoid merge conflicts. 
+important to get done. With this the candidate picked a task with a service where another candidate wasn't currently working on which helped us avoid merge conflicts.
 This structure of work helped us all to understand more about each other services and let us easily add new features to the different services as needed. \
 \
 A more in-depth explanation on what the candidates specifically contributed will be in the individual reflections as each candidate has had a hand in several places and it would be a lot to describe what everyone contributed with.
+
+### Microservice requirements
+
+| #  | Requirement                                                         | How it is met                                                                                                             | See                             |
+|----|---------------------------------------------------------------------|---------------------------------------------------------------------------------------------------------------------------|---------------------------------|
+| 1  | Communication between services that fulfill different functionality |                                                         |  |
+| 2  | Syncronous communication                                            |                                                       |  |
+| 3  | Asynchronous communication                                          |                                                        |  |
+| 4  | Each Service has clear structure and functionality                  |                                                         |  |
+| 5  | The architecture of the project is consistent with the documentation. (All services aredescribed in the architecture, they can be found in the project, their functionality, structure, interactions are documented                                             |                                                        |  |
+| 6  | The project can be deployed as a group of Docker containers.                                                            |                                                        |  |
+| 7  | Gateway                                                             | Spring Cloud Gateway on port 8100 routes `/api/**` to the services                                                        | [Access points](#access-points) |
+| 8  | Load balancing                                                      | Gateway routes use `lb://` and Spring Cloud LoadBalancer (round-robin) over Consul instances                              | [Scaling](#scaling)             |
+| 9  | Health check                                                        | All services register in Consul with a check on `/actuator/health`; only healthy instances get traffic (`query-passing`)  | [Verify](#verify)               |
+| 10 | Docker Compose                                                      | The whole system starts with `docker compose up`                                                                          | [Build and run](#build-and-run) |
+| 11 | Central configuration                                               | Consul KV, loaded from `consul/consul_kv.json`, with `prod` and `dev` profiles                                            | [Configuration](#configuration) |
+| 12 | Multiple instances                                                  | Unique `instance-id` per instance; scaling with `--scale`                                                                 | [Scaling](#scaling)             |
+
+
+
+## Access points
+
+| Component           | URL / Port            |
+|---------------------|-----------------------|
+| Gateway             | http://localhost:8100 |
+| Frontend            | http://localhost:5173 |
+| Consul UI           | http://localhost:8500 |
+| Kafka               | localhost:9092 |
+| Kafka UI (dev)      | http://localhost:8090 |
+| Kibana (dev)        | http://localhost:5601 |
+| Elasticsearch (dev) | http://localhost:9200 |
+
+### Services
+
+All services are accessed through the gateway. Host ports are assigned by Docker.
+
+| Service                | Container port | Gateway route            |
+|------------------------|----------------|--------------------------|
+| chef-service           | 8002           | `/api/chef/**`           |
+| customer-service       | 8003           | `/api/customer/**`       |
+| productlisting-service | 8006           | `/api/productListing/**` |
+| recipe-service         | 8008           | `/api/recipe/**`         |
+| purchase-service       | 8011           | `/api/purchase/**`       |
+| taskscheduler-service  | 8020           | no route (internal)      |
+
+### Databases
+
+User: `username` / Password: `password`
+
+| Database         | Port |
+|------------------|------|
+| chefDB           | 5432 |
+| customerDB       | 5433 |
+| productlistingDB | 5434 |
+| purchaseDB       | 5435 |
+| recipeDB         | 5436 |
+
+## Configuration
+
+Configuration is controlled centrally through Consul KV. The source is `consul/consul_kv.json`, which `consul-importer` loads into Consul on startup. The values can be seen (and edited live) in the Consul UI under **Key/Value** at http://localhost:8500.
+
+![Consul KV overview](screenshots/consulUi.png)
+
+After editing `consul_kv.json`, rebuild the importer:
+
+
+```bash
+docker compose build consul-importer
+```
+
+### Profiles
+
+Each compose file sets a Spring profile (`SPRING_PROFILES_ACTIVE`): `prod` in `docker-compose.yml` and `dev` in `docker-compose_dev.yml`. The profile decides which keys the services read from Consul:
+
+| Key                             | Applies to                          |
+|---------------------------------|-------------------------------------|
+| `config/application/data`       | all services (default / prod)       |
+| `config/application,dev/data`   | all services in dev (overrides)     |
+| `config/TaskScheduler/data`     | TaskScheduler (default / prod)      |
+| `config/TaskScheduler,dev/data` | TaskScheduler in dev (overrides)    |
+
+| Setting                         | prod         | dev        |
+|---------------------------------|--------------|------------|
+| SQL logging (`show-sql`)        | off          | on         |
+| Stack trace in error responses  | never        | always     |
+| Actuator endpoints              | health, info | all        |
+| Health details                  | status only  | status + component details      |
+| TaskScheduler logging           | INFO         | DEBUG      |
+| Listing deadline check interval | every 30 s   | every 1 min |
+
+The deadline check interval shows how the same code behaves differently depending on configuration from Consul.
+
+Shared settings for all services, such as a unique `instance-id` (needed to run multiple instances) and `query-passing` (only healthy instances receive traffic), are also defined centrally.
+
+Consul runs in dev mode (`agent -dev`), so the KV store is kept in memory. Changes made in the UI are lost on restart; permanent changes belong in `consul_kv.json`.
+
