@@ -6,7 +6,7 @@ We are developing a social platform where home chefs can sell homemade meals to 
 \
 Instead of competing mainly on price, chefs can stand out through their food, their story, and their home setting. Each chef profile includes a “home vibe” that describes the atmosphere at the address, such as music, pets, outdoor seating, or whether the home is family friendly. Purchases are supported, but the emphasis is on the social experience.\
 \
-The current implementation includes the core functionality. Chefs can create recipe listings, and customers can browse and purchase from them. A background microservice checks for listings that have passed their deadline and closes them. Chefs and customers are notified when a purchase is made, or when a listing with a purchase reaches its deadline. A frontend with minimal endpoints supports a working demo.\
+The current implementation includes the core functionality. Chefs can create recipes and also create a listing of the recipes, and customers can browse and purchase from them. A background microservice checks for listings that have passed their deadline and closes them. Chefs and customers are notified when a purchase is made, or when a listing with a purchase reaches its deadline. A frontend with minimal endpoints supports a working demo.\
 \
 Due to time constraints, several social features are not yet implemented. These include favoriting chefs and customers, messaging, and discovering new chefs through random nearby listings from chefs the customer has not previously purchased from. These are planned for future development.
 
