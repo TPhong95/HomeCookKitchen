@@ -233,7 +233,7 @@ Acceptance criteria:
 
 From arbeidskrav priority user story: 4. Receive order
 
-Now that you have placed an order as a customer, you can see it from the chef's side. Log out and log in as the chef who owns the listing you ordered from. The test data also contains existing orders for Gordon Ramsay, so this works without placing an order first.
+Now that you have made a purchase as a customer, you can see it from the chef's side. Log out and log in as the chef who owns the listing you ordered from. The test data also contains existing orders for Gordon Ramsay, so this works without placing an order first.
 
 As a chef, I want to be notified when customers order from my listings, so that I know how many portions to prepare and for which customers. The mail icon in the left sidebar shows how many unread notifications I have. When I click it, I see a notification for each order, showing the dish, the number of seats, which customer ordered and when. I can mark each notification as read.
 
