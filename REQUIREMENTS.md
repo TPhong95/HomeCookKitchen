@@ -6,7 +6,7 @@
 - [x] an overview of the project (the one from the arbeidskrav may be used as a basis). The
   overview should accurately describe the project implementation.
 
-- [ ] a list of user stories that allow an examiner to assess the functionality developed in the
+- [x] a list of user stories that allow an examiner to assess the functionality developed in the
   project (think of scenarios that the examiner can run to see what functionality you have
   implemented).
   The implementation of project specific user stories will be based on the user stories present in
