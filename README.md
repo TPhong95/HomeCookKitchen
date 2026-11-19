@@ -248,12 +248,12 @@ The four user stories above are the priority stories from the arbeidskrav, adapt
 
 ### Contribution:
 
-| Candidate      | Main responsibility                                              |
-|----------------|------------------------------------------------------------------|
-| Candidate   41 | Chef microservice, docker compose, profiles, consuler/gateway    |
-| Candidate   37 | Customer microservice, Frontend                                  |
-| Candidate   16 | Recipes microservice, ProductListing microservice, kafka service |
-| Candidate   39 | Purchase microservice, initdata, taskscheduler                   |
+| Candidate      | Main responsibility                                                        |
+|----------------|----------------------------------------------------------------------------|
+| Candidate   41 | Chef microservice, docker compose, profiles, consul/gateway, Pom dependency |
+| Candidate   37 | Customer microservice, Frontend, User story implementation                 |
+| Candidate   16 | Recipes microservice, ProductListing microservice, kafka service           |
+| Candidate   39 | Purchase microservice, initdata, taskscheduler                             |
 
 ![assignmentboard.png](screenshots/assignmentboard.png)
 The assignment board we used. (Trello)
